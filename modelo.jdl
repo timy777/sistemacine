@@ -1,0 +1,103 @@
+entity SalaMedica {
+    nroSala Integer required
+    nombre String required
+    ubicacion String
+    equipamiento String
+}
+
+entity ProcesoMedico {
+    tipoProceso String required
+    fechaInicio Instant required
+    fechaFin Instant
+    estado String required
+	hashBlockchain String
+}
+
+entity PersonalMedico {
+    nombre String required
+    especialidad String
+    telefonoContacto String
+    correo String
+    licenciaMedica String
+}
+
+entity Paciente {
+    nombre String required
+    fechaNacimiento LocalDate required
+    genero String
+    direccion String
+    carnetidentidad String required
+    email String required
+    password String required
+    telefonoContacto String
+    historialMedico String
+}
+
+entity CitaMedica {
+    fechaCita LocalDate required
+    horaCita String required
+    motivo String
+    estado String required
+}
+
+entity ConsultaMedica {
+    diagnostico String required
+    tratamientoSugerido String
+    observaciones String
+    fechaConsulta Instant required
+}
+
+entity EvaluacionFisica {
+    presionArterial String
+    temperatura Float
+    ritmoCardiaco Integer
+    frecuenciaRespiratoria Integer
+    peso Float
+    altura Float
+}
+
+entity Medicacion {
+    nombreMedicamento String required
+    dosis String
+    frecuencia String
+    viaAdministracion String
+}
+
+entity Tratamiento {
+    tipoTratamiento String required
+    duracion String
+    objetivo String
+}
+
+entity EstudioMedico {
+    tipoEstudio String required
+    resultado String
+    fechaRealizacion Instant required
+}
+
+relationship ManyToMany {
+    PersonalMedico to Paciente
+}
+
+relationship ManyToOne {
+    CitaMedica to Paciente
+    CitaMedica to PersonalMedico
+    ProcesoMedico to Paciente
+    ProcesoMedico to PersonalMedico
+    ProcesoMedico to SalaMedica
+}
+
+relationship OneToMany {
+    PersonalMedico to ConsultaMedica
+    Paciente to ConsultaMedica
+    ConsultaMedica to EvaluacionFisica
+    ConsultaMedica to Medicacion
+    ConsultaMedica to Tratamiento
+    ConsultaMedica to EstudioMedico
+}
+
+paginate SalaMedica, ProcesoMedico, PersonalMedico, Paciente, CitaMedica, ConsultaMedica, EvaluacionFisica, Medicacion, Tratamiento, EstudioMedico with pagination
+
+dto SalaMedica, ProcesoMedico, PersonalMedico, Paciente, CitaMedica, ConsultaMedica, EvaluacionFisica, Medicacion, Tratamiento, EstudioMedico with mapstruct
+
+service SalaMedica, ProcesoMedico, PersonalMedico, Paciente, CitaMedica, ConsultaMedica, EvaluacionFisica, Medicacion, Tratamiento, EstudioMedico with serviceClass

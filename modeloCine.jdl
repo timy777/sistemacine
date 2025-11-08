@@ -1,0 +1,152 @@
+enum TipoPersona {
+  CLIENTE,
+  VENDEDOR
+}
+
+enum TipoSala {
+  DOSD,
+  TRESD,
+  VIP
+}
+
+enum EstadoPelicula {
+  EN_CARTELERA,
+  PROXIMO_ESTRENO,
+  RETIRADA
+}
+
+enum Sexo {
+  MASCULINO,
+  FEMENINO,
+  OTRO
+}
+
+enum TipoGenero {
+  ACCION,
+  COMEDIA,
+  DRAMA,
+  DOCUMENTAL,
+  TERROR,
+  ANIMACION,
+  ROMANCE,
+  CIENCIA_FICCION
+}
+
+
+/* ==============================
+   ENTIDADES PRINCIPALES
+   ============================== */
+
+/* 1. Personas (clientes o vendedores) */
+entity Persona {
+  nombre String required,
+  apellido String required,
+  telefono String,
+  email String required,
+  tipo TipoPersona required,
+  fechaNacimiento LocalDate required,
+  sexo Sexo required,
+  carnetIdentidad String required
+}
+
+/* 2. Género de película */
+entity Genero {
+  nombre String required,
+  descripcion String
+}
+
+/* 3. Películas */
+entity Pelicula {
+  titulo String required,
+  sinopsis TextBlob,
+  duracion Integer required,
+  idioma String,
+  clasificacion String,
+  formato String,
+  estado EstadoPelicula required,
+  imagenUrl String
+}
+
+/* 4. Salas */
+entity Sala {
+  nombre String required,
+  capacidad Integer required,
+  tipo TipoSala required,
+  estado String
+}
+
+/* 5. Funciones (horarios de proyección) */
+entity Funcion {
+  fecha LocalDate required,
+  horaInicio LocalTime required,
+  horaFin LocalTime required,
+  precio BigDecimal required
+}
+
+/* 6. Ventas de boletos */
+entity Venta {
+  fecha ZonedDateTime required,
+  total BigDecimal required,
+  metodoPago String required
+}
+
+/* 7. Detalle de boletos vendidos */
+entity DetalleVenta {
+  asiento String required,
+  precioUnitario BigDecimal required
+}
+
+/* 8. Tarifas o precios configurables */
+entity Tarifa {
+  nombre String required,
+  descripcion String,
+  monto BigDecimal required,
+  diaSemana String,
+  tipoSala TipoSala
+}
+
+/* 9. Promociones y descuentos */
+entity Promocion {
+  nombre String required,
+  descripcion String,
+  porcentajeDescuento Double required,
+  fechaInicio LocalDate required,
+  fechaFin LocalDate required,
+  activa Boolean required
+}
+
+/* 10. Reportes (configuración o historial generado) */
+entity Reporte {
+  tipo String required,
+  fechaGeneracion ZonedDateTime required,
+  descripcion String
+}
+
+/* ==============================
+   RELACIONES ENTRE ENTIDADES
+   ============================== */
+
+relationship ManyToOne {
+    Venta{cliente(nombre)} to Persona,
+    Venta{vendedor(nombre)} to Persona,
+    Pelicula{genero(nombre)} to Genero,
+    Funcion{sala(nombre)} to Sala,
+    Funcion{pelicula(titulo)} to Pelicula,
+    DetalleVenta{funcion} to Funcion,
+    Funcion{tarifa(nombre)} to Tarifa,
+    Reporte{vendedor(nombre)} to Persona
+}
+
+relationship OneToMany {
+    Venta{detalles} to DetalleVenta{venta}
+}
+
+relationship ManyToMany {
+    Promocion{peliculas} to Pelicula{promociones}
+}
+
+paginate Persona, Genero, Pelicula, Sala, Funcion, Venta, DetalleVenta, Tarifa, Promocion, Reporte with pagination
+
+dto Persona, Genero, Pelicula, Sala, Funcion, Venta, DetalleVenta, Tarifa, Promocion, Reporte with mapstruct
+
+service Persona, Genero, Pelicula, Sala, Funcion, Venta, DetalleVenta, Tarifa, Promocion, Reporte with serviceClass

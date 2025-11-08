@@ -65,7 +65,7 @@ public class SecurityConfiguration {
         return authenticationManager;
     }
 
-    @Bean
+    /* @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         // @formatter:off
         http
@@ -107,6 +107,54 @@ public class SecurityConfiguration {
             .pathMatchers("/management/health/**").permitAll()
             .pathMatchers("/management/info").permitAll()
             .pathMatchers("/management/prometheus").permitAll()
+            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+        // @formatter:on
+        return http.build();
+    }*/
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        // @formatter:off
+        http
+            .csrf().disable()
+            .addFilterAt(new SpaWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
+            .addFilterAt(new JWTFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
+            .authenticationManager(reactiveAuthenticationManager())
+            .exceptionHandling()
+                .accessDeniedHandler(problemSupport)
+                .authenticationEntryPoint(problemSupport)
+        .and()
+            .headers()
+            .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
+            .and()
+                .referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+            .and()
+                .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
+            .and()
+                .frameOptions().mode(Mode.DENY)
+        .and()
+            .authorizeExchange()
+            // Swagger sin autenticación
+            .pathMatchers(
+                "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/v3/api-docs.yaml",
+                "/webjars/**"
+            ).permitAll()
+            // Endpoints públicos normales
+            .pathMatchers("/", "/*.*").permitAll()
+            .pathMatchers("/api/authenticate").permitAll()
+            .pathMatchers("/api/register").permitAll()
+            .pathMatchers("/api/activate").permitAll()
+            .pathMatchers("/api/account/reset-password/init").permitAll()
+            .pathMatchers("/api/account/reset-password/finish").permitAll()
+            .pathMatchers("/api/auth-info").permitAll()
+            // Protegidos
+            .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .pathMatchers("/api/**").authenticated()
+            .pathMatchers("/services/**").authenticated()
+            // Management
+            .pathMatchers("/management/health", "/management/health/**", "/management/info", "/management/prometheus").permitAll()
             .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
         // @formatter:on
         return http.build();

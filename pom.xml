@@ -595,6 +595,7 @@
                     <artifactId>jib-maven-plugin</artifactId>
                     <version>${jib-maven-plugin.version}</version>
                     <configuration>
+                        <format>Docker</format> 
                         <from>
                             <image>${jib-maven-plugin.image}</image>
                             <platforms>

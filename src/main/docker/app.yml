@@ -1,19 +1,20 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '3.8'
+#version: '3.8'
 services:
   sistemacine-app:
     image: sistemacine
     environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - _JAVA_OPTIONS=-Xmx1024m -Xms512m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_R2DBC_URL=r2dbc:mariadb://sistemacine-mariadb:3306/sistemacine?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://sistemacine-mariadb:3306/sistemacine?useLegacyDatetimeCode=false&serverTimezone=UTC
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - SERVER_PORT=8082
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:8080:8080
+      - 127.0.0.1:8080:8082
   sistemacine-mariadb:
     image: mariadb:10.7.1
     # volumes:

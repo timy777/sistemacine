@@ -1,0 +1,125 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-pelicula-heading" data-cy="PeliculaCreateUpdateHeading" jhiTranslate="sistemacineApp.pelicula.home.createOrEditLabel">
+        Create or edit a Pelicula
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.titulo" for="field_titulo">Titulo</label>
+          <input type="text" class="form-control" name="titulo" id="field_titulo" data-cy="titulo" formControlName="titulo" />
+          <div *ngIf="editForm.get('titulo')!.invalid && (editForm.get('titulo')!.dirty || editForm.get('titulo')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('titulo')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.sinopsis" for="field_sinopsis">Sinopsis</label>
+          <textarea class="form-control" name="sinopsis" id="field_sinopsis" data-cy="sinopsis" formControlName="sinopsis"></textarea>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.duracion" for="field_duracion">Duracion</label>
+          <input type="number" class="form-control" name="duracion" id="field_duracion" data-cy="duracion" formControlName="duracion" />
+          <div *ngIf="editForm.get('duracion')!.invalid && (editForm.get('duracion')!.dirty || editForm.get('duracion')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('duracion')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('duracion')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.idioma" for="field_idioma">Idioma</label>
+          <input type="text" class="form-control" name="idioma" id="field_idioma" data-cy="idioma" formControlName="idioma" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.clasificacion" for="field_clasificacion">Clasificacion</label>
+          <input
+            type="text"
+            class="form-control"
+            name="clasificacion"
+            id="field_clasificacion"
+            data-cy="clasificacion"
+            formControlName="clasificacion"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.formato" for="field_formato">Formato</label>
+          <input type="text" class="form-control" name="formato" id="field_formato" data-cy="formato" formControlName="formato" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.estado" for="field_estado">Estado</label>
+          <select class="form-control" name="estado" formControlName="estado" id="field_estado" data-cy="estado">
+            <option [ngValue]="null">{{ 'sistemacineApp.EstadoPelicula.null' | translate }}</option>
+            <option *ngFor="let estadoPelicula of estadoPeliculaValues" [value]="estadoPelicula">
+              {{ 'sistemacineApp.EstadoPelicula.' + estadoPelicula | translate }}
+            </option>
+          </select>
+          <div *ngIf="editForm.get('estado')!.invalid && (editForm.get('estado')!.dirty || editForm.get('estado')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('estado')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.imagenUrl" for="field_imagenUrl">Imagen Url</label>
+          <input type="text" class="form-control" name="imagenUrl" id="field_imagenUrl" data-cy="imagenUrl" formControlName="imagenUrl" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.pelicula.genero" for="field_genero">Genero</label>
+          <select class="form-control" id="field_genero" data-cy="genero" name="genero" formControlName="genero">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="generoOption.id === editForm.get('genero')!.value?.id ? editForm.get('genero')!.value : generoOption"
+              *ngFor="let generoOption of generosSharedCollection; trackBy: trackGeneroById"
+            >
+              {{ generoOption.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

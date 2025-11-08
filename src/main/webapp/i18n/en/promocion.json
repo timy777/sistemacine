@@ -1,0 +1,30 @@
+{
+  "sistemacineApp": {
+    "promocion": {
+      "home": {
+        "title": "Promocions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Promocion",
+        "createOrEditLabel": "Create or edit a Promocion",
+        "notFound": "No Promocions found"
+      },
+      "created": "A new Promocion is created with identifier {{ param }}",
+      "updated": "A Promocion is updated with identifier {{ param }}",
+      "deleted": "A Promocion is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Promocion {{ id }}?"
+      },
+      "detail": {
+        "title": "Promocion"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "descripcion": "Descripcion",
+      "porcentajeDescuento": "Porcentaje Descuento",
+      "fechaInicio": "Fecha Inicio",
+      "fechaFin": "Fecha Fin",
+      "activa": "Activa",
+      "peliculas": "Peliculas"
+    }
+  }
+}

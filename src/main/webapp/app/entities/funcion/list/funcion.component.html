@@ -1,0 +1,134 @@
+<div>
+  <h2 id="page-heading" data-cy="FuncionHeading">
+    <span jhiTranslate="sistemacineApp.funcion.home.title">Funcions</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="sistemacineApp.funcion.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-funcion"
+        [routerLink]="['/funcion/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="sistemacineApp.funcion.home.createLabel"> Create a new Funcion </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="funcions?.length === 0">
+    <span jhiTranslate="sistemacineApp.funcion.home.notFound">No funcions found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="funcions && funcions.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fecha">
+            <span jhiTranslate="sistemacineApp.funcion.fecha">Fecha</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="horaInicio">
+            <span jhiTranslate="sistemacineApp.funcion.horaInicio">Hora Inicio</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="horaFin">
+            <span jhiTranslate="sistemacineApp.funcion.horaFin">Hora Fin</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="precio">
+            <span jhiTranslate="sistemacineApp.funcion.precio">Precio</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="sala.nombre">
+            <span jhiTranslate="sistemacineApp.funcion.sala">Sala</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="pelicula.titulo">
+            <span jhiTranslate="sistemacineApp.funcion.pelicula">Pelicula</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="tarifa.nombre">
+            <span jhiTranslate="sistemacineApp.funcion.tarifa">Tarifa</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let funcion of funcions; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/funcion', funcion.id, 'view']">{{ funcion.id }}</a>
+          </td>
+          <td>{{ funcion.fecha | formatMediumDate }}</td>
+          <td>{{ funcion.horaInicio | formatMediumDatetime }}</td>
+          <td>{{ funcion.horaFin | formatMediumDatetime }}</td>
+          <td>{{ funcion.precio }}</td>
+          <td>
+            <div *ngIf="funcion.sala">
+              <a [routerLink]="['/sala', funcion.sala?.id, 'view']">{{ funcion.sala?.nombre }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="funcion.pelicula">
+              <a [routerLink]="['/pelicula', funcion.pelicula?.id, 'view']">{{ funcion.pelicula?.titulo }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="funcion.tarifa">
+              <a [routerLink]="['/tarifa', funcion.tarifa?.id, 'view']">{{ funcion.tarifa?.nombre }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/funcion', funcion.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/funcion', funcion.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(funcion)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="funcions && funcions.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

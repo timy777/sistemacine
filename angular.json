@@ -100,6 +100,7 @@
   },
   "defaultProject": "sistemacine",
   "cli": {
+    "analytics": "7cc9ea88-e558-4434-9894-c28d18a73bf4",
     "cache": {
       "enabled": true,
       "path": "./target/angular/",

@@ -1,0 +1,10 @@
+{
+  "sistemacineApp": {
+    "EstadoPelicula": {
+      "null": "",
+      "EN_CARTELERA": "EN_CARTELERA",
+      "PROXIMO_ESTRENO": "PROXIMO_ESTRENO",
+      "RETIRADA": "RETIRADA"
+    }
+  }
+}

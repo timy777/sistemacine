@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20251108145056",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "sala",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "capacidad",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "TipoSala",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DOSD,TRESD,VIP"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Sala",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

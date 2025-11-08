@@ -1,0 +1,10 @@
+{
+  "sistemacineApp": {
+    "TipoSala": {
+      "null": "",
+      "DOSD": "DOSD",
+      "TRESD": "TRESD",
+      "VIP": "VIP"
+    }
+  }
+}

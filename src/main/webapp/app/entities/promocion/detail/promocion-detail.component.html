@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="promocion">
+      <h2 data-cy="promocionDetailsHeading"><span jhiTranslate="sistemacineApp.promocion.detail.title">Promocion</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ promocion.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.promocion.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ promocion.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.promocion.descripcion">Descripcion</span></dt>
+        <dd>
+          <span>{{ promocion.descripcion }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.promocion.porcentajeDescuento">Porcentaje Descuento</span></dt>
+        <dd>
+          <span>{{ promocion.porcentajeDescuento }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.promocion.fechaInicio">Fecha Inicio</span></dt>
+        <dd>
+          <span>{{ promocion.fechaInicio | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.promocion.fechaFin">Fecha Fin</span></dt>
+        <dd>
+          <span>{{ promocion.fechaFin | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.promocion.activa">Activa</span></dt>
+        <dd>
+          <span>{{ promocion.activa }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.promocion.peliculas">Peliculas</span></dt>
+        <dd>
+          <span *ngFor="let peliculas of promocion.peliculas; let last = last">
+            <a [routerLink]="['/pelicula', peliculas?.id, 'view']">{{ peliculas.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/promocion', promocion.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

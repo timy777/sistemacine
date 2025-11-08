@@ -1,0 +1,39 @@
+{
+  "applications": "*",
+  "changelogDate": "20251108145059",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "detalle_venta",
+  "fields": [
+    {
+      "fieldName": "asiento",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "precioUnitario",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "DetalleVenta",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "funcion",
+      "otherEntityRelationshipName": "detalleVenta",
+      "relationshipName": "funcion",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "venta",
+      "otherEntityRelationshipName": "detalles",
+      "relationshipName": "venta",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

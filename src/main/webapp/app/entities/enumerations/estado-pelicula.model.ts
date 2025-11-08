@@ -1,0 +1,7 @@
+export enum EstadoPelicula {
+  EN_CARTELERA = 'EN_CARTELERA',
+
+  PROXIMO_ESTRENO = 'PROXIMO_ESTRENO',
+
+  RETIRADA = 'RETIRADA',
+}

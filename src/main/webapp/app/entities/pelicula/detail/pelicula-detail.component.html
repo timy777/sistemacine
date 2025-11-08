@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="pelicula">
+      <h2 data-cy="peliculaDetailsHeading"><span jhiTranslate="sistemacineApp.pelicula.detail.title">Pelicula</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ pelicula.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.titulo">Titulo</span></dt>
+        <dd>
+          <span>{{ pelicula.titulo }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.sinopsis">Sinopsis</span></dt>
+        <dd>
+          <span>{{ pelicula.sinopsis }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.duracion">Duracion</span></dt>
+        <dd>
+          <span>{{ pelicula.duracion }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.idioma">Idioma</span></dt>
+        <dd>
+          <span>{{ pelicula.idioma }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.clasificacion">Clasificacion</span></dt>
+        <dd>
+          <span>{{ pelicula.clasificacion }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.formato">Formato</span></dt>
+        <dd>
+          <span>{{ pelicula.formato }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.estado">Estado</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'sistemacineApp.EstadoPelicula.' + pelicula.estado }}">{{ pelicula.estado }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.imagenUrl">Imagen Url</span></dt>
+        <dd>
+          <span>{{ pelicula.imagenUrl }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.pelicula.genero">Genero</span></dt>
+        <dd>
+          <div *ngIf="pelicula.genero">
+            <a [routerLink]="['/genero', pelicula.genero?.id, 'view']">{{ pelicula.genero?.nombre }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/pelicula', pelicula.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

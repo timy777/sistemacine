@@ -1,0 +1,53 @@
+{
+  "applications": "*",
+  "changelogDate": "20251108145101",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "promocion",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "porcentajeDescuento",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fechaInicio",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fechaFin",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "activa",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Promocion",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "pelicula",
+      "otherEntityRelationshipName": "promociones",
+      "ownerSide": true,
+      "relationshipName": "peliculas",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

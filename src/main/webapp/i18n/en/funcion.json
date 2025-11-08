@@ -1,0 +1,30 @@
+{
+  "sistemacineApp": {
+    "funcion": {
+      "home": {
+        "title": "Funcions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Funcion",
+        "createOrEditLabel": "Create or edit a Funcion",
+        "notFound": "No Funcions found"
+      },
+      "created": "A new Funcion is created with identifier {{ param }}",
+      "updated": "A Funcion is updated with identifier {{ param }}",
+      "deleted": "A Funcion is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Funcion {{ id }}?"
+      },
+      "detail": {
+        "title": "Funcion"
+      },
+      "id": "ID",
+      "fecha": "Fecha",
+      "horaInicio": "Hora Inicio",
+      "horaFin": "Hora Fin",
+      "precio": "Precio",
+      "sala": "Sala",
+      "pelicula": "Pelicula",
+      "tarifa": "Tarifa"
+    }
+  }
+}

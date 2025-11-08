@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="persona">
+      <h2 data-cy="personaDetailsHeading"><span jhiTranslate="sistemacineApp.persona.detail.title">Persona</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ persona.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.persona.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ persona.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.persona.apellido">Apellido</span></dt>
+        <dd>
+          <span>{{ persona.apellido }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.persona.telefono">Telefono</span></dt>
+        <dd>
+          <span>{{ persona.telefono }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.persona.email">Email</span></dt>
+        <dd>
+          <span>{{ persona.email }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.persona.tipo">Tipo</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'sistemacineApp.TipoPersona.' + persona.tipo }}">{{ persona.tipo }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.persona.fechaNacimiento">Fecha Nacimiento</span></dt>
+        <dd>
+          <span>{{ persona.fechaNacimiento | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.persona.sexo">Sexo</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'sistemacineApp.Sexo.' + persona.sexo }}">{{ persona.sexo }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.persona.carnetIdentidad">Carnet Identidad</span></dt>
+        <dd>
+          <span>{{ persona.carnetIdentidad }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/persona', persona.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

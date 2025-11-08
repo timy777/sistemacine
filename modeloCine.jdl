@@ -78,14 +78,14 @@ entity Sala {
 /* 5. Funciones (horarios de proyección) */
 entity Funcion {
   fecha LocalDate required,
-  horaInicio LocalTime required,
-  horaFin LocalTime required,
+  horaInicio Instant required,
+  horaFin Instant required,
   precio BigDecimal required
 }
 
 /* 6. Ventas de boletos */
 entity Venta {
-  fecha ZonedDateTime required,
+  fecha Instant required,
   total BigDecimal required,
   metodoPago String required
 }
@@ -118,7 +118,7 @@ entity Promocion {
 /* 10. Reportes (configuración o historial generado) */
 entity Reporte {
   tipo String required,
-  fechaGeneracion ZonedDateTime required,
+  fechaGeneracion LocalDate required,
   descripcion String
 }
 

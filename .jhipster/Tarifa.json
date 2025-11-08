@@ -1,0 +1,39 @@
+{
+  "applications": "*",
+  "changelogDate": "20251108145100",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "tarifa",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "monto",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "diaSemana",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tipoSala",
+      "fieldType": "TipoSala",
+      "fieldValues": "DOSD,TRESD,VIP"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Tarifa",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

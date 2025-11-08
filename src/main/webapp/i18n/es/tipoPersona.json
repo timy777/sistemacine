@@ -1,0 +1,9 @@
+{
+  "sistemacineApp": {
+    "TipoPersona": {
+      "null": "",
+      "CLIENTE": "CLIENTE",
+      "VENDEDOR": "VENDEDOR"
+    }
+  }
+}

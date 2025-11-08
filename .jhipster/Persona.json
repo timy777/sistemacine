@@ -1,0 +1,57 @@
+{
+  "applications": "*",
+  "changelogDate": "20251108145053",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "persona",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "apellido",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "telefono",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "TipoPersona",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CLIENTE,VENDEDOR"
+    },
+    {
+      "fieldName": "fechaNacimiento",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sexo",
+      "fieldType": "Sexo",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "MASCULINO,FEMENINO,OTRO"
+    },
+    {
+      "fieldName": "carnetIdentidad",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Persona",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

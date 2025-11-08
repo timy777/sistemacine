@@ -1,0 +1,25 @@
+{
+  "applications": "*",
+  "changelogDate": "20251108145054",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "genero",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Genero",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

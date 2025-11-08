@@ -1,0 +1,68 @@
+{
+  "applications": "*",
+  "changelogDate": "20251108145055",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "pelicula",
+  "fields": [
+    {
+      "fieldName": "titulo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sinopsis",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "duracion",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "idioma",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "clasificacion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "formato",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoPelicula",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_CARTELERA,PROXIMO_ESTRENO,RETIRADA"
+    },
+    {
+      "fieldName": "imagenUrl",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Pelicula",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "nombre",
+      "otherEntityName": "genero",
+      "otherEntityRelationshipName": "pelicula",
+      "relationshipName": "genero",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "promocion",
+      "otherEntityRelationshipName": "peliculas",
+      "ownerSide": false,
+      "relationshipName": "promociones",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="detalleVenta">
+      <h2 data-cy="detalleVentaDetailsHeading"><span jhiTranslate="sistemacineApp.detalleVenta.detail.title">Detalle Venta</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ detalleVenta.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.detalleVenta.asiento">Asiento</span></dt>
+        <dd>
+          <span>{{ detalleVenta.asiento }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.detalleVenta.precioUnitario">Precio Unitario</span></dt>
+        <dd>
+          <span>{{ detalleVenta.precioUnitario }}</span>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.detalleVenta.funcion">Funcion</span></dt>
+        <dd>
+          <div *ngIf="detalleVenta.funcion">
+            <a [routerLink]="['/funcion', detalleVenta.funcion?.id, 'view']">{{ detalleVenta.funcion?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="sistemacineApp.detalleVenta.venta">Venta</span></dt>
+        <dd>
+          <div *ngIf="detalleVenta.venta">
+            <a [routerLink]="['/venta', detalleVenta.venta?.id, 'view']">{{ detalleVenta.venta?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/detalle-venta', detalleVenta.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

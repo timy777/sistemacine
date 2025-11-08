@@ -1,0 +1,38 @@
+{
+  "applications": "*",
+  "changelogDate": "20251108145102",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "reporte",
+  "fields": [
+    {
+      "fieldName": "tipo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fechaGeneracion",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Reporte",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "nombre",
+      "otherEntityName": "persona",
+      "otherEntityRelationshipName": "reporte",
+      "relationshipName": "vendedor",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

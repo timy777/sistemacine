@@ -1,0 +1,170 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-funcion-heading" data-cy="FuncionCreateUpdateHeading" jhiTranslate="sistemacineApp.funcion.home.createOrEditLabel">
+        Create or edit a Funcion
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.funcion.fecha" for="field_fecha">Fecha</label>
+          <div class="input-group">
+            <input
+              id="field_fecha"
+              data-cy="fecha"
+              type="text"
+              class="form-control"
+              name="fecha"
+              ngbDatepicker
+              #fechaDp="ngbDatepicker"
+              formControlName="fecha"
+            />
+            <button type="button" class="btn btn-secondary" (click)="fechaDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+          <div *ngIf="editForm.get('fecha')!.invalid && (editForm.get('fecha')!.dirty || editForm.get('fecha')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('fecha')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.funcion.horaInicio" for="field_horaInicio">Hora Inicio</label>
+          <div class="d-flex">
+            <input
+              id="field_horaInicio"
+              data-cy="horaInicio"
+              type="datetime-local"
+              class="form-control"
+              name="horaInicio"
+              formControlName="horaInicio"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div *ngIf="editForm.get('horaInicio')!.invalid && (editForm.get('horaInicio')!.dirty || editForm.get('horaInicio')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('horaInicio')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('horaInicio')?.errors?.ZonedDateTimelocal"
+              jhiTranslate="entity.validation.ZonedDateTimelocal"
+            >
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.funcion.horaFin" for="field_horaFin">Hora Fin</label>
+          <div class="d-flex">
+            <input
+              id="field_horaFin"
+              data-cy="horaFin"
+              type="datetime-local"
+              class="form-control"
+              name="horaFin"
+              formControlName="horaFin"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div *ngIf="editForm.get('horaFin')!.invalid && (editForm.get('horaFin')!.dirty || editForm.get('horaFin')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('horaFin')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('horaFin')?.errors?.ZonedDateTimelocal"
+              jhiTranslate="entity.validation.ZonedDateTimelocal"
+            >
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.funcion.precio" for="field_precio">Precio</label>
+          <input type="number" class="form-control" name="precio" id="field_precio" data-cy="precio" formControlName="precio" />
+          <div *ngIf="editForm.get('precio')!.invalid && (editForm.get('precio')!.dirty || editForm.get('precio')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('precio')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('precio')?.errors?.number" jhiTranslate="entity.validation.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.funcion.sala" for="field_sala">Sala</label>
+          <select class="form-control" id="field_sala" data-cy="sala" name="sala" formControlName="sala">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="salaOption.id === editForm.get('sala')!.value?.id ? editForm.get('sala')!.value : salaOption"
+              *ngFor="let salaOption of salasSharedCollection; trackBy: trackSalaById"
+            >
+              {{ salaOption.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.funcion.pelicula" for="field_pelicula">Pelicula</label>
+          <select class="form-control" id="field_pelicula" data-cy="pelicula" name="pelicula" formControlName="pelicula">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="peliculaOption.id === editForm.get('pelicula')!.value?.id ? editForm.get('pelicula')!.value : peliculaOption"
+              *ngFor="let peliculaOption of peliculasSharedCollection; trackBy: trackPeliculaById"
+            >
+              {{ peliculaOption.titulo }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="sistemacineApp.funcion.tarifa" for="field_tarifa">Tarifa</label>
+          <select class="form-control" id="field_tarifa" data-cy="tarifa" name="tarifa" formControlName="tarifa">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="tarifaOption.id === editForm.get('tarifa')!.value?.id ? editForm.get('tarifa')!.value : tarifaOption"
+              *ngFor="let tarifaOption of tarifasSharedCollection; trackBy: trackTarifaById"
+            >
+              {{ tarifaOption.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

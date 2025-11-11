@@ -1,0 +1,16 @@
+services:
+  sistemacine-app:
+    build: .
+    ports:
+      - '8083:8083'
+      - '5005:5005' # Debug port
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/sistemacine
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:7.0
+    ports:
+      - '27017:27017'

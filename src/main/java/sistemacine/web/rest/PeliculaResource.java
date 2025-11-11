@@ -74,7 +74,7 @@ public class PeliculaResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/peliculas/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class PeliculaResource {
      */
     @PutMapping("/peliculas/{id}")
     public Mono<ResponseEntity<PeliculaDTO>> updatePelicula(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody PeliculaDTO peliculaDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Pelicula : {}, {}", id, peliculaDTO);
@@ -118,7 +118,7 @@ public class PeliculaResource {
                     .map(result ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId()))
                             .body(result)
                     );
             });
@@ -137,7 +137,7 @@ public class PeliculaResource {
      */
     @PatchMapping(value = "/peliculas/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public Mono<ResponseEntity<PeliculaDTO>> partialUpdatePelicula(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody PeliculaDTO peliculaDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Pelicula partially : {}, {}", id, peliculaDTO);
@@ -162,7 +162,7 @@ public class PeliculaResource {
                     .map(res ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, res.getId()))
                             .body(res)
                     );
             });
@@ -206,7 +206,7 @@ public class PeliculaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the peliculaDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/peliculas/{id}")
-    public Mono<ResponseEntity<PeliculaDTO>> getPelicula(@PathVariable Long id) {
+    public Mono<ResponseEntity<PeliculaDTO>> getPelicula(@PathVariable String id) {
         log.debug("REST request to get Pelicula : {}", id);
         Mono<PeliculaDTO> peliculaDTO = peliculaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(peliculaDTO);
@@ -220,15 +220,12 @@ public class PeliculaResource {
      */
     @DeleteMapping("/peliculas/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deletePelicula(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> deletePelicula(@PathVariable String id) {
         log.debug("REST request to delete Pelicula : {}", id);
         return peliculaService
             .delete(id)
             .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
+                ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build()
             );
     }
 }

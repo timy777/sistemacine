@@ -14,7 +14,7 @@ describe('Promocion Management Detail Component', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { data: of({ promocion: { id: 123 } }) },
+          useValue: { data: of({ promocion: { id: 'ABC' } }) },
         },
       ],
     })
@@ -30,7 +30,7 @@ describe('Promocion Management Detail Component', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(comp.promocion).toEqual(expect.objectContaining({ id: 123 }));
+      expect(comp.promocion).toEqual(expect.objectContaining({ id: 'ABC' }));
     });
   });
 });

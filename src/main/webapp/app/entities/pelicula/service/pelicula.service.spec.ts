@@ -21,7 +21,7 @@ describe('Pelicula Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     elemDefault = {
-      id: 0,
+      id: 'AAAAAAA',
       titulo: 'AAAAAAA',
       sinopsis: 'AAAAAAA',
       duracion: 0,
@@ -37,7 +37,7 @@ describe('Pelicula Service', () => {
     it('should find an element', () => {
       const returnedFromService = Object.assign({}, elemDefault);
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find('ABC').subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -47,7 +47,7 @@ describe('Pelicula Service', () => {
     it('should create a Pelicula', () => {
       const returnedFromService = Object.assign(
         {
-          id: 0,
+          id: 'ID',
         },
         elemDefault
       );
@@ -64,7 +64,7 @@ describe('Pelicula Service', () => {
     it('should update a Pelicula', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           titulo: 'BBBBBB',
           sinopsis: 'BBBBBB',
           duracion: 1,
@@ -109,7 +109,7 @@ describe('Pelicula Service', () => {
     it('should return a list of Pelicula', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           titulo: 'BBBBBB',
           sinopsis: 'BBBBBB',
           duracion: 1,
@@ -133,7 +133,7 @@ describe('Pelicula Service', () => {
     });
 
     it('should delete a Pelicula', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+      service.delete('ABC').subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
@@ -142,42 +142,42 @@ describe('Pelicula Service', () => {
 
     describe('addPeliculaToCollectionIfMissing', () => {
       it('should add a Pelicula to an empty array', () => {
-        const pelicula: IPelicula = { id: 123 };
+        const pelicula: IPelicula = { id: 'ABC' };
         expectedResult = service.addPeliculaToCollectionIfMissing([], pelicula);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(pelicula);
       });
 
       it('should not add a Pelicula to an array that contains it', () => {
-        const pelicula: IPelicula = { id: 123 };
+        const pelicula: IPelicula = { id: 'ABC' };
         const peliculaCollection: IPelicula[] = [
           {
             ...pelicula,
           },
-          { id: 456 },
+          { id: 'CBA' },
         ];
         expectedResult = service.addPeliculaToCollectionIfMissing(peliculaCollection, pelicula);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a Pelicula to an array that doesn't contain it", () => {
-        const pelicula: IPelicula = { id: 123 };
-        const peliculaCollection: IPelicula[] = [{ id: 456 }];
+        const pelicula: IPelicula = { id: 'ABC' };
+        const peliculaCollection: IPelicula[] = [{ id: 'CBA' }];
         expectedResult = service.addPeliculaToCollectionIfMissing(peliculaCollection, pelicula);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(pelicula);
       });
 
       it('should add only unique Pelicula to an array', () => {
-        const peliculaArray: IPelicula[] = [{ id: 123 }, { id: 456 }, { id: 45009 }];
-        const peliculaCollection: IPelicula[] = [{ id: 123 }];
+        const peliculaArray: IPelicula[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: '78bffd45-2326-484c-aeee-8a2b9c79beb4' }];
+        const peliculaCollection: IPelicula[] = [{ id: 'ABC' }];
         expectedResult = service.addPeliculaToCollectionIfMissing(peliculaCollection, ...peliculaArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const pelicula: IPelicula = { id: 123 };
-        const pelicula2: IPelicula = { id: 456 };
+        const pelicula: IPelicula = { id: 'ABC' };
+        const pelicula2: IPelicula = { id: 'CBA' };
         expectedResult = service.addPeliculaToCollectionIfMissing([], pelicula, pelicula2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(pelicula);
@@ -185,14 +185,14 @@ describe('Pelicula Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const pelicula: IPelicula = { id: 123 };
+        const pelicula: IPelicula = { id: 'ABC' };
         expectedResult = service.addPeliculaToCollectionIfMissing([], null, pelicula, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(pelicula);
       });
 
       it('should return initial array if no Pelicula is added', () => {
-        const peliculaCollection: IPelicula[] = [{ id: 123 }];
+        const peliculaCollection: IPelicula[] = [{ id: 'ABC' }];
         expectedResult = service.addPeliculaToCollectionIfMissing(peliculaCollection, undefined, null);
         expect(expectedResult).toEqual(peliculaCollection);
       });

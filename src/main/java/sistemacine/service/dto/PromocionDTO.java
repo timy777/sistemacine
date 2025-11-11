@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
  */
 public class PromocionDTO implements Serializable {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
     private String nombre;
@@ -33,11 +33,11 @@ public class PromocionDTO implements Serializable {
 
     private Set<PeliculaDTO> peliculas = new HashSet<>();
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -122,7 +122,7 @@ public class PromocionDTO implements Serializable {
     @Override
     public String toString() {
         return "PromocionDTO{" +
-            "id=" + getId() +
+            "id='" + getId() + "'" +
             ", nombre='" + getNombre() + "'" +
             ", descripcion='" + getDescripcion() + "'" +
             ", porcentajeDescuento=" + getPorcentajeDescuento() +

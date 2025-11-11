@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="PersonaHeading">
-    <span jhiTranslate="sistemacineApp.persona.home.title">Personas</span>
+    <span>Personas</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="sistemacineApp.persona.home.refreshListLabel">Refresh List</span>
+        <span>Refresh List</span>
       </button>
 
       <button
@@ -15,7 +15,7 @@
         [routerLink]="['/persona/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="sistemacineApp.persona.home.createLabel"> Create a new Persona </span>
+        <span> Create a new Persona </span>
       </button>
     </div>
   </h2>
@@ -25,34 +25,22 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="personas?.length === 0">
-    <span jhiTranslate="sistemacineApp.persona.home.notFound">No personas found</span>
+    <span>No personas found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="personas && personas.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="nombre">
-            <span jhiTranslate="sistemacineApp.persona.nombre">Nombre</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="apellido">
-            <span jhiTranslate="sistemacineApp.persona.apellido">Apellido</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="telefono">
-            <span jhiTranslate="sistemacineApp.persona.telefono">Telefono</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="email">
-            <span jhiTranslate="sistemacineApp.persona.email">Email</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="tipo"><span jhiTranslate="sistemacineApp.persona.tipo">Tipo</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fechaNacimiento">
-            <span jhiTranslate="sistemacineApp.persona.fechaNacimiento">Fecha Nacimiento</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="sexo"><span jhiTranslate="sistemacineApp.persona.sexo">Sexo</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="carnetIdentidad">
-            <span jhiTranslate="sistemacineApp.persona.carnetIdentidad">Carnet Identidad</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="nombre"><span>Nombre</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="apellido"><span>Apellido</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="telefono"><span>Telefono</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="email"><span>Email</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="tipo"><span>Tipo</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fechaNacimiento"><span>Fecha Nacimiento</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="sexo"><span>Sexo</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="carnetIdentidad"><span>Carnet Identidad</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -65,9 +53,9 @@
           <td>{{ persona.apellido }}</td>
           <td>{{ persona.telefono }}</td>
           <td>{{ persona.email }}</td>
-          <td jhiTranslate="{{ 'sistemacineApp.TipoPersona.' + persona.tipo }}">{{ persona.tipo }}</td>
+          <td>{{ persona.tipo }}</td>
           <td>{{ persona.fechaNacimiento | formatMediumDate }}</td>
-          <td jhiTranslate="{{ 'sistemacineApp.Sexo.' + persona.sexo }}">{{ persona.sexo }}</td>
+          <td>{{ persona.sexo }}</td>
           <td>{{ persona.carnetIdentidad }}</td>
           <td class="text-end">
             <div class="btn-group">
@@ -78,7 +66,7 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button
@@ -88,12 +76,12 @@
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline">Edit</span>
               </button>
 
               <button type="submit" (click)="delete(persona)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
           </td>

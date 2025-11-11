@@ -1,20 +1,18 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-venta-heading" data-cy="VentaCreateUpdateHeading" jhiTranslate="sistemacineApp.venta.home.createOrEditLabel">
-        Create or edit a Venta
-      </h2>
+      <h2 id="jhi-venta-heading" data-cy="VentaCreateUpdateHeading">Create or edit a Venta</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
 
         <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          <label class="form-label" for="field_id">ID</label>
+          <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.venta.fecha" for="field_fecha">Fecha</label>
+          <label class="form-label" for="field_fecha">Fecha</label>
           <div class="d-flex">
             <input
               id="field_fecha"
@@ -27,34 +25,24 @@
             />
           </div>
           <div *ngIf="editForm.get('fecha')!.invalid && (editForm.get('fecha')!.dirty || editForm.get('fecha')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('fecha')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('fecha')?.errors?.ZonedDateTimelocal"
-              jhiTranslate="entity.validation.ZonedDateTimelocal"
-            >
+            <small class="form-text text-danger" *ngIf="editForm.get('fecha')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('fecha')?.errors?.ZonedDateTimelocal">
               This field should be a date and time.
             </small>
           </div>
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.venta.total" for="field_total">Total</label>
+          <label class="form-label" for="field_total">Total</label>
           <input type="number" class="form-control" name="total" id="field_total" data-cy="total" formControlName="total" />
           <div *ngIf="editForm.get('total')!.invalid && (editForm.get('total')!.dirty || editForm.get('total')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('total')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('total')?.errors?.number" jhiTranslate="entity.validation.number">
-              This field should be a number.
-            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('total')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('total')?.errors?.number"> This field should be a number. </small>
           </div>
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.venta.metodoPago" for="field_metodoPago">Metodo Pago</label>
+          <label class="form-label" for="field_metodoPago">Metodo Pago</label>
           <input
             type="text"
             class="form-control"
@@ -64,18 +52,12 @@
             formControlName="metodoPago"
           />
           <div *ngIf="editForm.get('metodoPago')!.invalid && (editForm.get('metodoPago')!.dirty || editForm.get('metodoPago')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('metodoPago')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('metodoPago')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.venta.cliente" for="field_cliente">Cliente</label>
+          <label class="form-label" for="field_cliente">Cliente</label>
           <select class="form-control" id="field_cliente" data-cy="cliente" name="cliente" formControlName="cliente">
             <option [ngValue]="null"></option>
             <option
@@ -88,7 +70,7 @@
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.venta.vendedor" for="field_vendedor">Vendedor</label>
+          <label class="form-label" for="field_vendedor">Vendedor</label>
           <select class="form-control" id="field_vendedor" data-cy="vendedor" name="vendedor" formControlName="vendedor">
             <option [ngValue]="null"></option>
             <option
@@ -103,7 +85,7 @@
 
       <div>
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
         </button>
 
         <button
@@ -113,7 +95,7 @@
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
         >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>
       </div>
     </form>

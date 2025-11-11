@@ -21,16 +21,16 @@ export class PeliculaService {
   }
 
   update(pelicula: IPelicula): Observable<EntityResponseType> {
-    return this.http.put<IPelicula>(`${this.resourceUrl}/${getPeliculaIdentifier(pelicula) as number}`, pelicula, { observe: 'response' });
+    return this.http.put<IPelicula>(`${this.resourceUrl}/${getPeliculaIdentifier(pelicula) as string}`, pelicula, { observe: 'response' });
   }
 
   partialUpdate(pelicula: IPelicula): Observable<EntityResponseType> {
-    return this.http.patch<IPelicula>(`${this.resourceUrl}/${getPeliculaIdentifier(pelicula) as number}`, pelicula, {
+    return this.http.patch<IPelicula>(`${this.resourceUrl}/${getPeliculaIdentifier(pelicula) as string}`, pelicula, {
       observe: 'response',
     });
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http.get<IPelicula>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
@@ -39,7 +39,7 @@ export class PeliculaService {
     return this.http.get<IPelicula[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

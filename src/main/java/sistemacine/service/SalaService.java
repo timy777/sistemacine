@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.domain.Sala;
@@ -16,7 +15,6 @@ import sistemacine.service.mapper.SalaMapper;
  * Service Implementation for managing {@link Sala}.
  */
 @Service
-@Transactional
 public class SalaService {
 
     private final Logger log = LoggerFactory.getLogger(SalaService.class);
@@ -78,7 +76,6 @@ public class SalaService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    @Transactional(readOnly = true)
     public Flux<SalaDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Salas");
         return salaRepository.findAllBy(pageable).map(salaMapper::toDto);
@@ -99,8 +96,7 @@ public class SalaService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    @Transactional(readOnly = true)
-    public Mono<SalaDTO> findOne(Long id) {
+    public Mono<SalaDTO> findOne(String id) {
         log.debug("Request to get Sala : {}", id);
         return salaRepository.findById(id).map(salaMapper::toDto);
     }
@@ -111,7 +107,7 @@ public class SalaService {
      * @param id the id of the entity.
      * @return a Mono to signal the deletion
      */
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         log.debug("Request to delete Sala : {}", id);
         return salaRepository.deleteById(id);
     }

@@ -21,7 +21,7 @@ describe('Tarifa Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     elemDefault = {
-      id: 0,
+      id: 'AAAAAAA',
       nombre: 'AAAAAAA',
       descripcion: 'AAAAAAA',
       monto: 0,
@@ -34,7 +34,7 @@ describe('Tarifa Service', () => {
     it('should find an element', () => {
       const returnedFromService = Object.assign({}, elemDefault);
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find('ABC').subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -44,7 +44,7 @@ describe('Tarifa Service', () => {
     it('should create a Tarifa', () => {
       const returnedFromService = Object.assign(
         {
-          id: 0,
+          id: 'ID',
         },
         elemDefault
       );
@@ -61,7 +61,7 @@ describe('Tarifa Service', () => {
     it('should update a Tarifa', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           nombre: 'BBBBBB',
           descripcion: 'BBBBBB',
           monto: 1,
@@ -103,7 +103,7 @@ describe('Tarifa Service', () => {
     it('should return a list of Tarifa', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           nombre: 'BBBBBB',
           descripcion: 'BBBBBB',
           monto: 1,
@@ -124,7 +124,7 @@ describe('Tarifa Service', () => {
     });
 
     it('should delete a Tarifa', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+      service.delete('ABC').subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
@@ -133,42 +133,42 @@ describe('Tarifa Service', () => {
 
     describe('addTarifaToCollectionIfMissing', () => {
       it('should add a Tarifa to an empty array', () => {
-        const tarifa: ITarifa = { id: 123 };
+        const tarifa: ITarifa = { id: 'ABC' };
         expectedResult = service.addTarifaToCollectionIfMissing([], tarifa);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(tarifa);
       });
 
       it('should not add a Tarifa to an array that contains it', () => {
-        const tarifa: ITarifa = { id: 123 };
+        const tarifa: ITarifa = { id: 'ABC' };
         const tarifaCollection: ITarifa[] = [
           {
             ...tarifa,
           },
-          { id: 456 },
+          { id: 'CBA' },
         ];
         expectedResult = service.addTarifaToCollectionIfMissing(tarifaCollection, tarifa);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a Tarifa to an array that doesn't contain it", () => {
-        const tarifa: ITarifa = { id: 123 };
-        const tarifaCollection: ITarifa[] = [{ id: 456 }];
+        const tarifa: ITarifa = { id: 'ABC' };
+        const tarifaCollection: ITarifa[] = [{ id: 'CBA' }];
         expectedResult = service.addTarifaToCollectionIfMissing(tarifaCollection, tarifa);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(tarifa);
       });
 
       it('should add only unique Tarifa to an array', () => {
-        const tarifaArray: ITarifa[] = [{ id: 123 }, { id: 456 }, { id: 72774 }];
-        const tarifaCollection: ITarifa[] = [{ id: 123 }];
+        const tarifaArray: ITarifa[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: 'b9c00b13-da0d-4682-b827-9de2eb3a01d5' }];
+        const tarifaCollection: ITarifa[] = [{ id: 'ABC' }];
         expectedResult = service.addTarifaToCollectionIfMissing(tarifaCollection, ...tarifaArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const tarifa: ITarifa = { id: 123 };
-        const tarifa2: ITarifa = { id: 456 };
+        const tarifa: ITarifa = { id: 'ABC' };
+        const tarifa2: ITarifa = { id: 'CBA' };
         expectedResult = service.addTarifaToCollectionIfMissing([], tarifa, tarifa2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(tarifa);
@@ -176,14 +176,14 @@ describe('Tarifa Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const tarifa: ITarifa = { id: 123 };
+        const tarifa: ITarifa = { id: 'ABC' };
         expectedResult = service.addTarifaToCollectionIfMissing([], null, tarifa, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(tarifa);
       });
 
       it('should return initial array if no Tarifa is added', () => {
-        const tarifaCollection: ITarifa[] = [{ id: 123 }];
+        const tarifaCollection: ITarifa[] = [{ id: 'ABC' }];
         expectedResult = service.addTarifaToCollectionIfMissing(tarifaCollection, undefined, null);
         expect(expectedResult).toEqual(tarifaCollection);
       });

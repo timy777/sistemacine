@@ -57,7 +57,7 @@ export class PromocionComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IPromocion): number {
+  trackId(_index: number, item: IPromocion): string {
     return item.id!;
   }
 

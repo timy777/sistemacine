@@ -16,7 +16,7 @@ export class TarifaDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(id: number): void {
+  confirmDelete(id: string): void {
     this.tarifaService.delete(id).subscribe(() => {
       this.activeModal.close('deleted');
     });

@@ -29,18 +29,18 @@ export class PromocionService {
   update(promocion: IPromocion): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(promocion);
     return this.http
-      .put<IPromocion>(`${this.resourceUrl}/${getPromocionIdentifier(promocion) as number}`, copy, { observe: 'response' })
+      .put<IPromocion>(`${this.resourceUrl}/${getPromocionIdentifier(promocion) as string}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(promocion: IPromocion): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(promocion);
     return this.http
-      .patch<IPromocion>(`${this.resourceUrl}/${getPromocionIdentifier(promocion) as number}`, copy, { observe: 'response' })
+      .patch<IPromocion>(`${this.resourceUrl}/${getPromocionIdentifier(promocion) as string}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http
       .get<IPromocion>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -53,7 +53,7 @@ export class PromocionService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

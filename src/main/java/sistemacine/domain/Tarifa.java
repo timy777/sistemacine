@@ -4,52 +4,50 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import sistemacine.domain.enumeration.TipoSala;
 
 /**
  * A Tarifa.
  */
-@Table("tarifa")
+@Document(collection = "tarifa")
 public class Tarifa implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
-    @Column("nombre")
+    @Field("nombre")
     private String nombre;
 
-    @Column("descripcion")
+    @Field("descripcion")
     private String descripcion;
 
     @NotNull(message = "must not be null")
-    @Column("monto")
+    @Field("monto")
     private BigDecimal monto;
 
-    @Column("dia_semana")
+    @Field("dia_semana")
     private String diaSemana;
 
-    @Column("tipo_sala")
+    @Field("tipo_sala")
     private TipoSala tipoSala;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
-    public Tarifa id(Long id) {
+    public Tarifa id(String id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -89,7 +87,7 @@ public class Tarifa implements Serializable {
     }
 
     public void setMonto(BigDecimal monto) {
-        this.monto = monto != null ? monto.stripTrailingZeros() : null;
+        this.monto = monto;
     }
 
     public String getDiaSemana() {

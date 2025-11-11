@@ -20,7 +20,7 @@ describe('DetalleVenta Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     elemDefault = {
-      id: 0,
+      id: 'AAAAAAA',
       asiento: 'AAAAAAA',
       precioUnitario: 0,
     };
@@ -30,7 +30,7 @@ describe('DetalleVenta Service', () => {
     it('should find an element', () => {
       const returnedFromService = Object.assign({}, elemDefault);
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find('ABC').subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -40,7 +40,7 @@ describe('DetalleVenta Service', () => {
     it('should create a DetalleVenta', () => {
       const returnedFromService = Object.assign(
         {
-          id: 0,
+          id: 'ID',
         },
         elemDefault
       );
@@ -57,7 +57,7 @@ describe('DetalleVenta Service', () => {
     it('should update a DetalleVenta', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           asiento: 'BBBBBB',
           precioUnitario: 1,
         },
@@ -90,7 +90,7 @@ describe('DetalleVenta Service', () => {
     it('should return a list of DetalleVenta', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           asiento: 'BBBBBB',
           precioUnitario: 1,
         },
@@ -108,7 +108,7 @@ describe('DetalleVenta Service', () => {
     });
 
     it('should delete a DetalleVenta', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+      service.delete('ABC').subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
@@ -117,42 +117,42 @@ describe('DetalleVenta Service', () => {
 
     describe('addDetalleVentaToCollectionIfMissing', () => {
       it('should add a DetalleVenta to an empty array', () => {
-        const detalleVenta: IDetalleVenta = { id: 123 };
+        const detalleVenta: IDetalleVenta = { id: 'ABC' };
         expectedResult = service.addDetalleVentaToCollectionIfMissing([], detalleVenta);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(detalleVenta);
       });
 
       it('should not add a DetalleVenta to an array that contains it', () => {
-        const detalleVenta: IDetalleVenta = { id: 123 };
+        const detalleVenta: IDetalleVenta = { id: 'ABC' };
         const detalleVentaCollection: IDetalleVenta[] = [
           {
             ...detalleVenta,
           },
-          { id: 456 },
+          { id: 'CBA' },
         ];
         expectedResult = service.addDetalleVentaToCollectionIfMissing(detalleVentaCollection, detalleVenta);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a DetalleVenta to an array that doesn't contain it", () => {
-        const detalleVenta: IDetalleVenta = { id: 123 };
-        const detalleVentaCollection: IDetalleVenta[] = [{ id: 456 }];
+        const detalleVenta: IDetalleVenta = { id: 'ABC' };
+        const detalleVentaCollection: IDetalleVenta[] = [{ id: 'CBA' }];
         expectedResult = service.addDetalleVentaToCollectionIfMissing(detalleVentaCollection, detalleVenta);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(detalleVenta);
       });
 
       it('should add only unique DetalleVenta to an array', () => {
-        const detalleVentaArray: IDetalleVenta[] = [{ id: 123 }, { id: 456 }, { id: 62701 }];
-        const detalleVentaCollection: IDetalleVenta[] = [{ id: 123 }];
+        const detalleVentaArray: IDetalleVenta[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: 'a74ebc5b-2ce9-4722-8d1d-3e90cf00a10f' }];
+        const detalleVentaCollection: IDetalleVenta[] = [{ id: 'ABC' }];
         expectedResult = service.addDetalleVentaToCollectionIfMissing(detalleVentaCollection, ...detalleVentaArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const detalleVenta: IDetalleVenta = { id: 123 };
-        const detalleVenta2: IDetalleVenta = { id: 456 };
+        const detalleVenta: IDetalleVenta = { id: 'ABC' };
+        const detalleVenta2: IDetalleVenta = { id: 'CBA' };
         expectedResult = service.addDetalleVentaToCollectionIfMissing([], detalleVenta, detalleVenta2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(detalleVenta);
@@ -160,14 +160,14 @@ describe('DetalleVenta Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const detalleVenta: IDetalleVenta = { id: 123 };
+        const detalleVenta: IDetalleVenta = { id: 'ABC' };
         expectedResult = service.addDetalleVentaToCollectionIfMissing([], null, detalleVenta, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(detalleVenta);
       });
 
       it('should return initial array if no DetalleVenta is added', () => {
-        const detalleVentaCollection: IDetalleVenta[] = [{ id: 123 }];
+        const detalleVentaCollection: IDetalleVenta[] = [{ id: 'ABC' }];
         expectedResult = service.addDetalleVentaToCollectionIfMissing(detalleVentaCollection, undefined, null);
         expect(expectedResult).toEqual(detalleVentaCollection);
       });

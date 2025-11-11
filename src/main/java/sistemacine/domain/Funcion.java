@@ -7,69 +7,58 @@ import java.time.Instant;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A Funcion.
  */
-@Table("funcion")
+@Document(collection = "funcion")
 public class Funcion implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
-    @Column("fecha")
+    @Field("fecha")
     private LocalDate fecha;
 
     @NotNull(message = "must not be null")
-    @Column("hora_inicio")
+    @Field("hora_inicio")
     private Instant horaInicio;
 
     @NotNull(message = "must not be null")
-    @Column("hora_fin")
+    @Field("hora_fin")
     private Instant horaFin;
 
     @NotNull(message = "must not be null")
-    @Column("precio")
+    @Field("precio")
     private BigDecimal precio;
 
-    @Transient
+    @Field("sala")
     private Sala sala;
 
-    @Transient
+    @Field("pelicula")
     @JsonIgnoreProperties(value = { "genero", "promociones" }, allowSetters = true)
     private Pelicula pelicula;
 
-    @Transient
+    @Field("tarifa")
     private Tarifa tarifa;
-
-    @Column("sala_id")
-    private Long salaId;
-
-    @Column("pelicula_id")
-    private Long peliculaId;
-
-    @Column("tarifa_id")
-    private Long tarifaId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
-    public Funcion id(Long id) {
+    public Funcion id(String id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -122,7 +111,7 @@ public class Funcion implements Serializable {
     }
 
     public void setPrecio(BigDecimal precio) {
-        this.precio = precio != null ? precio.stripTrailingZeros() : null;
+        this.precio = precio;
     }
 
     public Sala getSala() {
@@ -131,7 +120,6 @@ public class Funcion implements Serializable {
 
     public void setSala(Sala sala) {
         this.sala = sala;
-        this.salaId = sala != null ? sala.getId() : null;
     }
 
     public Funcion sala(Sala sala) {
@@ -145,7 +133,6 @@ public class Funcion implements Serializable {
 
     public void setPelicula(Pelicula pelicula) {
         this.pelicula = pelicula;
-        this.peliculaId = pelicula != null ? pelicula.getId() : null;
     }
 
     public Funcion pelicula(Pelicula pelicula) {
@@ -159,36 +146,11 @@ public class Funcion implements Serializable {
 
     public void setTarifa(Tarifa tarifa) {
         this.tarifa = tarifa;
-        this.tarifaId = tarifa != null ? tarifa.getId() : null;
     }
 
     public Funcion tarifa(Tarifa tarifa) {
         this.setTarifa(tarifa);
         return this;
-    }
-
-    public Long getSalaId() {
-        return this.salaId;
-    }
-
-    public void setSalaId(Long sala) {
-        this.salaId = sala;
-    }
-
-    public Long getPeliculaId() {
-        return this.peliculaId;
-    }
-
-    public void setPeliculaId(Long pelicula) {
-        this.peliculaId = pelicula;
-    }
-
-    public Long getTarifaId() {
-        return this.tarifaId;
-    }
-
-    public void setTarifaId(Long tarifa) {
-        this.tarifaId = tarifa;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

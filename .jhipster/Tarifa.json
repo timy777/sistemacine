@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20251108145100",
+  "changelogDate": "20251111142906",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "tarifa",

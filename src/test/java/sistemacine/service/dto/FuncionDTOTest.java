@@ -11,12 +11,12 @@ class FuncionDTOTest {
     void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(FuncionDTO.class);
         FuncionDTO funcionDTO1 = new FuncionDTO();
-        funcionDTO1.setId(1L);
+        funcionDTO1.setId("id1");
         FuncionDTO funcionDTO2 = new FuncionDTO();
         assertThat(funcionDTO1).isNotEqualTo(funcionDTO2);
         funcionDTO2.setId(funcionDTO1.getId());
         assertThat(funcionDTO1).isEqualTo(funcionDTO2);
-        funcionDTO2.setId(2L);
+        funcionDTO2.setId("id2");
         assertThat(funcionDTO1).isNotEqualTo(funcionDTO2);
         funcionDTO1.setId(null);
         assertThat(funcionDTO1).isNotEqualTo(funcionDTO2);

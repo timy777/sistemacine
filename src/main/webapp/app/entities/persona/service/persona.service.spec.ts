@@ -26,7 +26,7 @@ describe('Persona Service', () => {
     currentDate = dayjs();
 
     elemDefault = {
-      id: 0,
+      id: 'AAAAAAA',
       nombre: 'AAAAAAA',
       apellido: 'AAAAAAA',
       telefono: 'AAAAAAA',
@@ -47,7 +47,7 @@ describe('Persona Service', () => {
         elemDefault
       );
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find('ABC').subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -57,7 +57,7 @@ describe('Persona Service', () => {
     it('should create a Persona', () => {
       const returnedFromService = Object.assign(
         {
-          id: 0,
+          id: 'ID',
           fechaNacimiento: currentDate.format(DATE_FORMAT),
         },
         elemDefault
@@ -80,7 +80,7 @@ describe('Persona Service', () => {
     it('should update a Persona', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           nombre: 'BBBBBB',
           apellido: 'BBBBBB',
           telefono: 'BBBBBB',
@@ -137,7 +137,7 @@ describe('Persona Service', () => {
     it('should return a list of Persona', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           nombre: 'BBBBBB',
           apellido: 'BBBBBB',
           telefono: 'BBBBBB',
@@ -166,7 +166,7 @@ describe('Persona Service', () => {
     });
 
     it('should delete a Persona', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+      service.delete('ABC').subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
@@ -175,42 +175,42 @@ describe('Persona Service', () => {
 
     describe('addPersonaToCollectionIfMissing', () => {
       it('should add a Persona to an empty array', () => {
-        const persona: IPersona = { id: 123 };
+        const persona: IPersona = { id: 'ABC' };
         expectedResult = service.addPersonaToCollectionIfMissing([], persona);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(persona);
       });
 
       it('should not add a Persona to an array that contains it', () => {
-        const persona: IPersona = { id: 123 };
+        const persona: IPersona = { id: 'ABC' };
         const personaCollection: IPersona[] = [
           {
             ...persona,
           },
-          { id: 456 },
+          { id: 'CBA' },
         ];
         expectedResult = service.addPersonaToCollectionIfMissing(personaCollection, persona);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a Persona to an array that doesn't contain it", () => {
-        const persona: IPersona = { id: 123 };
-        const personaCollection: IPersona[] = [{ id: 456 }];
+        const persona: IPersona = { id: 'ABC' };
+        const personaCollection: IPersona[] = [{ id: 'CBA' }];
         expectedResult = service.addPersonaToCollectionIfMissing(personaCollection, persona);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(persona);
       });
 
       it('should add only unique Persona to an array', () => {
-        const personaArray: IPersona[] = [{ id: 123 }, { id: 456 }, { id: 40074 }];
-        const personaCollection: IPersona[] = [{ id: 123 }];
+        const personaArray: IPersona[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: '66dd4c43-c70f-4954-b210-445ad9ea8ff9' }];
+        const personaCollection: IPersona[] = [{ id: 'ABC' }];
         expectedResult = service.addPersonaToCollectionIfMissing(personaCollection, ...personaArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const persona: IPersona = { id: 123 };
-        const persona2: IPersona = { id: 456 };
+        const persona: IPersona = { id: 'ABC' };
+        const persona2: IPersona = { id: 'CBA' };
         expectedResult = service.addPersonaToCollectionIfMissing([], persona, persona2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(persona);
@@ -218,14 +218,14 @@ describe('Persona Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const persona: IPersona = { id: 123 };
+        const persona: IPersona = { id: 'ABC' };
         expectedResult = service.addPersonaToCollectionIfMissing([], null, persona, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(persona);
       });
 
       it('should return initial array if no Persona is added', () => {
-        const personaCollection: IPersona[] = [{ id: 123 }];
+        const personaCollection: IPersona[] = [{ id: 'ABC' }];
         expectedResult = service.addPersonaToCollectionIfMissing(personaCollection, undefined, null);
         expect(expectedResult).toEqual(personaCollection);
       });

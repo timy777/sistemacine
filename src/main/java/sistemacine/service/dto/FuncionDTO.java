@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
  */
 public class FuncionDTO implements Serializable {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
     private LocalDate fecha;
@@ -32,11 +32,11 @@ public class FuncionDTO implements Serializable {
 
     private TarifaDTO tarifa;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -121,7 +121,7 @@ public class FuncionDTO implements Serializable {
     @Override
     public String toString() {
         return "FuncionDTO{" +
-            "id=" + getId() +
+            "id='" + getId() + "'" +
             ", fecha='" + getFecha() + "'" +
             ", horaInicio='" + getHoraInicio() + "'" +
             ", horaFin='" + getHoraFin() + "'" +

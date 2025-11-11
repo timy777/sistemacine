@@ -21,14 +21,14 @@ export class TarifaService {
   }
 
   update(tarifa: ITarifa): Observable<EntityResponseType> {
-    return this.http.put<ITarifa>(`${this.resourceUrl}/${getTarifaIdentifier(tarifa) as number}`, tarifa, { observe: 'response' });
+    return this.http.put<ITarifa>(`${this.resourceUrl}/${getTarifaIdentifier(tarifa) as string}`, tarifa, { observe: 'response' });
   }
 
   partialUpdate(tarifa: ITarifa): Observable<EntityResponseType> {
-    return this.http.patch<ITarifa>(`${this.resourceUrl}/${getTarifaIdentifier(tarifa) as number}`, tarifa, { observe: 'response' });
+    return this.http.patch<ITarifa>(`${this.resourceUrl}/${getTarifaIdentifier(tarifa) as string}`, tarifa, { observe: 'response' });
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http.get<ITarifa>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
@@ -37,7 +37,7 @@ export class TarifaService {
     return this.http.get<ITarifa[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

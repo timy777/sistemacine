@@ -9,18 +9,18 @@ import javax.validation.constraints.*;
  */
 public class GeneroDTO implements Serializable {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
     private String nombre;
 
     private String descripcion;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -65,7 +65,7 @@ public class GeneroDTO implements Serializable {
     @Override
     public String toString() {
         return "GeneroDTO{" +
-            "id=" + getId() +
+            "id='" + getId() + "'" +
             ", nombre='" + getNombre() + "'" +
             ", descripcion='" + getDescripcion() + "'" +
             "}";

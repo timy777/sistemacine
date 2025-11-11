@@ -2,7 +2,7 @@ import dayjs from 'dayjs/esm';
 import { IPelicula } from 'app/entities/pelicula/pelicula.model';
 
 export interface IPromocion {
-  id?: number;
+  id?: string;
   nombre?: string;
   descripcion?: string | null;
   porcentajeDescuento?: number;
@@ -14,7 +14,7 @@ export interface IPromocion {
 
 export class Promocion implements IPromocion {
   constructor(
-    public id?: number,
+    public id?: string,
     public nombre?: string,
     public descripcion?: string | null,
     public porcentajeDescuento?: number,
@@ -27,6 +27,6 @@ export class Promocion implements IPromocion {
   }
 }
 
-export function getPromocionIdentifier(promocion: IPromocion): number | undefined {
+export function getPromocionIdentifier(promocion: IPromocion): string | undefined {
   return promocion.id;
 }

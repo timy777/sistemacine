@@ -3,7 +3,7 @@ import { TipoPersona } from 'app/entities/enumerations/tipo-persona.model';
 import { Sexo } from 'app/entities/enumerations/sexo.model';
 
 export interface IPersona {
-  id?: number;
+  id?: string;
   nombre?: string;
   apellido?: string;
   telefono?: string | null;
@@ -16,7 +16,7 @@ export interface IPersona {
 
 export class Persona implements IPersona {
   constructor(
-    public id?: number,
+    public id?: string,
     public nombre?: string,
     public apellido?: string,
     public telefono?: string | null,
@@ -28,6 +28,6 @@ export class Persona implements IPersona {
   ) {}
 }
 
-export function getPersonaIdentifier(persona: IPersona): number | undefined {
+export function getPersonaIdentifier(persona: IPersona): string | undefined {
   return persona.id;
 }

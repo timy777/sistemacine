@@ -43,7 +43,7 @@ describe('Genero Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should update editForm', () => {
-      const genero: IGenero = { id: 456 };
+      const genero: IGenero = { id: 'CBA' };
 
       activatedRoute.data = of({ genero });
       comp.ngOnInit();
@@ -56,7 +56,7 @@ describe('Genero Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Genero>>();
-      const genero = { id: 123 };
+      const genero = { id: 'ABC' };
       jest.spyOn(generoService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ genero });
@@ -98,7 +98,7 @@ describe('Genero Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Genero>>();
-      const genero = { id: 123 };
+      const genero = { id: 'ABC' };
       jest.spyOn(generoService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ genero });

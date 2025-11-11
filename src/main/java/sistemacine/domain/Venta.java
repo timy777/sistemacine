@@ -8,62 +8,54 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A Venta.
  */
-@Table("venta")
+@Document(collection = "venta")
 public class Venta implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
-    @Column("fecha")
+    @Field("fecha")
     private Instant fecha;
 
     @NotNull(message = "must not be null")
-    @Column("total")
+    @Field("total")
     private BigDecimal total;
 
     @NotNull(message = "must not be null")
-    @Column("metodo_pago")
+    @Field("metodo_pago")
     private String metodoPago;
 
-    @Transient
+    @Field("detalles")
     @JsonIgnoreProperties(value = { "funcion", "venta" }, allowSetters = true)
     private Set<DetalleVenta> detalles = new HashSet<>();
 
-    @Transient
+    @Field("cliente")
     private Persona cliente;
 
-    @Transient
+    @Field("vendedor")
     private Persona vendedor;
-
-    @Column("cliente_id")
-    private Long clienteId;
-
-    @Column("vendedor_id")
-    private Long vendedorId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
-    public Venta id(Long id) {
+    public Venta id(String id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -90,7 +82,7 @@ public class Venta implements Serializable {
     }
 
     public void setTotal(BigDecimal total) {
-        this.total = total != null ? total.stripTrailingZeros() : null;
+        this.total = total;
     }
 
     public String getMetodoPago() {
@@ -143,7 +135,6 @@ public class Venta implements Serializable {
 
     public void setCliente(Persona persona) {
         this.cliente = persona;
-        this.clienteId = persona != null ? persona.getId() : null;
     }
 
     public Venta cliente(Persona persona) {
@@ -157,28 +148,11 @@ public class Venta implements Serializable {
 
     public void setVendedor(Persona persona) {
         this.vendedor = persona;
-        this.vendedorId = persona != null ? persona.getId() : null;
     }
 
     public Venta vendedor(Persona persona) {
         this.setVendedor(persona);
         return this;
-    }
-
-    public Long getClienteId() {
-        return this.clienteId;
-    }
-
-    public void setClienteId(Long persona) {
-        this.clienteId = persona;
-    }
-
-    public Long getVendedorId() {
-        return this.vendedorId;
-    }
-
-    public void setVendedorId(Long persona) {
-        this.vendedorId = persona;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

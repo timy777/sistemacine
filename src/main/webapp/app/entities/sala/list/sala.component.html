@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="SalaHeading">
-    <span jhiTranslate="sistemacineApp.sala.home.title">Salas</span>
+    <span>Salas</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="sistemacineApp.sala.home.refreshListLabel">Refresh List</span>
+        <span>Refresh List</span>
       </button>
 
       <button
@@ -15,7 +15,7 @@
         [routerLink]="['/sala/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="sistemacineApp.sala.home.createLabel"> Create a new Sala </span>
+        <span> Create a new Sala </span>
       </button>
     </div>
   </h2>
@@ -25,24 +25,18 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="salas?.length === 0">
-    <span jhiTranslate="sistemacineApp.sala.home.notFound">No salas found</span>
+    <span>No salas found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="salas && salas.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="nombre">
-            <span jhiTranslate="sistemacineApp.sala.nombre">Nombre</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="capacidad">
-            <span jhiTranslate="sistemacineApp.sala.capacidad">Capacidad</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="tipo"><span jhiTranslate="sistemacineApp.sala.tipo">Tipo</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="estado">
-            <span jhiTranslate="sistemacineApp.sala.estado">Estado</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="nombre"><span>Nombre</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="capacidad"><span>Capacidad</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="tipo"><span>Tipo</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="estado"><span>Estado</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -53,23 +47,23 @@
           </td>
           <td>{{ sala.nombre }}</td>
           <td>{{ sala.capacidad }}</td>
-          <td jhiTranslate="{{ 'sistemacineApp.TipoSala.' + sala.tipo }}">{{ sala.tipo }}</td>
+          <td>{{ sala.tipo }}</td>
           <td>{{ sala.estado }}</td>
           <td class="text-end">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/sala', sala.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button type="submit" [routerLink]="['/sala', sala.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline">Edit</span>
               </button>
 
               <button type="submit" (click)="delete(sala)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
           </td>

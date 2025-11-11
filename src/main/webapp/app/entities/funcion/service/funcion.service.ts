@@ -29,18 +29,18 @@ export class FuncionService {
   update(funcion: IFuncion): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(funcion);
     return this.http
-      .put<IFuncion>(`${this.resourceUrl}/${getFuncionIdentifier(funcion) as number}`, copy, { observe: 'response' })
+      .put<IFuncion>(`${this.resourceUrl}/${getFuncionIdentifier(funcion) as string}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(funcion: IFuncion): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(funcion);
     return this.http
-      .patch<IFuncion>(`${this.resourceUrl}/${getFuncionIdentifier(funcion) as number}`, copy, { observe: 'response' })
+      .patch<IFuncion>(`${this.resourceUrl}/${getFuncionIdentifier(funcion) as string}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http
       .get<IFuncion>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -53,7 +53,7 @@ export class FuncionService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

@@ -57,7 +57,7 @@ export class TarifaComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: ITarifa): number {
+  trackId(_index: number, item: ITarifa): string {
     return item.id!;
   }
 

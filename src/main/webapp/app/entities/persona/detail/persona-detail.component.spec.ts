@@ -14,7 +14,7 @@ describe('Persona Management Detail Component', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { data: of({ persona: { id: 123 } }) },
+          useValue: { data: of({ persona: { id: 'ABC' } }) },
         },
       ],
     })
@@ -30,7 +30,7 @@ describe('Persona Management Detail Component', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(comp.persona).toEqual(expect.objectContaining({ id: 123 }));
+      expect(comp.persona).toEqual(expect.objectContaining({ id: 'ABC' }));
     });
   });
 });

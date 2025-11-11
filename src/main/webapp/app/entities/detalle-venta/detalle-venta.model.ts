@@ -2,7 +2,7 @@ import { IFuncion } from 'app/entities/funcion/funcion.model';
 import { IVenta } from 'app/entities/venta/venta.model';
 
 export interface IDetalleVenta {
-  id?: number;
+  id?: string;
   asiento?: string;
   precioUnitario?: number;
   funcion?: IFuncion | null;
@@ -11,7 +11,7 @@ export interface IDetalleVenta {
 
 export class DetalleVenta implements IDetalleVenta {
   constructor(
-    public id?: number,
+    public id?: string,
     public asiento?: string,
     public precioUnitario?: number,
     public funcion?: IFuncion | null,
@@ -19,6 +19,6 @@ export class DetalleVenta implements IDetalleVenta {
   ) {}
 }
 
-export function getDetalleVentaIdentifier(detalleVenta: IDetalleVenta): number | undefined {
+export function getDetalleVentaIdentifier(detalleVenta: IDetalleVenta): string | undefined {
   return detalleVenta.id;
 }

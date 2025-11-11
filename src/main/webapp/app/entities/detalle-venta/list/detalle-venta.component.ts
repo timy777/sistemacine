@@ -57,7 +57,7 @@ export class DetalleVentaComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IDetalleVenta): number {
+  trackId(_index: number, item: IDetalleVenta): string {
     return item.id!;
   }
 

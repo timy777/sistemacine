@@ -29,18 +29,18 @@ export class ReporteService {
   update(reporte: IReporte): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(reporte);
     return this.http
-      .put<IReporte>(`${this.resourceUrl}/${getReporteIdentifier(reporte) as number}`, copy, { observe: 'response' })
+      .put<IReporte>(`${this.resourceUrl}/${getReporteIdentifier(reporte) as string}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(reporte: IReporte): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(reporte);
     return this.http
-      .patch<IReporte>(`${this.resourceUrl}/${getReporteIdentifier(reporte) as number}`, copy, { observe: 'response' })
+      .patch<IReporte>(`${this.resourceUrl}/${getReporteIdentifier(reporte) as string}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http
       .get<IReporte>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -53,7 +53,7 @@ export class ReporteService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

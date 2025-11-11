@@ -55,11 +55,11 @@ describe('Funcion Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call Sala query and add missing value', () => {
-      const funcion: IFuncion = { id: 456 };
-      const sala: ISala = { id: 85239 };
+      const funcion: IFuncion = { id: 'CBA' };
+      const sala: ISala = { id: 'db00bc94-cc4f-4afc-af0f-e094d7cbf772' };
       funcion.sala = sala;
 
-      const salaCollection: ISala[] = [{ id: 69904 }];
+      const salaCollection: ISala[] = [{ id: '8380f54b-1f89-436b-90f1-29f440b10557' }];
       jest.spyOn(salaService, 'query').mockReturnValue(of(new HttpResponse({ body: salaCollection })));
       const additionalSalas = [sala];
       const expectedCollection: ISala[] = [...additionalSalas, ...salaCollection];
@@ -74,11 +74,11 @@ describe('Funcion Management Update Component', () => {
     });
 
     it('Should call Pelicula query and add missing value', () => {
-      const funcion: IFuncion = { id: 456 };
-      const pelicula: IPelicula = { id: 60776 };
+      const funcion: IFuncion = { id: 'CBA' };
+      const pelicula: IPelicula = { id: '98c89e68-7332-4f2f-bbf6-f1f54a150218' };
       funcion.pelicula = pelicula;
 
-      const peliculaCollection: IPelicula[] = [{ id: 51478 }];
+      const peliculaCollection: IPelicula[] = [{ id: '0125de0b-ed4e-4d49-ab7a-0a91a8a64ef2' }];
       jest.spyOn(peliculaService, 'query').mockReturnValue(of(new HttpResponse({ body: peliculaCollection })));
       const additionalPeliculas = [pelicula];
       const expectedCollection: IPelicula[] = [...additionalPeliculas, ...peliculaCollection];
@@ -93,11 +93,11 @@ describe('Funcion Management Update Component', () => {
     });
 
     it('Should call Tarifa query and add missing value', () => {
-      const funcion: IFuncion = { id: 456 };
-      const tarifa: ITarifa = { id: 45009 };
+      const funcion: IFuncion = { id: 'CBA' };
+      const tarifa: ITarifa = { id: '76ff44ca-2af5-4517-ae8c-9a419ad867e7' };
       funcion.tarifa = tarifa;
 
-      const tarifaCollection: ITarifa[] = [{ id: 37887 }];
+      const tarifaCollection: ITarifa[] = [{ id: 'a6cb11d9-3099-4693-8fed-876b0af718f4' }];
       jest.spyOn(tarifaService, 'query').mockReturnValue(of(new HttpResponse({ body: tarifaCollection })));
       const additionalTarifas = [tarifa];
       const expectedCollection: ITarifa[] = [...additionalTarifas, ...tarifaCollection];
@@ -112,12 +112,12 @@ describe('Funcion Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const funcion: IFuncion = { id: 456 };
-      const sala: ISala = { id: 5332 };
+      const funcion: IFuncion = { id: 'CBA' };
+      const sala: ISala = { id: 'ea42e5fe-bd54-451b-9caf-c2dad64ce595' };
       funcion.sala = sala;
-      const pelicula: IPelicula = { id: 77508 };
+      const pelicula: IPelicula = { id: 'd6d88c41-f743-41b0-a765-5a7bd83d822a' };
       funcion.pelicula = pelicula;
-      const tarifa: ITarifa = { id: 96873 };
+      const tarifa: ITarifa = { id: '62a951de-a0ba-4411-95ab-99a54d943852' };
       funcion.tarifa = tarifa;
 
       activatedRoute.data = of({ funcion });
@@ -134,7 +134,7 @@ describe('Funcion Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Funcion>>();
-      const funcion = { id: 123 };
+      const funcion = { id: 'ABC' };
       jest.spyOn(funcionService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ funcion });
@@ -176,7 +176,7 @@ describe('Funcion Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Funcion>>();
-      const funcion = { id: 123 };
+      const funcion = { id: 'ABC' };
       jest.spyOn(funcionService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ funcion });
@@ -197,7 +197,7 @@ describe('Funcion Management Update Component', () => {
   describe('Tracking relationships identifiers', () => {
     describe('trackSalaById', () => {
       it('Should return tracked Sala primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackSalaById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
@@ -205,7 +205,7 @@ describe('Funcion Management Update Component', () => {
 
     describe('trackPeliculaById', () => {
       it('Should return tracked Pelicula primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackPeliculaById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
@@ -213,7 +213,7 @@ describe('Funcion Management Update Component', () => {
 
     describe('trackTarifaById', () => {
       it('Should return tracked Tarifa primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackTarifaById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });

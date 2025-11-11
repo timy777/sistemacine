@@ -43,7 +43,7 @@ describe('Pelicula routing resolve service', () => {
     it('should return IPelicula returned by find', () => {
       // GIVEN
       service.find = jest.fn(id => of(new HttpResponse({ body: { id } })));
-      mockActivatedRouteSnapshot.params = { id: 123 };
+      mockActivatedRouteSnapshot.params = { id: 'ABC' };
 
       // WHEN
       routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
@@ -51,8 +51,8 @@ describe('Pelicula routing resolve service', () => {
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(123);
-      expect(resultPelicula).toEqual({ id: 123 });
+      expect(service.find).toBeCalledWith('ABC');
+      expect(resultPelicula).toEqual({ id: 'ABC' });
     });
 
     it('should return new IPelicula if id is not provided', () => {
@@ -73,7 +73,7 @@ describe('Pelicula routing resolve service', () => {
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
       jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as Pelicula })));
-      mockActivatedRouteSnapshot.params = { id: 123 };
+      mockActivatedRouteSnapshot.params = { id: 'ABC' };
 
       // WHEN
       routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
@@ -81,7 +81,7 @@ describe('Pelicula routing resolve service', () => {
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(123);
+      expect(service.find).toBeCalledWith('ABC');
       expect(resultPelicula).toEqual(undefined);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
     });

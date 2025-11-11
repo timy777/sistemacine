@@ -74,7 +74,7 @@ public class PromocionResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/promocions/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class PromocionResource {
      */
     @PutMapping("/promocions/{id}")
     public Mono<ResponseEntity<PromocionDTO>> updatePromocion(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody PromocionDTO promocionDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Promocion : {}, {}", id, promocionDTO);
@@ -118,7 +118,7 @@ public class PromocionResource {
                     .map(result ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId()))
                             .body(result)
                     );
             });
@@ -137,7 +137,7 @@ public class PromocionResource {
      */
     @PatchMapping(value = "/promocions/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public Mono<ResponseEntity<PromocionDTO>> partialUpdatePromocion(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody PromocionDTO promocionDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Promocion partially : {}, {}", id, promocionDTO);
@@ -162,7 +162,7 @@ public class PromocionResource {
                     .map(res ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, res.getId()))
                             .body(res)
                     );
             });
@@ -206,7 +206,7 @@ public class PromocionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the promocionDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/promocions/{id}")
-    public Mono<ResponseEntity<PromocionDTO>> getPromocion(@PathVariable Long id) {
+    public Mono<ResponseEntity<PromocionDTO>> getPromocion(@PathVariable String id) {
         log.debug("REST request to get Promocion : {}", id);
         Mono<PromocionDTO> promocionDTO = promocionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(promocionDTO);
@@ -220,15 +220,12 @@ public class PromocionResource {
      */
     @DeleteMapping("/promocions/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deletePromocion(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> deletePromocion(@PathVariable String id) {
         log.debug("REST request to delete Promocion : {}", id);
         return promocionService
             .delete(id)
             .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
+                ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build()
             );
     }
 }

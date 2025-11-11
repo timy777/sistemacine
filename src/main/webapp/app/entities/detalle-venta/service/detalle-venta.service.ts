@@ -21,18 +21,18 @@ export class DetalleVentaService {
   }
 
   update(detalleVenta: IDetalleVenta): Observable<EntityResponseType> {
-    return this.http.put<IDetalleVenta>(`${this.resourceUrl}/${getDetalleVentaIdentifier(detalleVenta) as number}`, detalleVenta, {
+    return this.http.put<IDetalleVenta>(`${this.resourceUrl}/${getDetalleVentaIdentifier(detalleVenta) as string}`, detalleVenta, {
       observe: 'response',
     });
   }
 
   partialUpdate(detalleVenta: IDetalleVenta): Observable<EntityResponseType> {
-    return this.http.patch<IDetalleVenta>(`${this.resourceUrl}/${getDetalleVentaIdentifier(detalleVenta) as number}`, detalleVenta, {
+    return this.http.patch<IDetalleVenta>(`${this.resourceUrl}/${getDetalleVentaIdentifier(detalleVenta) as string}`, detalleVenta, {
       observe: 'response',
     });
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http.get<IDetalleVenta>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
@@ -41,7 +41,7 @@ export class DetalleVentaService {
     return this.http.get<IDetalleVenta[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

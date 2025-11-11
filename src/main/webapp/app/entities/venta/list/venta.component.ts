@@ -57,7 +57,7 @@ export class VentaComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IVenta): number {
+  trackId(_index: number, item: IVenta): string {
     return item.id!;
   }
 

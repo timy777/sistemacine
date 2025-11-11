@@ -74,7 +74,7 @@ public class VentaResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/ventas/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class VentaResource {
      */
     @PutMapping("/ventas/{id}")
     public Mono<ResponseEntity<VentaDTO>> updateVenta(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody VentaDTO ventaDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Venta : {}, {}", id, ventaDTO);
@@ -118,7 +118,7 @@ public class VentaResource {
                     .map(result ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId()))
                             .body(result)
                     );
             });
@@ -137,7 +137,7 @@ public class VentaResource {
      */
     @PatchMapping(value = "/ventas/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public Mono<ResponseEntity<VentaDTO>> partialUpdateVenta(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody VentaDTO ventaDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Venta partially : {}, {}", id, ventaDTO);
@@ -162,7 +162,7 @@ public class VentaResource {
                     .map(res ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, res.getId()))
                             .body(res)
                     );
             });
@@ -206,7 +206,7 @@ public class VentaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ventaDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/ventas/{id}")
-    public Mono<ResponseEntity<VentaDTO>> getVenta(@PathVariable Long id) {
+    public Mono<ResponseEntity<VentaDTO>> getVenta(@PathVariable String id) {
         log.debug("REST request to get Venta : {}", id);
         Mono<VentaDTO> ventaDTO = ventaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(ventaDTO);
@@ -220,15 +220,12 @@ public class VentaResource {
      */
     @DeleteMapping("/ventas/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deleteVenta(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> deleteVenta(@PathVariable String id) {
         log.debug("REST request to delete Venta : {}", id);
         return ventaService
             .delete(id)
             .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
+                ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build()
             );
     }
 }

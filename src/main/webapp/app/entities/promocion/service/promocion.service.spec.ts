@@ -24,7 +24,7 @@ describe('Promocion Service', () => {
     currentDate = dayjs();
 
     elemDefault = {
-      id: 0,
+      id: 'AAAAAAA',
       nombre: 'AAAAAAA',
       descripcion: 'AAAAAAA',
       porcentajeDescuento: 0,
@@ -44,7 +44,7 @@ describe('Promocion Service', () => {
         elemDefault
       );
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find('ABC').subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -54,7 +54,7 @@ describe('Promocion Service', () => {
     it('should create a Promocion', () => {
       const returnedFromService = Object.assign(
         {
-          id: 0,
+          id: 'ID',
           fechaInicio: currentDate.format(DATE_FORMAT),
           fechaFin: currentDate.format(DATE_FORMAT),
         },
@@ -79,7 +79,7 @@ describe('Promocion Service', () => {
     it('should update a Promocion', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           nombre: 'BBBBBB',
           descripcion: 'BBBBBB',
           porcentajeDescuento: 1,
@@ -135,7 +135,7 @@ describe('Promocion Service', () => {
     it('should return a list of Promocion', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           nombre: 'BBBBBB',
           descripcion: 'BBBBBB',
           porcentajeDescuento: 1,
@@ -163,7 +163,7 @@ describe('Promocion Service', () => {
     });
 
     it('should delete a Promocion', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+      service.delete('ABC').subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
@@ -172,42 +172,42 @@ describe('Promocion Service', () => {
 
     describe('addPromocionToCollectionIfMissing', () => {
       it('should add a Promocion to an empty array', () => {
-        const promocion: IPromocion = { id: 123 };
+        const promocion: IPromocion = { id: 'ABC' };
         expectedResult = service.addPromocionToCollectionIfMissing([], promocion);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(promocion);
       });
 
       it('should not add a Promocion to an array that contains it', () => {
-        const promocion: IPromocion = { id: 123 };
+        const promocion: IPromocion = { id: 'ABC' };
         const promocionCollection: IPromocion[] = [
           {
             ...promocion,
           },
-          { id: 456 },
+          { id: 'CBA' },
         ];
         expectedResult = service.addPromocionToCollectionIfMissing(promocionCollection, promocion);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a Promocion to an array that doesn't contain it", () => {
-        const promocion: IPromocion = { id: 123 };
-        const promocionCollection: IPromocion[] = [{ id: 456 }];
+        const promocion: IPromocion = { id: 'ABC' };
+        const promocionCollection: IPromocion[] = [{ id: 'CBA' }];
         expectedResult = service.addPromocionToCollectionIfMissing(promocionCollection, promocion);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(promocion);
       });
 
       it('should add only unique Promocion to an array', () => {
-        const promocionArray: IPromocion[] = [{ id: 123 }, { id: 456 }, { id: 15236 }];
-        const promocionCollection: IPromocion[] = [{ id: 123 }];
+        const promocionArray: IPromocion[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: '2dab4604-f6c5-4f29-a112-a779282568c4' }];
+        const promocionCollection: IPromocion[] = [{ id: 'ABC' }];
         expectedResult = service.addPromocionToCollectionIfMissing(promocionCollection, ...promocionArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const promocion: IPromocion = { id: 123 };
-        const promocion2: IPromocion = { id: 456 };
+        const promocion: IPromocion = { id: 'ABC' };
+        const promocion2: IPromocion = { id: 'CBA' };
         expectedResult = service.addPromocionToCollectionIfMissing([], promocion, promocion2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(promocion);
@@ -215,14 +215,14 @@ describe('Promocion Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const promocion: IPromocion = { id: 123 };
+        const promocion: IPromocion = { id: 'ABC' };
         expectedResult = service.addPromocionToCollectionIfMissing([], null, promocion, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(promocion);
       });
 
       it('should return initial array if no Promocion is added', () => {
-        const promocionCollection: IPromocion[] = [{ id: 123 }];
+        const promocionCollection: IPromocion[] = [{ id: 'ABC' }];
         expectedResult = service.addPromocionToCollectionIfMissing(promocionCollection, undefined, null);
         expect(expectedResult).toEqual(promocionCollection);
       });

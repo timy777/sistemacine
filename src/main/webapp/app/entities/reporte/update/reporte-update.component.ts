@@ -56,7 +56,7 @@ export class ReporteUpdateComponent implements OnInit {
     }
   }
 
-  trackPersonaById(_index: number, item: IPersona): number {
+  trackPersonaById(_index: number, item: IPersona): string {
     return item.id!;
   }
 

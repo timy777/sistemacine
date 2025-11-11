@@ -74,7 +74,7 @@ public class SalaResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/salas/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class SalaResource {
      */
     @PutMapping("/salas/{id}")
     public Mono<ResponseEntity<SalaDTO>> updateSala(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody SalaDTO salaDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Sala : {}, {}", id, salaDTO);
@@ -118,7 +118,7 @@ public class SalaResource {
                     .map(result ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId()))
                             .body(result)
                     );
             });
@@ -137,7 +137,7 @@ public class SalaResource {
      */
     @PatchMapping(value = "/salas/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public Mono<ResponseEntity<SalaDTO>> partialUpdateSala(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody SalaDTO salaDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Sala partially : {}, {}", id, salaDTO);
@@ -162,7 +162,7 @@ public class SalaResource {
                     .map(res ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, res.getId()))
                             .body(res)
                     );
             });
@@ -204,7 +204,7 @@ public class SalaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the salaDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/salas/{id}")
-    public Mono<ResponseEntity<SalaDTO>> getSala(@PathVariable Long id) {
+    public Mono<ResponseEntity<SalaDTO>> getSala(@PathVariable String id) {
         log.debug("REST request to get Sala : {}", id);
         Mono<SalaDTO> salaDTO = salaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(salaDTO);
@@ -218,15 +218,12 @@ public class SalaResource {
      */
     @DeleteMapping("/salas/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deleteSala(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> deleteSala(@PathVariable String id) {
         log.debug("REST request to delete Sala : {}", id);
         return salaService
             .delete(id)
             .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
+                ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build()
             );
     }
 }

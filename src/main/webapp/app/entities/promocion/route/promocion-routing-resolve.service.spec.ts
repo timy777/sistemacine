@@ -43,7 +43,7 @@ describe('Promocion routing resolve service', () => {
     it('should return IPromocion returned by find', () => {
       // GIVEN
       service.find = jest.fn(id => of(new HttpResponse({ body: { id } })));
-      mockActivatedRouteSnapshot.params = { id: 123 };
+      mockActivatedRouteSnapshot.params = { id: 'ABC' };
 
       // WHEN
       routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
@@ -51,8 +51,8 @@ describe('Promocion routing resolve service', () => {
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(123);
-      expect(resultPromocion).toEqual({ id: 123 });
+      expect(service.find).toBeCalledWith('ABC');
+      expect(resultPromocion).toEqual({ id: 'ABC' });
     });
 
     it('should return new IPromocion if id is not provided', () => {
@@ -73,7 +73,7 @@ describe('Promocion routing resolve service', () => {
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
       jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as Promocion })));
-      mockActivatedRouteSnapshot.params = { id: 123 };
+      mockActivatedRouteSnapshot.params = { id: 'ABC' };
 
       // WHEN
       routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
@@ -81,7 +81,7 @@ describe('Promocion routing resolve service', () => {
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(123);
+      expect(service.find).toBeCalledWith('ABC');
       expect(resultPromocion).toEqual(undefined);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
     });

@@ -47,11 +47,11 @@ describe('Reporte Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call Persona query and add missing value', () => {
-      const reporte: IReporte = { id: 456 };
-      const vendedor: IPersona = { id: 88199 };
+      const reporte: IReporte = { id: 'CBA' };
+      const vendedor: IPersona = { id: 'e77717ac-b757-49b3-ae0f-65c9a6722d45' };
       reporte.vendedor = vendedor;
 
-      const personaCollection: IPersona[] = [{ id: 45511 }];
+      const personaCollection: IPersona[] = [{ id: 'fd3ddb65-14ed-4f48-bd6b-9195dc0f590b' }];
       jest.spyOn(personaService, 'query').mockReturnValue(of(new HttpResponse({ body: personaCollection })));
       const additionalPersonas = [vendedor];
       const expectedCollection: IPersona[] = [...additionalPersonas, ...personaCollection];
@@ -66,8 +66,8 @@ describe('Reporte Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const reporte: IReporte = { id: 456 };
-      const vendedor: IPersona = { id: 48454 };
+      const reporte: IReporte = { id: 'CBA' };
+      const vendedor: IPersona = { id: 'fa6cb919-bfd9-4fd0-b0dd-e676bfaf1edd' };
       reporte.vendedor = vendedor;
 
       activatedRoute.data = of({ reporte });
@@ -82,7 +82,7 @@ describe('Reporte Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Reporte>>();
-      const reporte = { id: 123 };
+      const reporte = { id: 'ABC' };
       jest.spyOn(reporteService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ reporte });
@@ -124,7 +124,7 @@ describe('Reporte Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Reporte>>();
-      const reporte = { id: 123 };
+      const reporte = { id: 'ABC' };
       jest.spyOn(reporteService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ reporte });
@@ -145,7 +145,7 @@ describe('Reporte Management Update Component', () => {
   describe('Tracking relationships identifiers', () => {
     describe('trackPersonaById', () => {
       it('Should return tracked Persona primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackPersonaById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });

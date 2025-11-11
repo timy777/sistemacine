@@ -28,18 +28,18 @@ export class VentaService {
   update(venta: IVenta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(venta);
     return this.http
-      .put<IVenta>(`${this.resourceUrl}/${getVentaIdentifier(venta) as number}`, copy, { observe: 'response' })
+      .put<IVenta>(`${this.resourceUrl}/${getVentaIdentifier(venta) as string}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(venta: IVenta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(venta);
     return this.http
-      .patch<IVenta>(`${this.resourceUrl}/${getVentaIdentifier(venta) as number}`, copy, { observe: 'response' })
+      .patch<IVenta>(`${this.resourceUrl}/${getVentaIdentifier(venta) as string}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http
       .get<IVenta>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -52,7 +52,7 @@ export class VentaService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

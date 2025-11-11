@@ -21,7 +21,7 @@ describe('Sala Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     elemDefault = {
-      id: 0,
+      id: 'AAAAAAA',
       nombre: 'AAAAAAA',
       capacidad: 0,
       tipo: TipoSala.DOSD,
@@ -33,7 +33,7 @@ describe('Sala Service', () => {
     it('should find an element', () => {
       const returnedFromService = Object.assign({}, elemDefault);
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find('ABC').subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -43,7 +43,7 @@ describe('Sala Service', () => {
     it('should create a Sala', () => {
       const returnedFromService = Object.assign(
         {
-          id: 0,
+          id: 'ID',
         },
         elemDefault
       );
@@ -60,7 +60,7 @@ describe('Sala Service', () => {
     it('should update a Sala', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           nombre: 'BBBBBB',
           capacidad: 1,
           tipo: 'BBBBBB',
@@ -102,7 +102,7 @@ describe('Sala Service', () => {
     it('should return a list of Sala', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           nombre: 'BBBBBB',
           capacidad: 1,
           tipo: 'BBBBBB',
@@ -122,7 +122,7 @@ describe('Sala Service', () => {
     });
 
     it('should delete a Sala', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+      service.delete('ABC').subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
@@ -131,42 +131,42 @@ describe('Sala Service', () => {
 
     describe('addSalaToCollectionIfMissing', () => {
       it('should add a Sala to an empty array', () => {
-        const sala: ISala = { id: 123 };
+        const sala: ISala = { id: 'ABC' };
         expectedResult = service.addSalaToCollectionIfMissing([], sala);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(sala);
       });
 
       it('should not add a Sala to an array that contains it', () => {
-        const sala: ISala = { id: 123 };
+        const sala: ISala = { id: 'ABC' };
         const salaCollection: ISala[] = [
           {
             ...sala,
           },
-          { id: 456 },
+          { id: 'CBA' },
         ];
         expectedResult = service.addSalaToCollectionIfMissing(salaCollection, sala);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a Sala to an array that doesn't contain it", () => {
-        const sala: ISala = { id: 123 };
-        const salaCollection: ISala[] = [{ id: 456 }];
+        const sala: ISala = { id: 'ABC' };
+        const salaCollection: ISala[] = [{ id: 'CBA' }];
         expectedResult = service.addSalaToCollectionIfMissing(salaCollection, sala);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(sala);
       });
 
       it('should add only unique Sala to an array', () => {
-        const salaArray: ISala[] = [{ id: 123 }, { id: 456 }, { id: 54870 }];
-        const salaCollection: ISala[] = [{ id: 123 }];
+        const salaArray: ISala[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: '8196ce3a-f7c7-4893-b984-c7276440be1f' }];
+        const salaCollection: ISala[] = [{ id: 'ABC' }];
         expectedResult = service.addSalaToCollectionIfMissing(salaCollection, ...salaArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const sala: ISala = { id: 123 };
-        const sala2: ISala = { id: 456 };
+        const sala: ISala = { id: 'ABC' };
+        const sala2: ISala = { id: 'CBA' };
         expectedResult = service.addSalaToCollectionIfMissing([], sala, sala2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(sala);
@@ -174,14 +174,14 @@ describe('Sala Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const sala: ISala = { id: 123 };
+        const sala: ISala = { id: 'ABC' };
         expectedResult = service.addSalaToCollectionIfMissing([], null, sala, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(sala);
       });
 
       it('should return initial array if no Sala is added', () => {
-        const salaCollection: ISala[] = [{ id: 123 }];
+        const salaCollection: ISala[] = [{ id: 'ABC' }];
         expectedResult = service.addSalaToCollectionIfMissing(salaCollection, undefined, null);
         expect(expectedResult).toEqual(salaCollection);
       });

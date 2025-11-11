@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="FuncionHeading">
-    <span jhiTranslate="sistemacineApp.funcion.home.title">Funcions</span>
+    <span>Funcions</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="sistemacineApp.funcion.home.refreshListLabel">Refresh List</span>
+        <span>Refresh List</span>
       </button>
 
       <button
@@ -15,7 +15,7 @@
         [routerLink]="['/funcion/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="sistemacineApp.funcion.home.createLabel"> Create a new Funcion </span>
+        <span> Create a new Funcion </span>
       </button>
     </div>
   </h2>
@@ -25,35 +25,21 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="funcions?.length === 0">
-    <span jhiTranslate="sistemacineApp.funcion.home.notFound">No funcions found</span>
+    <span>No funcions found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="funcions && funcions.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fecha">
-            <span jhiTranslate="sistemacineApp.funcion.fecha">Fecha</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="horaInicio">
-            <span jhiTranslate="sistemacineApp.funcion.horaInicio">Hora Inicio</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="horaFin">
-            <span jhiTranslate="sistemacineApp.funcion.horaFin">Hora Fin</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="precio">
-            <span jhiTranslate="sistemacineApp.funcion.precio">Precio</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="sala.nombre">
-            <span jhiTranslate="sistemacineApp.funcion.sala">Sala</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="pelicula.titulo">
-            <span jhiTranslate="sistemacineApp.funcion.pelicula">Pelicula</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="tarifa.nombre">
-            <span jhiTranslate="sistemacineApp.funcion.tarifa">Tarifa</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fecha"><span>Fecha</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="horaInicio"><span>Hora Inicio</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="horaFin"><span>Hora Fin</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="precio"><span>Precio</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="sala.nombre"><span>Sala</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="pelicula.titulo"><span>Pelicula</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="tarifa.nombre"><span>Tarifa</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -90,7 +76,7 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button
@@ -100,12 +86,12 @@
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline">Edit</span>
               </button>
 
               <button type="submit" (click)="delete(funcion)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
           </td>

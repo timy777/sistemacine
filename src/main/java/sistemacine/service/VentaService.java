@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.domain.Venta;
@@ -16,7 +15,6 @@ import sistemacine.service.mapper.VentaMapper;
  * Service Implementation for managing {@link Venta}.
  */
 @Service
-@Transactional
 public class VentaService {
 
     private final Logger log = LoggerFactory.getLogger(VentaService.class);
@@ -78,7 +76,6 @@ public class VentaService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    @Transactional(readOnly = true)
     public Flux<VentaDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Ventas");
         return ventaRepository.findAllBy(pageable).map(ventaMapper::toDto);
@@ -108,8 +105,7 @@ public class VentaService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    @Transactional(readOnly = true)
-    public Mono<VentaDTO> findOne(Long id) {
+    public Mono<VentaDTO> findOne(String id) {
         log.debug("Request to get Venta : {}", id);
         return ventaRepository.findOneWithEagerRelationships(id).map(ventaMapper::toDto);
     }
@@ -120,7 +116,7 @@ public class VentaService {
      * @param id the id of the entity.
      * @return a Mono to signal the deletion
      */
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         log.debug("Request to delete Venta : {}", id);
         return ventaRepository.deleteById(id);
     }

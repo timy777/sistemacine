@@ -11,7 +11,7 @@ import javax.validation.constraints.*;
  */
 public class VentaDTO implements Serializable {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
     private Instant fecha;
@@ -26,11 +26,11 @@ public class VentaDTO implements Serializable {
 
     private PersonaDTO vendedor;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -99,7 +99,7 @@ public class VentaDTO implements Serializable {
     @Override
     public String toString() {
         return "VentaDTO{" +
-            "id=" + getId() +
+            "id='" + getId() + "'" +
             ", fecha='" + getFecha() + "'" +
             ", total=" + getTotal() +
             ", metodoPago='" + getMetodoPago() + "'" +

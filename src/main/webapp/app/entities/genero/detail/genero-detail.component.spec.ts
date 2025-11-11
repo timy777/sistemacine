@@ -14,7 +14,7 @@ describe('Genero Management Detail Component', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { data: of({ genero: { id: 123 } }) },
+          useValue: { data: of({ genero: { id: 'ABC' } }) },
         },
       ],
     })
@@ -30,7 +30,7 @@ describe('Genero Management Detail Component', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(comp.genero).toEqual(expect.objectContaining({ id: 123 }));
+      expect(comp.genero).toEqual(expect.objectContaining({ id: 'ABC' }));
     });
   });
 });

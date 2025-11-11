@@ -57,7 +57,7 @@ export class GeneroComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IGenero): number {
+  trackId(_index: number, item: IGenero): string {
     return item.id!;
   }
 

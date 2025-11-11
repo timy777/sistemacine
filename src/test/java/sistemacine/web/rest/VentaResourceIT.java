@@ -11,9 +11,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +28,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.Venta;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.VentaRepository;
 import sistemacine.service.VentaService;
 import sistemacine.service.dto.VentaDTO;
@@ -57,9 +54,6 @@ class VentaResourceIT {
     private static final String ENTITY_API_URL = "/api/ventas";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private VentaRepository ventaRepository;
 
@@ -73,9 +67,6 @@ class VentaResourceIT {
     private VentaService ventaServiceMock;
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private WebTestClient webTestClient;
 
     private Venta venta;
@@ -86,7 +77,7 @@ class VentaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Venta createEntity(EntityManager em) {
+    public static Venta createEntity() {
         Venta venta = new Venta().fecha(DEFAULT_FECHA).total(DEFAULT_TOTAL).metodoPago(DEFAULT_METODO_PAGO);
         return venta;
     }
@@ -97,28 +88,15 @@ class VentaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Venta createUpdatedEntity(EntityManager em) {
+    public static Venta createUpdatedEntity() {
         Venta venta = new Venta().fecha(UPDATED_FECHA).total(UPDATED_TOTAL).metodoPago(UPDATED_METODO_PAGO);
         return venta;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Venta.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        venta = createEntity(em);
+        ventaRepository.deleteAll().block();
+        venta = createEntity();
     }
 
     @Test
@@ -147,7 +125,7 @@ class VentaResourceIT {
     @Test
     void createVentaWithExistingId() throws Exception {
         // Create the Venta with an existing ID
-        venta.setId(1L);
+        venta.setId("existing_id");
         VentaDTO ventaDTO = ventaMapper.toDto(venta);
 
         int databaseSizeBeforeCreate = ventaRepository.findAll().collectList().block().size();
@@ -250,7 +228,7 @@ class VentaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(venta.getId().intValue()))
+            .value(hasItem(venta.getId()))
             .jsonPath("$.[*].fecha")
             .value(hasItem(DEFAULT_FECHA.toString()))
             .jsonPath("$.[*].total")
@@ -294,7 +272,7 @@ class VentaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(venta.getId().intValue()))
+            .value(is(venta.getId()))
             .jsonPath("$.fecha")
             .value(is(DEFAULT_FECHA.toString()))
             .jsonPath("$.total")
@@ -348,7 +326,7 @@ class VentaResourceIT {
     @Test
     void putNonExistingVenta() throws Exception {
         int databaseSizeBeforeUpdate = ventaRepository.findAll().collectList().block().size();
-        venta.setId(count.incrementAndGet());
+        venta.setId(UUID.randomUUID().toString());
 
         // Create the Venta
         VentaDTO ventaDTO = ventaMapper.toDto(venta);
@@ -371,7 +349,7 @@ class VentaResourceIT {
     @Test
     void putWithIdMismatchVenta() throws Exception {
         int databaseSizeBeforeUpdate = ventaRepository.findAll().collectList().block().size();
-        venta.setId(count.incrementAndGet());
+        venta.setId(UUID.randomUUID().toString());
 
         // Create the Venta
         VentaDTO ventaDTO = ventaMapper.toDto(venta);
@@ -379,7 +357,7 @@ class VentaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(ventaDTO))
             .exchange()
@@ -394,7 +372,7 @@ class VentaResourceIT {
     @Test
     void putWithMissingIdPathParamVenta() throws Exception {
         int databaseSizeBeforeUpdate = ventaRepository.findAll().collectList().block().size();
-        venta.setId(count.incrementAndGet());
+        venta.setId(UUID.randomUUID().toString());
 
         // Create the Venta
         VentaDTO ventaDTO = ventaMapper.toDto(venta);
@@ -479,7 +457,7 @@ class VentaResourceIT {
     @Test
     void patchNonExistingVenta() throws Exception {
         int databaseSizeBeforeUpdate = ventaRepository.findAll().collectList().block().size();
-        venta.setId(count.incrementAndGet());
+        venta.setId(UUID.randomUUID().toString());
 
         // Create the Venta
         VentaDTO ventaDTO = ventaMapper.toDto(venta);
@@ -502,7 +480,7 @@ class VentaResourceIT {
     @Test
     void patchWithIdMismatchVenta() throws Exception {
         int databaseSizeBeforeUpdate = ventaRepository.findAll().collectList().block().size();
-        venta.setId(count.incrementAndGet());
+        venta.setId(UUID.randomUUID().toString());
 
         // Create the Venta
         VentaDTO ventaDTO = ventaMapper.toDto(venta);
@@ -510,7 +488,7 @@ class VentaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(ventaDTO))
             .exchange()
@@ -525,7 +503,7 @@ class VentaResourceIT {
     @Test
     void patchWithMissingIdPathParamVenta() throws Exception {
         int databaseSizeBeforeUpdate = ventaRepository.findAll().collectList().block().size();
-        venta.setId(count.incrementAndGet());
+        venta.setId(UUID.randomUUID().toString());
 
         // Create the Venta
         VentaDTO ventaDTO = ventaMapper.toDto(venta);

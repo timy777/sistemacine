@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="ReporteHeading">
-    <span jhiTranslate="sistemacineApp.reporte.home.title">Reportes</span>
+    <span>Reportes</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="sistemacineApp.reporte.home.refreshListLabel">Refresh List</span>
+        <span>Refresh List</span>
       </button>
 
       <button
@@ -15,7 +15,7 @@
         [routerLink]="['/reporte/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="sistemacineApp.reporte.home.createLabel"> Create a new Reporte </span>
+        <span> Create a new Reporte </span>
       </button>
     </div>
   </h2>
@@ -25,24 +25,18 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="reportes?.length === 0">
-    <span jhiTranslate="sistemacineApp.reporte.home.notFound">No reportes found</span>
+    <span>No reportes found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="reportes && reportes.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="tipo"><span jhiTranslate="sistemacineApp.reporte.tipo">Tipo</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fechaGeneracion">
-            <span jhiTranslate="sistemacineApp.reporte.fechaGeneracion">Fecha Generacion</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="descripcion">
-            <span jhiTranslate="sistemacineApp.reporte.descripcion">Descripcion</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="vendedor.nombre">
-            <span jhiTranslate="sistemacineApp.reporte.vendedor">Vendedor</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="tipo"><span>Tipo</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fechaGeneracion"><span>Fecha Generacion</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="descripcion"><span>Descripcion</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="vendedor.nombre"><span>Vendedor</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -68,7 +62,7 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button
@@ -78,12 +72,12 @@
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline">Edit</span>
               </button>
 
               <button type="submit" (click)="delete(reporte)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
           </td>

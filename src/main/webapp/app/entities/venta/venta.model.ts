@@ -3,7 +3,7 @@ import { IDetalleVenta } from 'app/entities/detalle-venta/detalle-venta.model';
 import { IPersona } from 'app/entities/persona/persona.model';
 
 export interface IVenta {
-  id?: number;
+  id?: string;
   fecha?: dayjs.Dayjs;
   total?: number;
   metodoPago?: string;
@@ -14,7 +14,7 @@ export interface IVenta {
 
 export class Venta implements IVenta {
   constructor(
-    public id?: number,
+    public id?: string,
     public fecha?: dayjs.Dayjs,
     public total?: number,
     public metodoPago?: string,
@@ -24,6 +24,6 @@ export class Venta implements IVenta {
   ) {}
 }
 
-export function getVentaIdentifier(venta: IVenta): number | undefined {
+export function getVentaIdentifier(venta: IVenta): string | undefined {
   return venta.id;
 }

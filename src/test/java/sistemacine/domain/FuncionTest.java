@@ -11,11 +11,11 @@ class FuncionTest {
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Funcion.class);
         Funcion funcion1 = new Funcion();
-        funcion1.setId(1L);
+        funcion1.setId("id1");
         Funcion funcion2 = new Funcion();
         funcion2.setId(funcion1.getId());
         assertThat(funcion1).isEqualTo(funcion2);
-        funcion2.setId(2L);
+        funcion2.setId("id2");
         assertThat(funcion1).isNotEqualTo(funcion2);
         funcion1.setId(null);
         assertThat(funcion1).isNotEqualTo(funcion2);

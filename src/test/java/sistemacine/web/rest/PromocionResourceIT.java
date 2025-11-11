@@ -9,9 +9,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +26,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.Promocion;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.PromocionRepository;
 import sistemacine.service.PromocionService;
 import sistemacine.service.dto.PromocionDTO;
@@ -64,9 +61,6 @@ class PromocionResourceIT {
     private static final String ENTITY_API_URL = "/api/promocions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private PromocionRepository promocionRepository;
 
@@ -80,9 +74,6 @@ class PromocionResourceIT {
     private PromocionService promocionServiceMock;
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private WebTestClient webTestClient;
 
     private Promocion promocion;
@@ -93,7 +84,7 @@ class PromocionResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Promocion createEntity(EntityManager em) {
+    public static Promocion createEntity() {
         Promocion promocion = new Promocion()
             .nombre(DEFAULT_NOMBRE)
             .descripcion(DEFAULT_DESCRIPCION)
@@ -110,7 +101,7 @@ class PromocionResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Promocion createUpdatedEntity(EntityManager em) {
+    public static Promocion createUpdatedEntity() {
         Promocion promocion = new Promocion()
             .nombre(UPDATED_NOMBRE)
             .descripcion(UPDATED_DESCRIPCION)
@@ -121,24 +112,10 @@ class PromocionResourceIT {
         return promocion;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll("rel_promocion__peliculas").block();
-            em.deleteAll(Promocion.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        promocion = createEntity(em);
+        promocionRepository.deleteAll().block();
+        promocion = createEntity();
     }
 
     @Test
@@ -170,7 +147,7 @@ class PromocionResourceIT {
     @Test
     void createPromocionWithExistingId() throws Exception {
         // Create the Promocion with an existing ID
-        promocion.setId(1L);
+        promocion.setId("existing_id");
         PromocionDTO promocionDTO = promocionMapper.toDto(promocion);
 
         int databaseSizeBeforeCreate = promocionRepository.findAll().collectList().block().size();
@@ -317,7 +294,7 @@ class PromocionResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(promocion.getId().intValue()))
+            .value(hasItem(promocion.getId()))
             .jsonPath("$.[*].nombre")
             .value(hasItem(DEFAULT_NOMBRE))
             .jsonPath("$.[*].descripcion")
@@ -367,7 +344,7 @@ class PromocionResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(promocion.getId().intValue()))
+            .value(is(promocion.getId()))
             .jsonPath("$.nombre")
             .value(is(DEFAULT_NOMBRE))
             .jsonPath("$.descripcion")
@@ -436,7 +413,7 @@ class PromocionResourceIT {
     @Test
     void putNonExistingPromocion() throws Exception {
         int databaseSizeBeforeUpdate = promocionRepository.findAll().collectList().block().size();
-        promocion.setId(count.incrementAndGet());
+        promocion.setId(UUID.randomUUID().toString());
 
         // Create the Promocion
         PromocionDTO promocionDTO = promocionMapper.toDto(promocion);
@@ -459,7 +436,7 @@ class PromocionResourceIT {
     @Test
     void putWithIdMismatchPromocion() throws Exception {
         int databaseSizeBeforeUpdate = promocionRepository.findAll().collectList().block().size();
-        promocion.setId(count.incrementAndGet());
+        promocion.setId(UUID.randomUUID().toString());
 
         // Create the Promocion
         PromocionDTO promocionDTO = promocionMapper.toDto(promocion);
@@ -467,7 +444,7 @@ class PromocionResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(promocionDTO))
             .exchange()
@@ -482,7 +459,7 @@ class PromocionResourceIT {
     @Test
     void putWithMissingIdPathParamPromocion() throws Exception {
         int databaseSizeBeforeUpdate = promocionRepository.findAll().collectList().block().size();
-        promocion.setId(count.incrementAndGet());
+        promocion.setId(UUID.randomUUID().toString());
 
         // Create the Promocion
         PromocionDTO promocionDTO = promocionMapper.toDto(promocion);
@@ -579,7 +556,7 @@ class PromocionResourceIT {
     @Test
     void patchNonExistingPromocion() throws Exception {
         int databaseSizeBeforeUpdate = promocionRepository.findAll().collectList().block().size();
-        promocion.setId(count.incrementAndGet());
+        promocion.setId(UUID.randomUUID().toString());
 
         // Create the Promocion
         PromocionDTO promocionDTO = promocionMapper.toDto(promocion);
@@ -602,7 +579,7 @@ class PromocionResourceIT {
     @Test
     void patchWithIdMismatchPromocion() throws Exception {
         int databaseSizeBeforeUpdate = promocionRepository.findAll().collectList().block().size();
-        promocion.setId(count.incrementAndGet());
+        promocion.setId(UUID.randomUUID().toString());
 
         // Create the Promocion
         PromocionDTO promocionDTO = promocionMapper.toDto(promocion);
@@ -610,7 +587,7 @@ class PromocionResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(promocionDTO))
             .exchange()
@@ -625,7 +602,7 @@ class PromocionResourceIT {
     @Test
     void patchWithMissingIdPathParamPromocion() throws Exception {
         int databaseSizeBeforeUpdate = promocionRepository.findAll().collectList().block().size();
-        promocion.setId(count.incrementAndGet());
+        promocion.setId(UUID.randomUUID().toString());
 
         // Create the Promocion
         PromocionDTO promocionDTO = promocionMapper.toDto(promocion);

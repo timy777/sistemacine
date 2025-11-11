@@ -8,14 +8,9 @@ import static sistemacine.web.rest.TestUtil.sameNumber;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
@@ -24,7 +19,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.DetalleVenta;
 import sistemacine.repository.DetalleVentaRepository;
-import sistemacine.repository.EntityManager;
 import sistemacine.service.dto.DetalleVentaDTO;
 import sistemacine.service.mapper.DetalleVentaMapper;
 
@@ -45,17 +39,11 @@ class DetalleVentaResourceIT {
     private static final String ENTITY_API_URL = "/api/detalle-ventas";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private DetalleVentaRepository detalleVentaRepository;
 
     @Autowired
     private DetalleVentaMapper detalleVentaMapper;
-
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -68,7 +56,7 @@ class DetalleVentaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static DetalleVenta createEntity(EntityManager em) {
+    public static DetalleVenta createEntity() {
         DetalleVenta detalleVenta = new DetalleVenta().asiento(DEFAULT_ASIENTO).precioUnitario(DEFAULT_PRECIO_UNITARIO);
         return detalleVenta;
     }
@@ -79,28 +67,15 @@ class DetalleVentaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static DetalleVenta createUpdatedEntity(EntityManager em) {
+    public static DetalleVenta createUpdatedEntity() {
         DetalleVenta detalleVenta = new DetalleVenta().asiento(UPDATED_ASIENTO).precioUnitario(UPDATED_PRECIO_UNITARIO);
         return detalleVenta;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(DetalleVenta.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        detalleVenta = createEntity(em);
+        detalleVentaRepository.deleteAll().block();
+        detalleVenta = createEntity();
     }
 
     @Test
@@ -128,7 +103,7 @@ class DetalleVentaResourceIT {
     @Test
     void createDetalleVentaWithExistingId() throws Exception {
         // Create the DetalleVenta with an existing ID
-        detalleVenta.setId(1L);
+        detalleVenta.setId("existing_id");
         DetalleVentaDTO detalleVentaDTO = detalleVentaMapper.toDto(detalleVenta);
 
         int databaseSizeBeforeCreate = detalleVentaRepository.findAll().collectList().block().size();
@@ -209,7 +184,7 @@ class DetalleVentaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(detalleVenta.getId().intValue()))
+            .value(hasItem(detalleVenta.getId()))
             .jsonPath("$.[*].asiento")
             .value(hasItem(DEFAULT_ASIENTO))
             .jsonPath("$.[*].precioUnitario")
@@ -233,7 +208,7 @@ class DetalleVentaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(detalleVenta.getId().intValue()))
+            .value(is(detalleVenta.getId()))
             .jsonPath("$.asiento")
             .value(is(DEFAULT_ASIENTO))
             .jsonPath("$.precioUnitario")
@@ -284,7 +259,7 @@ class DetalleVentaResourceIT {
     @Test
     void putNonExistingDetalleVenta() throws Exception {
         int databaseSizeBeforeUpdate = detalleVentaRepository.findAll().collectList().block().size();
-        detalleVenta.setId(count.incrementAndGet());
+        detalleVenta.setId(UUID.randomUUID().toString());
 
         // Create the DetalleVenta
         DetalleVentaDTO detalleVentaDTO = detalleVentaMapper.toDto(detalleVenta);
@@ -307,7 +282,7 @@ class DetalleVentaResourceIT {
     @Test
     void putWithIdMismatchDetalleVenta() throws Exception {
         int databaseSizeBeforeUpdate = detalleVentaRepository.findAll().collectList().block().size();
-        detalleVenta.setId(count.incrementAndGet());
+        detalleVenta.setId(UUID.randomUUID().toString());
 
         // Create the DetalleVenta
         DetalleVentaDTO detalleVentaDTO = detalleVentaMapper.toDto(detalleVenta);
@@ -315,7 +290,7 @@ class DetalleVentaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(detalleVentaDTO))
             .exchange()
@@ -330,7 +305,7 @@ class DetalleVentaResourceIT {
     @Test
     void putWithMissingIdPathParamDetalleVenta() throws Exception {
         int databaseSizeBeforeUpdate = detalleVentaRepository.findAll().collectList().block().size();
-        detalleVenta.setId(count.incrementAndGet());
+        detalleVenta.setId(UUID.randomUUID().toString());
 
         // Create the DetalleVenta
         DetalleVentaDTO detalleVentaDTO = detalleVentaMapper.toDto(detalleVenta);
@@ -411,7 +386,7 @@ class DetalleVentaResourceIT {
     @Test
     void patchNonExistingDetalleVenta() throws Exception {
         int databaseSizeBeforeUpdate = detalleVentaRepository.findAll().collectList().block().size();
-        detalleVenta.setId(count.incrementAndGet());
+        detalleVenta.setId(UUID.randomUUID().toString());
 
         // Create the DetalleVenta
         DetalleVentaDTO detalleVentaDTO = detalleVentaMapper.toDto(detalleVenta);
@@ -434,7 +409,7 @@ class DetalleVentaResourceIT {
     @Test
     void patchWithIdMismatchDetalleVenta() throws Exception {
         int databaseSizeBeforeUpdate = detalleVentaRepository.findAll().collectList().block().size();
-        detalleVenta.setId(count.incrementAndGet());
+        detalleVenta.setId(UUID.randomUUID().toString());
 
         // Create the DetalleVenta
         DetalleVentaDTO detalleVentaDTO = detalleVentaMapper.toDto(detalleVenta);
@@ -442,7 +417,7 @@ class DetalleVentaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(detalleVentaDTO))
             .exchange()
@@ -457,7 +432,7 @@ class DetalleVentaResourceIT {
     @Test
     void patchWithMissingIdPathParamDetalleVenta() throws Exception {
         int databaseSizeBeforeUpdate = detalleVentaRepository.findAll().collectList().block().size();
-        detalleVenta.setId(count.incrementAndGet());
+        detalleVenta.setId(UUID.randomUUID().toString());
 
         // Create the DetalleVenta
         DetalleVentaDTO detalleVentaDTO = detalleVentaMapper.toDto(detalleVenta);

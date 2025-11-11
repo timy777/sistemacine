@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import sistemacine.domain.User;
 import sistemacine.repository.UserRepository;
@@ -31,20 +30,19 @@ public class DomainUserDetailsService implements ReactiveUserDetailsService {
     }
 
     @Override
-    @Transactional
     public Mono<UserDetails> findByUsername(final String login) {
         log.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
             return userRepository
-                .findOneWithAuthoritiesByEmailIgnoreCase(login)
+                .findOneByEmailIgnoreCase(login)
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException("User with email " + login + " was not found in the database")))
                 .map(user -> createSpringSecurityUser(login, user));
         }
 
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         return userRepository
-            .findOneWithAuthoritiesByLogin(lowercaseLogin)
+            .findOneByLogin(lowercaseLogin)
             .switchIfEmpty(Mono.error(new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database")))
             .map(user -> createSpringSecurityUser(lowercaseLogin, user));
     }

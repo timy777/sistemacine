@@ -13,6 +13,14 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+mongock:
+  migration-scan-package:
+    - sistemacine.config.dbmigrations
+  mongo-db:
+    read-concern: local
+    write-concern:
+      journal: false
+
 spring:
   application:
     name: sistemacine
@@ -20,19 +28,13 @@ spring:
   jackson:
     serialization:
       write-durations-as-timestamps: false
-  liquibase:
-    contexts: test
-    url: jdbc:h2:mem:sistemacine;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  data:
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-  r2dbc:
-    url: r2dbc:h2:mem:///sistemacine;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: r2dbc
-    password:
   task:
     execution:
       thread-name-prefix: sistemacine-task-
@@ -74,7 +76,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: ZjJkYzhlMGJlNjAwMTY3ZmFlM2NmYzNlODhhY2E4ZGI5YmE3NTNhMTNlYzgzYjM4MDAwYWY2YTU3YjQwZGU1NTdhMTI5NTMwMjAwN2RiMTBiMWQxYTI1MTdkZDg4ZWJmNjA4OGE5MDliOGE4NjYzN2QwYWYxMmVmMjdhNTc1MGQ=
+        base64-secret: NTUxZTQ3NjY4MTdkYmFiOGVlYjk2OWQxZGEzOGZlYjYxZDRiM2EyYWZlZTRjNDczNjBkOTA5ZTYwZDY4MTA5YzgzMjJkMTkzNjg5NGM1M2QwMGY0NmM2YWUyODg1ZmI0Y2RmODJlNzZmMmU2NDY5MzRhM2RjM2M0MjM3OWQyMzE=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
 # ===================================================================

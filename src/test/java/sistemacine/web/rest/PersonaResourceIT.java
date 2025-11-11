@@ -8,14 +8,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
@@ -25,7 +20,6 @@ import sistemacine.IntegrationTest;
 import sistemacine.domain.Persona;
 import sistemacine.domain.enumeration.Sexo;
 import sistemacine.domain.enumeration.TipoPersona;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.PersonaRepository;
 import sistemacine.service.dto.PersonaDTO;
 import sistemacine.service.mapper.PersonaMapper;
@@ -65,17 +59,11 @@ class PersonaResourceIT {
     private static final String ENTITY_API_URL = "/api/personas";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private PersonaRepository personaRepository;
 
     @Autowired
     private PersonaMapper personaMapper;
-
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -88,7 +76,7 @@ class PersonaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Persona createEntity(EntityManager em) {
+    public static Persona createEntity() {
         Persona persona = new Persona()
             .nombre(DEFAULT_NOMBRE)
             .apellido(DEFAULT_APELLIDO)
@@ -107,7 +95,7 @@ class PersonaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Persona createUpdatedEntity(EntityManager em) {
+    public static Persona createUpdatedEntity() {
         Persona persona = new Persona()
             .nombre(UPDATED_NOMBRE)
             .apellido(UPDATED_APELLIDO)
@@ -120,23 +108,10 @@ class PersonaResourceIT {
         return persona;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Persona.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        persona = createEntity(em);
+        personaRepository.deleteAll().block();
+        persona = createEntity();
     }
 
     @Test
@@ -170,7 +145,7 @@ class PersonaResourceIT {
     @Test
     void createPersonaWithExistingId() throws Exception {
         // Create the Persona with an existing ID
-        persona.setId(1L);
+        persona.setId("existing_id");
         PersonaDTO personaDTO = personaMapper.toDto(persona);
 
         int databaseSizeBeforeCreate = personaRepository.findAll().collectList().block().size();
@@ -361,7 +336,7 @@ class PersonaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(persona.getId().intValue()))
+            .value(hasItem(persona.getId()))
             .jsonPath("$.[*].nombre")
             .value(hasItem(DEFAULT_NOMBRE))
             .jsonPath("$.[*].apellido")
@@ -397,7 +372,7 @@ class PersonaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(persona.getId().intValue()))
+            .value(is(persona.getId()))
             .jsonPath("$.nombre")
             .value(is(DEFAULT_NOMBRE))
             .jsonPath("$.apellido")
@@ -474,7 +449,7 @@ class PersonaResourceIT {
     @Test
     void putNonExistingPersona() throws Exception {
         int databaseSizeBeforeUpdate = personaRepository.findAll().collectList().block().size();
-        persona.setId(count.incrementAndGet());
+        persona.setId(UUID.randomUUID().toString());
 
         // Create the Persona
         PersonaDTO personaDTO = personaMapper.toDto(persona);
@@ -497,7 +472,7 @@ class PersonaResourceIT {
     @Test
     void putWithIdMismatchPersona() throws Exception {
         int databaseSizeBeforeUpdate = personaRepository.findAll().collectList().block().size();
-        persona.setId(count.incrementAndGet());
+        persona.setId(UUID.randomUUID().toString());
 
         // Create the Persona
         PersonaDTO personaDTO = personaMapper.toDto(persona);
@@ -505,7 +480,7 @@ class PersonaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(personaDTO))
             .exchange()
@@ -520,7 +495,7 @@ class PersonaResourceIT {
     @Test
     void putWithMissingIdPathParamPersona() throws Exception {
         int databaseSizeBeforeUpdate = personaRepository.findAll().collectList().block().size();
-        persona.setId(count.incrementAndGet());
+        persona.setId(UUID.randomUUID().toString());
 
         // Create the Persona
         PersonaDTO personaDTO = personaMapper.toDto(persona);
@@ -628,7 +603,7 @@ class PersonaResourceIT {
     @Test
     void patchNonExistingPersona() throws Exception {
         int databaseSizeBeforeUpdate = personaRepository.findAll().collectList().block().size();
-        persona.setId(count.incrementAndGet());
+        persona.setId(UUID.randomUUID().toString());
 
         // Create the Persona
         PersonaDTO personaDTO = personaMapper.toDto(persona);
@@ -651,7 +626,7 @@ class PersonaResourceIT {
     @Test
     void patchWithIdMismatchPersona() throws Exception {
         int databaseSizeBeforeUpdate = personaRepository.findAll().collectList().block().size();
-        persona.setId(count.incrementAndGet());
+        persona.setId(UUID.randomUUID().toString());
 
         // Create the Persona
         PersonaDTO personaDTO = personaMapper.toDto(persona);
@@ -659,7 +634,7 @@ class PersonaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(personaDTO))
             .exchange()
@@ -674,7 +649,7 @@ class PersonaResourceIT {
     @Test
     void patchWithMissingIdPathParamPersona() throws Exception {
         int databaseSizeBeforeUpdate = personaRepository.findAll().collectList().block().size();
-        persona.setId(count.incrementAndGet());
+        persona.setId(UUID.randomUUID().toString());
 
         // Create the Persona
         PersonaDTO personaDTO = personaMapper.toDto(persona);

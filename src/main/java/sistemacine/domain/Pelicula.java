@@ -6,72 +6,67 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import sistemacine.domain.enumeration.EstadoPelicula;
 
 /**
  * A Pelicula.
  */
-@Table("pelicula")
+@Document(collection = "pelicula")
 public class Pelicula implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
-    @Column("titulo")
+    @Field("titulo")
     private String titulo;
 
-    @Column("sinopsis")
+    @Field("sinopsis")
     private String sinopsis;
 
     @NotNull(message = "must not be null")
-    @Column("duracion")
+    @Field("duracion")
     private Integer duracion;
 
-    @Column("idioma")
+    @Field("idioma")
     private String idioma;
 
-    @Column("clasificacion")
+    @Field("clasificacion")
     private String clasificacion;
 
-    @Column("formato")
+    @Field("formato")
     private String formato;
 
     @NotNull(message = "must not be null")
-    @Column("estado")
+    @Field("estado")
     private EstadoPelicula estado;
 
-    @Column("imagen_url")
+    @Field("imagen_url")
     private String imagenUrl;
 
-    @Transient
+    @Field("genero")
     private Genero genero;
 
-    @Transient
+    @Field("promociones")
     @JsonIgnoreProperties(value = { "peliculas" }, allowSetters = true)
     private Set<Promocion> promociones = new HashSet<>();
 
-    @Column("genero_id")
-    private Long generoId;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
-    public Pelicula id(Long id) {
+    public Pelicula id(String id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -185,7 +180,6 @@ public class Pelicula implements Serializable {
 
     public void setGenero(Genero genero) {
         this.genero = genero;
-        this.generoId = genero != null ? genero.getId() : null;
     }
 
     public Pelicula genero(Genero genero) {
@@ -222,14 +216,6 @@ public class Pelicula implements Serializable {
         this.promociones.remove(promocion);
         promocion.getPeliculas().remove(this);
         return this;
-    }
-
-    public Long getGeneroId() {
-        return this.generoId;
-    }
-
-    public void setGeneroId(Long genero) {
-        this.generoId = genero;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

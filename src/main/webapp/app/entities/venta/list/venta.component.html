@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="VentaHeading">
-    <span jhiTranslate="sistemacineApp.venta.home.title">Ventas</span>
+    <span>Ventas</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="sistemacineApp.venta.home.refreshListLabel">Refresh List</span>
+        <span>Refresh List</span>
       </button>
 
       <button
@@ -15,7 +15,7 @@
         [routerLink]="['/venta/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="sistemacineApp.venta.home.createLabel"> Create a new Venta </span>
+        <span> Create a new Venta </span>
       </button>
     </div>
   </h2>
@@ -25,29 +25,19 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="ventas?.length === 0">
-    <span jhiTranslate="sistemacineApp.venta.home.notFound">No ventas found</span>
+    <span>No ventas found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="ventas && ventas.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fecha">
-            <span jhiTranslate="sistemacineApp.venta.fecha">Fecha</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="total">
-            <span jhiTranslate="sistemacineApp.venta.total">Total</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="metodoPago">
-            <span jhiTranslate="sistemacineApp.venta.metodoPago">Metodo Pago</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="cliente.nombre">
-            <span jhiTranslate="sistemacineApp.venta.cliente">Cliente</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="vendedor.nombre">
-            <span jhiTranslate="sistemacineApp.venta.vendedor">Vendedor</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fecha"><span>Fecha</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="total"><span>Total</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="metodoPago"><span>Metodo Pago</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="cliente.nombre"><span>Cliente</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="vendedor.nombre"><span>Vendedor</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -73,17 +63,17 @@
             <div class="btn-group">
               <button type="submit" [routerLink]="['/venta', venta.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button type="submit" [routerLink]="['/venta', venta.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline">Edit</span>
               </button>
 
               <button type="submit" (click)="delete(venta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
           </td>

@@ -65,7 +65,7 @@ export class PeliculaUpdateComponent implements OnInit {
   setFileData(event: Event, field: string, isImage: boolean): void {
     this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
       error: (err: FileLoadError) =>
-        this.eventManager.broadcast(new EventWithContent<AlertError>('sistemacineApp.error', { ...err, key: 'error.file.' + err.key })),
+        this.eventManager.broadcast(new EventWithContent<AlertError>('sistemacineApp.error', { message: err.message })),
     });
   }
 
@@ -83,7 +83,7 @@ export class PeliculaUpdateComponent implements OnInit {
     }
   }
 
-  trackGeneroById(_index: number, item: IGenero): number {
+  trackGeneroById(_index: number, item: IGenero): string {
     return item.id!;
   }
 

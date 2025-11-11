@@ -76,15 +76,15 @@ export class FuncionUpdateComponent implements OnInit {
     }
   }
 
-  trackSalaById(_index: number, item: ISala): number {
+  trackSalaById(_index: number, item: ISala): string {
     return item.id!;
   }
 
-  trackPeliculaById(_index: number, item: IPelicula): number {
+  trackPeliculaById(_index: number, item: IPelicula): string {
     return item.id!;
   }
 
-  trackTarifaById(_index: number, item: ITarifa): number {
+  trackTarifaById(_index: number, item: ITarifa): string {
     return item.id!;
   }
 

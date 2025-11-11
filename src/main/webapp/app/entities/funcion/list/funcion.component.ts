@@ -57,7 +57,7 @@ export class FuncionComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IFuncion): number {
+  trackId(_index: number, item: IFuncion): string {
     return item.id!;
   }
 

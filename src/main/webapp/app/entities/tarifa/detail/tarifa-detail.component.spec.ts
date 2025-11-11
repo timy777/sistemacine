@@ -14,7 +14,7 @@ describe('Tarifa Management Detail Component', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { data: of({ tarifa: { id: 123 } }) },
+          useValue: { data: of({ tarifa: { id: 'ABC' } }) },
         },
       ],
     })
@@ -30,7 +30,7 @@ describe('Tarifa Management Detail Component', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(comp.tarifa).toEqual(expect.objectContaining({ id: 123 }));
+      expect(comp.tarifa).toEqual(expect.objectContaining({ id: 'ABC' }));
     });
   });
 });

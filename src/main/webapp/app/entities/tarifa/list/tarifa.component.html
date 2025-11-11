@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="TarifaHeading">
-    <span jhiTranslate="sistemacineApp.tarifa.home.title">Tarifas</span>
+    <span>Tarifas</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="sistemacineApp.tarifa.home.refreshListLabel">Refresh List</span>
+        <span>Refresh List</span>
       </button>
 
       <button
@@ -15,7 +15,7 @@
         [routerLink]="['/tarifa/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="sistemacineApp.tarifa.home.createLabel"> Create a new Tarifa </span>
+        <span> Create a new Tarifa </span>
       </button>
     </div>
   </h2>
@@ -25,29 +25,19 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="tarifas?.length === 0">
-    <span jhiTranslate="sistemacineApp.tarifa.home.notFound">No tarifas found</span>
+    <span>No tarifas found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="tarifas && tarifas.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="nombre">
-            <span jhiTranslate="sistemacineApp.tarifa.nombre">Nombre</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="descripcion">
-            <span jhiTranslate="sistemacineApp.tarifa.descripcion">Descripcion</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="monto">
-            <span jhiTranslate="sistemacineApp.tarifa.monto">Monto</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="diaSemana">
-            <span jhiTranslate="sistemacineApp.tarifa.diaSemana">Dia Semana</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="tipoSala">
-            <span jhiTranslate="sistemacineApp.tarifa.tipoSala">Tipo Sala</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="nombre"><span>Nombre</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="descripcion"><span>Descripcion</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="monto"><span>Monto</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="diaSemana"><span>Dia Semana</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="tipoSala"><span>Tipo Sala</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -60,22 +50,22 @@
           <td>{{ tarifa.descripcion }}</td>
           <td>{{ tarifa.monto }}</td>
           <td>{{ tarifa.diaSemana }}</td>
-          <td jhiTranslate="{{ 'sistemacineApp.TipoSala.' + tarifa.tipoSala }}">{{ tarifa.tipoSala }}</td>
+          <td>{{ tarifa.tipoSala }}</td>
           <td class="text-end">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/tarifa', tarifa.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button type="submit" [routerLink]="['/tarifa', tarifa.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline">Edit</span>
               </button>
 
               <button type="submit" (click)="delete(tarifa)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
           </td>

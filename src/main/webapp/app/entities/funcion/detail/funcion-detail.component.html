@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="funcion">
-      <h2 data-cy="funcionDetailsHeading"><span jhiTranslate="sistemacineApp.funcion.detail.title">Funcion</span></h2>
+      <h2 data-cy="funcionDetailsHeading"><span>Funcion</span></h2>
 
       <hr />
 
@@ -10,39 +10,39 @@
       <jhi-alert></jhi-alert>
 
       <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dt><span>ID</span></dt>
         <dd>
           <span>{{ funcion.id }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.funcion.fecha">Fecha</span></dt>
+        <dt><span>Fecha</span></dt>
         <dd>
           <span>{{ funcion.fecha | formatMediumDate }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.funcion.horaInicio">Hora Inicio</span></dt>
+        <dt><span>Hora Inicio</span></dt>
         <dd>
           <span>{{ funcion.horaInicio | formatMediumDatetime }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.funcion.horaFin">Hora Fin</span></dt>
+        <dt><span>Hora Fin</span></dt>
         <dd>
           <span>{{ funcion.horaFin | formatMediumDatetime }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.funcion.precio">Precio</span></dt>
+        <dt><span>Precio</span></dt>
         <dd>
           <span>{{ funcion.precio }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.funcion.sala">Sala</span></dt>
+        <dt><span>Sala</span></dt>
         <dd>
           <div *ngIf="funcion.sala">
             <a [routerLink]="['/sala', funcion.sala?.id, 'view']">{{ funcion.sala?.nombre }}</a>
           </div>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.funcion.pelicula">Pelicula</span></dt>
+        <dt><span>Pelicula</span></dt>
         <dd>
           <div *ngIf="funcion.pelicula">
             <a [routerLink]="['/pelicula', funcion.pelicula?.id, 'view']">{{ funcion.pelicula?.titulo }}</a>
           </div>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.funcion.tarifa">Tarifa</span></dt>
+        <dt><span>Tarifa</span></dt>
         <dd>
           <div *ngIf="funcion.tarifa">
             <a [routerLink]="['/tarifa', funcion.tarifa?.id, 'view']">{{ funcion.tarifa?.nombre }}</a>
@@ -51,11 +51,11 @@
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
       <button type="button" [routerLink]="['/funcion', funcion.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>
   </div>

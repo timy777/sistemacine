@@ -59,7 +59,7 @@ export class PeliculaComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IPelicula): number {
+  trackId(_index: number, item: IPelicula): string {
     return item.id!;
   }
 

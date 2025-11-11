@@ -12,78 +12,76 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Field;
 import sistemacine.config.Constants;
 
 /**
  * A user.
  */
-@Table("jhi_user")
+@org.springframework.data.mongodb.core.mapping.Document(collection = "jhi_user")
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    private Long id;
+    private String id;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
+    @Indexed
     private String login;
 
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
-    @Column("password_hash")
     private String password;
 
     @Size(max = 50)
-    @Column("first_name")
+    @Field("first_name")
     private String firstName;
 
     @Size(max = 50)
-    @Column("last_name")
+    @Field("last_name")
     private String lastName;
 
     @Email
     @Size(min = 5, max = 254)
+    @Indexed
     private String email;
 
-    @NotNull
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
-    @Column("lang_key")
+    @Field("lang_key")
     private String langKey;
 
     @Size(max = 256)
-    @Column("image_url")
+    @Field("image_url")
     private String imageUrl;
 
     @Size(max = 20)
-    @Column("activation_key")
+    @Field("activation_key")
     @JsonIgnore
     private String activationKey;
 
     @Size(max = 20)
-    @Column("reset_key")
+    @Field("reset_key")
     @JsonIgnore
     private String resetKey;
 
-    @Column("reset_date")
+    @Field("reset_date")
     private Instant resetDate = null;
 
     @JsonIgnore
-    @Transient
     private Set<Authority> authorities = new HashSet<>();
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

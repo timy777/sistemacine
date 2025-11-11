@@ -24,7 +24,7 @@ describe('Funcion Service', () => {
     currentDate = dayjs();
 
     elemDefault = {
-      id: 0,
+      id: 'AAAAAAA',
       fecha: currentDate,
       horaInicio: currentDate,
       horaFin: currentDate,
@@ -43,7 +43,7 @@ describe('Funcion Service', () => {
         elemDefault
       );
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find('ABC').subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -53,7 +53,7 @@ describe('Funcion Service', () => {
     it('should create a Funcion', () => {
       const returnedFromService = Object.assign(
         {
-          id: 0,
+          id: 'ID',
           fecha: currentDate.format(DATE_FORMAT),
           horaInicio: currentDate.format(DATE_TIME_FORMAT),
           horaFin: currentDate.format(DATE_TIME_FORMAT),
@@ -80,7 +80,7 @@ describe('Funcion Service', () => {
     it('should update a Funcion', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           fecha: currentDate.format(DATE_FORMAT),
           horaInicio: currentDate.format(DATE_TIME_FORMAT),
           horaFin: currentDate.format(DATE_TIME_FORMAT),
@@ -135,7 +135,7 @@ describe('Funcion Service', () => {
     it('should return a list of Funcion', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           fecha: currentDate.format(DATE_FORMAT),
           horaInicio: currentDate.format(DATE_TIME_FORMAT),
           horaFin: currentDate.format(DATE_TIME_FORMAT),
@@ -162,7 +162,7 @@ describe('Funcion Service', () => {
     });
 
     it('should delete a Funcion', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+      service.delete('ABC').subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
@@ -171,42 +171,42 @@ describe('Funcion Service', () => {
 
     describe('addFuncionToCollectionIfMissing', () => {
       it('should add a Funcion to an empty array', () => {
-        const funcion: IFuncion = { id: 123 };
+        const funcion: IFuncion = { id: 'ABC' };
         expectedResult = service.addFuncionToCollectionIfMissing([], funcion);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(funcion);
       });
 
       it('should not add a Funcion to an array that contains it', () => {
-        const funcion: IFuncion = { id: 123 };
+        const funcion: IFuncion = { id: 'ABC' };
         const funcionCollection: IFuncion[] = [
           {
             ...funcion,
           },
-          { id: 456 },
+          { id: 'CBA' },
         ];
         expectedResult = service.addFuncionToCollectionIfMissing(funcionCollection, funcion);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a Funcion to an array that doesn't contain it", () => {
-        const funcion: IFuncion = { id: 123 };
-        const funcionCollection: IFuncion[] = [{ id: 456 }];
+        const funcion: IFuncion = { id: 'ABC' };
+        const funcionCollection: IFuncion[] = [{ id: 'CBA' }];
         expectedResult = service.addFuncionToCollectionIfMissing(funcionCollection, funcion);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(funcion);
       });
 
       it('should add only unique Funcion to an array', () => {
-        const funcionArray: IFuncion[] = [{ id: 123 }, { id: 456 }, { id: 28214 }];
-        const funcionCollection: IFuncion[] = [{ id: 123 }];
+        const funcionArray: IFuncion[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: '4f01a570-5df5-4ab4-a440-5ee66d4dfc84' }];
+        const funcionCollection: IFuncion[] = [{ id: 'ABC' }];
         expectedResult = service.addFuncionToCollectionIfMissing(funcionCollection, ...funcionArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const funcion: IFuncion = { id: 123 };
-        const funcion2: IFuncion = { id: 456 };
+        const funcion: IFuncion = { id: 'ABC' };
+        const funcion2: IFuncion = { id: 'CBA' };
         expectedResult = service.addFuncionToCollectionIfMissing([], funcion, funcion2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(funcion);
@@ -214,14 +214,14 @@ describe('Funcion Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const funcion: IFuncion = { id: 123 };
+        const funcion: IFuncion = { id: 'ABC' };
         expectedResult = service.addFuncionToCollectionIfMissing([], null, funcion, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(funcion);
       });
 
       it('should return initial array if no Funcion is added', () => {
-        const funcionCollection: IFuncion[] = [{ id: 123 }];
+        const funcionCollection: IFuncion[] = [{ id: 'ABC' }];
         expectedResult = service.addFuncionToCollectionIfMissing(funcionCollection, undefined, null);
         expect(expectedResult).toEqual(funcionCollection);
       });

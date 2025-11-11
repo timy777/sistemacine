@@ -43,7 +43,7 @@ describe('Tarifa Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should update editForm', () => {
-      const tarifa: ITarifa = { id: 456 };
+      const tarifa: ITarifa = { id: 'CBA' };
 
       activatedRoute.data = of({ tarifa });
       comp.ngOnInit();
@@ -56,7 +56,7 @@ describe('Tarifa Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Tarifa>>();
-      const tarifa = { id: 123 };
+      const tarifa = { id: 'ABC' };
       jest.spyOn(tarifaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ tarifa });
@@ -98,7 +98,7 @@ describe('Tarifa Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Tarifa>>();
-      const tarifa = { id: 123 };
+      const tarifa = { id: 'ABC' };
       jest.spyOn(tarifaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ tarifa });

@@ -21,14 +21,14 @@ export class GeneroService {
   }
 
   update(genero: IGenero): Observable<EntityResponseType> {
-    return this.http.put<IGenero>(`${this.resourceUrl}/${getGeneroIdentifier(genero) as number}`, genero, { observe: 'response' });
+    return this.http.put<IGenero>(`${this.resourceUrl}/${getGeneroIdentifier(genero) as string}`, genero, { observe: 'response' });
   }
 
   partialUpdate(genero: IGenero): Observable<EntityResponseType> {
-    return this.http.patch<IGenero>(`${this.resourceUrl}/${getGeneroIdentifier(genero) as number}`, genero, { observe: 'response' });
+    return this.http.patch<IGenero>(`${this.resourceUrl}/${getGeneroIdentifier(genero) as string}`, genero, { observe: 'response' });
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http.get<IGenero>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
@@ -37,7 +37,7 @@ export class GeneroService {
     return this.http.get<IGenero[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

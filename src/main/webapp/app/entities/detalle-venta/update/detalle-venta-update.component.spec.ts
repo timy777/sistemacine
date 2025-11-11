@@ -51,11 +51,11 @@ describe('DetalleVenta Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call Funcion query and add missing value', () => {
-      const detalleVenta: IDetalleVenta = { id: 456 };
-      const funcion: IFuncion = { id: 90821 };
+      const detalleVenta: IDetalleVenta = { id: 'CBA' };
+      const funcion: IFuncion = { id: 'e35331a2-7e4a-4887-9152-38436404c628' };
       detalleVenta.funcion = funcion;
 
-      const funcionCollection: IFuncion[] = [{ id: 20725 }];
+      const funcionCollection: IFuncion[] = [{ id: 'b5f18588-88dc-4e82-99d7-b40f98a05be5' }];
       jest.spyOn(funcionService, 'query').mockReturnValue(of(new HttpResponse({ body: funcionCollection })));
       const additionalFuncions = [funcion];
       const expectedCollection: IFuncion[] = [...additionalFuncions, ...funcionCollection];
@@ -70,11 +70,11 @@ describe('DetalleVenta Management Update Component', () => {
     });
 
     it('Should call Venta query and add missing value', () => {
-      const detalleVenta: IDetalleVenta = { id: 456 };
-      const venta: IVenta = { id: 78957 };
+      const detalleVenta: IDetalleVenta = { id: 'CBA' };
+      const venta: IVenta = { id: 'c2d05b8e-85ba-4672-9ab9-8525955a204f' };
       detalleVenta.venta = venta;
 
-      const ventaCollection: IVenta[] = [{ id: 12675 }];
+      const ventaCollection: IVenta[] = [{ id: 'af2aec15-3d52-4adb-a58c-e819c2745a66' }];
       jest.spyOn(ventaService, 'query').mockReturnValue(of(new HttpResponse({ body: ventaCollection })));
       const additionalVentas = [venta];
       const expectedCollection: IVenta[] = [...additionalVentas, ...ventaCollection];
@@ -89,10 +89,10 @@ describe('DetalleVenta Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const detalleVenta: IDetalleVenta = { id: 456 };
-      const funcion: IFuncion = { id: 36967 };
+      const detalleVenta: IDetalleVenta = { id: 'CBA' };
+      const funcion: IFuncion = { id: '1148e8d9-5dc4-4901-9df5-9bfe7bed26aa' };
       detalleVenta.funcion = funcion;
-      const venta: IVenta = { id: 84589 };
+      const venta: IVenta = { id: '10e6ac0b-2c64-4c19-bbdd-cb62d59a8b2f' };
       detalleVenta.venta = venta;
 
       activatedRoute.data = of({ detalleVenta });
@@ -108,7 +108,7 @@ describe('DetalleVenta Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<DetalleVenta>>();
-      const detalleVenta = { id: 123 };
+      const detalleVenta = { id: 'ABC' };
       jest.spyOn(detalleVentaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ detalleVenta });
@@ -150,7 +150,7 @@ describe('DetalleVenta Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<DetalleVenta>>();
-      const detalleVenta = { id: 123 };
+      const detalleVenta = { id: 'ABC' };
       jest.spyOn(detalleVentaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ detalleVenta });
@@ -171,7 +171,7 @@ describe('DetalleVenta Management Update Component', () => {
   describe('Tracking relationships identifiers', () => {
     describe('trackFuncionById', () => {
       it('Should return tracked Funcion primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackFuncionById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
@@ -179,7 +179,7 @@ describe('DetalleVenta Management Update Component', () => {
 
     describe('trackVentaById', () => {
       it('Should return tracked Venta primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackVentaById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });

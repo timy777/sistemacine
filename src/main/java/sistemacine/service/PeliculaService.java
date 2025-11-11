@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.domain.Pelicula;
@@ -16,7 +15,6 @@ import sistemacine.service.mapper.PeliculaMapper;
  * Service Implementation for managing {@link Pelicula}.
  */
 @Service
-@Transactional
 public class PeliculaService {
 
     private final Logger log = LoggerFactory.getLogger(PeliculaService.class);
@@ -78,7 +76,6 @@ public class PeliculaService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    @Transactional(readOnly = true)
     public Flux<PeliculaDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Peliculas");
         return peliculaRepository.findAllBy(pageable).map(peliculaMapper::toDto);
@@ -108,8 +105,7 @@ public class PeliculaService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    @Transactional(readOnly = true)
-    public Mono<PeliculaDTO> findOne(Long id) {
+    public Mono<PeliculaDTO> findOne(String id) {
         log.debug("Request to get Pelicula : {}", id);
         return peliculaRepository.findOneWithEagerRelationships(id).map(peliculaMapper::toDto);
     }
@@ -120,7 +116,7 @@ public class PeliculaService {
      * @param id the id of the entity.
      * @return a Mono to signal the deletion
      */
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         log.debug("Request to delete Pelicula : {}", id);
         return peliculaRepository.deleteById(id);
     }

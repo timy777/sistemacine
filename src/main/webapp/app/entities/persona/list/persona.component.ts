@@ -57,7 +57,7 @@ export class PersonaComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IPersona): number {
+  trackId(_index: number, item: IPersona): string {
     return item.id!;
   }
 

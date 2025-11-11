@@ -13,9 +13,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +30,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.Funcion;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.FuncionRepository;
 import sistemacine.service.FuncionService;
 import sistemacine.service.dto.FuncionDTO;
@@ -62,9 +59,6 @@ class FuncionResourceIT {
     private static final String ENTITY_API_URL = "/api/funcions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private FuncionRepository funcionRepository;
 
@@ -78,9 +72,6 @@ class FuncionResourceIT {
     private FuncionService funcionServiceMock;
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private WebTestClient webTestClient;
 
     private Funcion funcion;
@@ -91,7 +82,7 @@ class FuncionResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Funcion createEntity(EntityManager em) {
+    public static Funcion createEntity() {
         Funcion funcion = new Funcion()
             .fecha(DEFAULT_FECHA)
             .horaInicio(DEFAULT_HORA_INICIO)
@@ -106,7 +97,7 @@ class FuncionResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Funcion createUpdatedEntity(EntityManager em) {
+    public static Funcion createUpdatedEntity() {
         Funcion funcion = new Funcion()
             .fecha(UPDATED_FECHA)
             .horaInicio(UPDATED_HORA_INICIO)
@@ -115,23 +106,10 @@ class FuncionResourceIT {
         return funcion;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Funcion.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        funcion = createEntity(em);
+        funcionRepository.deleteAll().block();
+        funcion = createEntity();
     }
 
     @Test
@@ -161,7 +139,7 @@ class FuncionResourceIT {
     @Test
     void createFuncionWithExistingId() throws Exception {
         // Create the Funcion with an existing ID
-        funcion.setId(1L);
+        funcion.setId("existing_id");
         FuncionDTO funcionDTO = funcionMapper.toDto(funcion);
 
         int databaseSizeBeforeCreate = funcionRepository.findAll().collectList().block().size();
@@ -286,7 +264,7 @@ class FuncionResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(funcion.getId().intValue()))
+            .value(hasItem(funcion.getId()))
             .jsonPath("$.[*].fecha")
             .value(hasItem(DEFAULT_FECHA.toString()))
             .jsonPath("$.[*].horaInicio")
@@ -332,7 +310,7 @@ class FuncionResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(funcion.getId().intValue()))
+            .value(is(funcion.getId()))
             .jsonPath("$.fecha")
             .value(is(DEFAULT_FECHA.toString()))
             .jsonPath("$.horaInicio")
@@ -389,7 +367,7 @@ class FuncionResourceIT {
     @Test
     void putNonExistingFuncion() throws Exception {
         int databaseSizeBeforeUpdate = funcionRepository.findAll().collectList().block().size();
-        funcion.setId(count.incrementAndGet());
+        funcion.setId(UUID.randomUUID().toString());
 
         // Create the Funcion
         FuncionDTO funcionDTO = funcionMapper.toDto(funcion);
@@ -412,7 +390,7 @@ class FuncionResourceIT {
     @Test
     void putWithIdMismatchFuncion() throws Exception {
         int databaseSizeBeforeUpdate = funcionRepository.findAll().collectList().block().size();
-        funcion.setId(count.incrementAndGet());
+        funcion.setId(UUID.randomUUID().toString());
 
         // Create the Funcion
         FuncionDTO funcionDTO = funcionMapper.toDto(funcion);
@@ -420,7 +398,7 @@ class FuncionResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(funcionDTO))
             .exchange()
@@ -435,7 +413,7 @@ class FuncionResourceIT {
     @Test
     void putWithMissingIdPathParamFuncion() throws Exception {
         int databaseSizeBeforeUpdate = funcionRepository.findAll().collectList().block().size();
-        funcion.setId(count.incrementAndGet());
+        funcion.setId(UUID.randomUUID().toString());
 
         // Create the Funcion
         FuncionDTO funcionDTO = funcionMapper.toDto(funcion);
@@ -522,7 +500,7 @@ class FuncionResourceIT {
     @Test
     void patchNonExistingFuncion() throws Exception {
         int databaseSizeBeforeUpdate = funcionRepository.findAll().collectList().block().size();
-        funcion.setId(count.incrementAndGet());
+        funcion.setId(UUID.randomUUID().toString());
 
         // Create the Funcion
         FuncionDTO funcionDTO = funcionMapper.toDto(funcion);
@@ -545,7 +523,7 @@ class FuncionResourceIT {
     @Test
     void patchWithIdMismatchFuncion() throws Exception {
         int databaseSizeBeforeUpdate = funcionRepository.findAll().collectList().block().size();
-        funcion.setId(count.incrementAndGet());
+        funcion.setId(UUID.randomUUID().toString());
 
         // Create the Funcion
         FuncionDTO funcionDTO = funcionMapper.toDto(funcion);
@@ -553,7 +531,7 @@ class FuncionResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(funcionDTO))
             .exchange()
@@ -568,7 +546,7 @@ class FuncionResourceIT {
     @Test
     void patchWithMissingIdPathParamFuncion() throws Exception {
         int databaseSizeBeforeUpdate = funcionRepository.findAll().collectList().block().size();
-        funcion.setId(count.incrementAndGet());
+        funcion.setId(UUID.randomUUID().toString());
 
         // Create the Funcion
         FuncionDTO funcionDTO = funcionMapper.toDto(funcion);

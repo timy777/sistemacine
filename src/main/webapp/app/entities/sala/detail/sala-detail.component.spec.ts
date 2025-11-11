@@ -14,7 +14,7 @@ describe('Sala Management Detail Component', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { data: of({ sala: { id: 123 } }) },
+          useValue: { data: of({ sala: { id: 'ABC' } }) },
         },
       ],
     })
@@ -30,7 +30,7 @@ describe('Sala Management Detail Component', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(comp.sala).toEqual(expect.objectContaining({ id: 123 }));
+      expect(comp.sala).toEqual(expect.objectContaining({ id: 'ABC' }));
     });
   });
 });

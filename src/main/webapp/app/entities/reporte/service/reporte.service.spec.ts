@@ -24,7 +24,7 @@ describe('Reporte Service', () => {
     currentDate = dayjs();
 
     elemDefault = {
-      id: 0,
+      id: 'AAAAAAA',
       tipo: 'AAAAAAA',
       fechaGeneracion: currentDate,
       descripcion: 'AAAAAAA',
@@ -40,7 +40,7 @@ describe('Reporte Service', () => {
         elemDefault
       );
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find('ABC').subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -50,7 +50,7 @@ describe('Reporte Service', () => {
     it('should create a Reporte', () => {
       const returnedFromService = Object.assign(
         {
-          id: 0,
+          id: 'ID',
           fechaGeneracion: currentDate.format(DATE_FORMAT),
         },
         elemDefault
@@ -73,7 +73,7 @@ describe('Reporte Service', () => {
     it('should update a Reporte', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           tipo: 'BBBBBB',
           fechaGeneracion: currentDate.format(DATE_FORMAT),
           descripcion: 'BBBBBB',
@@ -122,7 +122,7 @@ describe('Reporte Service', () => {
     it('should return a list of Reporte', () => {
       const returnedFromService = Object.assign(
         {
-          id: 1,
+          id: 'BBBBBB',
           tipo: 'BBBBBB',
           fechaGeneracion: currentDate.format(DATE_FORMAT),
           descripcion: 'BBBBBB',
@@ -146,7 +146,7 @@ describe('Reporte Service', () => {
     });
 
     it('should delete a Reporte', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+      service.delete('ABC').subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
@@ -155,42 +155,42 @@ describe('Reporte Service', () => {
 
     describe('addReporteToCollectionIfMissing', () => {
       it('should add a Reporte to an empty array', () => {
-        const reporte: IReporte = { id: 123 };
+        const reporte: IReporte = { id: 'ABC' };
         expectedResult = service.addReporteToCollectionIfMissing([], reporte);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(reporte);
       });
 
       it('should not add a Reporte to an array that contains it', () => {
-        const reporte: IReporte = { id: 123 };
+        const reporte: IReporte = { id: 'ABC' };
         const reporteCollection: IReporte[] = [
           {
             ...reporte,
           },
-          { id: 456 },
+          { id: 'CBA' },
         ];
         expectedResult = service.addReporteToCollectionIfMissing(reporteCollection, reporte);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a Reporte to an array that doesn't contain it", () => {
-        const reporte: IReporte = { id: 123 };
-        const reporteCollection: IReporte[] = [{ id: 456 }];
+        const reporte: IReporte = { id: 'ABC' };
+        const reporteCollection: IReporte[] = [{ id: 'CBA' }];
         expectedResult = service.addReporteToCollectionIfMissing(reporteCollection, reporte);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(reporte);
       });
 
       it('should add only unique Reporte to an array', () => {
-        const reporteArray: IReporte[] = [{ id: 123 }, { id: 456 }, { id: 27434 }];
-        const reporteCollection: IReporte[] = [{ id: 123 }];
+        const reporteArray: IReporte[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: '478c1f76-38f2-42bc-a236-2addfd992e5e' }];
+        const reporteCollection: IReporte[] = [{ id: 'ABC' }];
         expectedResult = service.addReporteToCollectionIfMissing(reporteCollection, ...reporteArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const reporte: IReporte = { id: 123 };
-        const reporte2: IReporte = { id: 456 };
+        const reporte: IReporte = { id: 'ABC' };
+        const reporte2: IReporte = { id: 'CBA' };
         expectedResult = service.addReporteToCollectionIfMissing([], reporte, reporte2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(reporte);
@@ -198,14 +198,14 @@ describe('Reporte Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const reporte: IReporte = { id: 123 };
+        const reporte: IReporte = { id: 'ABC' };
         expectedResult = service.addReporteToCollectionIfMissing([], null, reporte, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(reporte);
       });
 
       it('should return initial array if no Reporte is added', () => {
-        const reporteCollection: IReporte[] = [{ id: 123 }];
+        const reporteCollection: IReporte[] = [{ id: 'ABC' }];
         expectedResult = service.addReporteToCollectionIfMissing(reporteCollection, undefined, null);
         expect(expectedResult).toEqual(reporteCollection);
       });

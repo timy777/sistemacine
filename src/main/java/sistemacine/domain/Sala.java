@@ -3,50 +3,48 @@ package sistemacine.domain;
 import java.io.Serializable;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import sistemacine.domain.enumeration.TipoSala;
 
 /**
  * A Sala.
  */
-@Table("sala")
+@Document(collection = "sala")
 public class Sala implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
-    @Column("nombre")
+    @Field("nombre")
     private String nombre;
 
     @NotNull(message = "must not be null")
-    @Column("capacidad")
+    @Field("capacidad")
     private Integer capacidad;
 
     @NotNull(message = "must not be null")
-    @Column("tipo")
+    @Field("tipo")
     private TipoSala tipo;
 
-    @Column("estado")
+    @Field("estado")
     private String estado;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
-    public Sala id(Long id) {
+    public Sala id(String id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

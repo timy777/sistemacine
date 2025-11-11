@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.domain.Genero;
@@ -16,7 +15,6 @@ import sistemacine.service.mapper.GeneroMapper;
  * Service Implementation for managing {@link Genero}.
  */
 @Service
-@Transactional
 public class GeneroService {
 
     private final Logger log = LoggerFactory.getLogger(GeneroService.class);
@@ -78,7 +76,6 @@ public class GeneroService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    @Transactional(readOnly = true)
     public Flux<GeneroDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Generos");
         return generoRepository.findAllBy(pageable).map(generoMapper::toDto);
@@ -99,8 +96,7 @@ public class GeneroService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    @Transactional(readOnly = true)
-    public Mono<GeneroDTO> findOne(Long id) {
+    public Mono<GeneroDTO> findOne(String id) {
         log.debug("Request to get Genero : {}", id);
         return generoRepository.findById(id).map(generoMapper::toDto);
     }
@@ -111,7 +107,7 @@ public class GeneroService {
      * @param id the id of the entity.
      * @return a Mono to signal the deletion
      */
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         log.debug("Request to delete Genero : {}", id);
         return generoRepository.deleteById(id);
     }

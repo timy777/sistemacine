@@ -11,12 +11,12 @@ class VentaDTOTest {
     void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(VentaDTO.class);
         VentaDTO ventaDTO1 = new VentaDTO();
-        ventaDTO1.setId(1L);
+        ventaDTO1.setId("id1");
         VentaDTO ventaDTO2 = new VentaDTO();
         assertThat(ventaDTO1).isNotEqualTo(ventaDTO2);
         ventaDTO2.setId(ventaDTO1.getId());
         assertThat(ventaDTO1).isEqualTo(ventaDTO2);
-        ventaDTO2.setId(2L);
+        ventaDTO2.setId("id2");
         assertThat(ventaDTO1).isNotEqualTo(ventaDTO2);
         ventaDTO1.setId(null);
         assertThat(ventaDTO1).isNotEqualTo(ventaDTO2);

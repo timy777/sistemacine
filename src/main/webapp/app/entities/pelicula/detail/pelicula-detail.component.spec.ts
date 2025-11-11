@@ -17,7 +17,7 @@ describe('Pelicula Management Detail Component', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { data: of({ pelicula: { id: 123 } }) },
+          useValue: { data: of({ pelicula: { id: 'ABC' } }) },
         },
       ],
     })
@@ -35,7 +35,7 @@ describe('Pelicula Management Detail Component', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(comp.pelicula).toEqual(expect.objectContaining({ id: 123 }));
+      expect(comp.pelicula).toEqual(expect.objectContaining({ id: 'ABC' }));
     });
   });
 

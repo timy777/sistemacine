@@ -7,9 +7,7 @@ import static org.mockito.Mockito.*;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +26,6 @@ import reactor.core.publisher.Mono;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.Pelicula;
 import sistemacine.domain.enumeration.EstadoPelicula;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.PeliculaRepository;
 import sistemacine.service.PeliculaService;
 import sistemacine.service.dto.PeliculaDTO;
@@ -70,9 +67,6 @@ class PeliculaResourceIT {
     private static final String ENTITY_API_URL = "/api/peliculas";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private PeliculaRepository peliculaRepository;
 
@@ -86,9 +80,6 @@ class PeliculaResourceIT {
     private PeliculaService peliculaServiceMock;
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private WebTestClient webTestClient;
 
     private Pelicula pelicula;
@@ -99,7 +90,7 @@ class PeliculaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Pelicula createEntity(EntityManager em) {
+    public static Pelicula createEntity() {
         Pelicula pelicula = new Pelicula()
             .titulo(DEFAULT_TITULO)
             .sinopsis(DEFAULT_SINOPSIS)
@@ -118,7 +109,7 @@ class PeliculaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Pelicula createUpdatedEntity(EntityManager em) {
+    public static Pelicula createUpdatedEntity() {
         Pelicula pelicula = new Pelicula()
             .titulo(UPDATED_TITULO)
             .sinopsis(UPDATED_SINOPSIS)
@@ -131,23 +122,10 @@ class PeliculaResourceIT {
         return pelicula;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Pelicula.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        pelicula = createEntity(em);
+        peliculaRepository.deleteAll().block();
+        pelicula = createEntity();
     }
 
     @Test
@@ -181,7 +159,7 @@ class PeliculaResourceIT {
     @Test
     void createPeliculaWithExistingId() throws Exception {
         // Create the Pelicula with an existing ID
-        pelicula.setId(1L);
+        pelicula.setId("existing_id");
         PeliculaDTO peliculaDTO = peliculaMapper.toDto(pelicula);
 
         int databaseSizeBeforeCreate = peliculaRepository.findAll().collectList().block().size();
@@ -284,7 +262,7 @@ class PeliculaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(pelicula.getId().intValue()))
+            .value(hasItem(pelicula.getId()))
             .jsonPath("$.[*].titulo")
             .value(hasItem(DEFAULT_TITULO))
             .jsonPath("$.[*].sinopsis")
@@ -338,7 +316,7 @@ class PeliculaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(pelicula.getId().intValue()))
+            .value(is(pelicula.getId()))
             .jsonPath("$.titulo")
             .value(is(DEFAULT_TITULO))
             .jsonPath("$.sinopsis")
@@ -415,7 +393,7 @@ class PeliculaResourceIT {
     @Test
     void putNonExistingPelicula() throws Exception {
         int databaseSizeBeforeUpdate = peliculaRepository.findAll().collectList().block().size();
-        pelicula.setId(count.incrementAndGet());
+        pelicula.setId(UUID.randomUUID().toString());
 
         // Create the Pelicula
         PeliculaDTO peliculaDTO = peliculaMapper.toDto(pelicula);
@@ -438,7 +416,7 @@ class PeliculaResourceIT {
     @Test
     void putWithIdMismatchPelicula() throws Exception {
         int databaseSizeBeforeUpdate = peliculaRepository.findAll().collectList().block().size();
-        pelicula.setId(count.incrementAndGet());
+        pelicula.setId(UUID.randomUUID().toString());
 
         // Create the Pelicula
         PeliculaDTO peliculaDTO = peliculaMapper.toDto(pelicula);
@@ -446,7 +424,7 @@ class PeliculaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(peliculaDTO))
             .exchange()
@@ -461,7 +439,7 @@ class PeliculaResourceIT {
     @Test
     void putWithMissingIdPathParamPelicula() throws Exception {
         int databaseSizeBeforeUpdate = peliculaRepository.findAll().collectList().block().size();
-        pelicula.setId(count.incrementAndGet());
+        pelicula.setId(UUID.randomUUID().toString());
 
         // Create the Pelicula
         PeliculaDTO peliculaDTO = peliculaMapper.toDto(pelicula);
@@ -564,7 +542,7 @@ class PeliculaResourceIT {
     @Test
     void patchNonExistingPelicula() throws Exception {
         int databaseSizeBeforeUpdate = peliculaRepository.findAll().collectList().block().size();
-        pelicula.setId(count.incrementAndGet());
+        pelicula.setId(UUID.randomUUID().toString());
 
         // Create the Pelicula
         PeliculaDTO peliculaDTO = peliculaMapper.toDto(pelicula);
@@ -587,7 +565,7 @@ class PeliculaResourceIT {
     @Test
     void patchWithIdMismatchPelicula() throws Exception {
         int databaseSizeBeforeUpdate = peliculaRepository.findAll().collectList().block().size();
-        pelicula.setId(count.incrementAndGet());
+        pelicula.setId(UUID.randomUUID().toString());
 
         // Create the Pelicula
         PeliculaDTO peliculaDTO = peliculaMapper.toDto(pelicula);
@@ -595,7 +573,7 @@ class PeliculaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(peliculaDTO))
             .exchange()
@@ -610,7 +588,7 @@ class PeliculaResourceIT {
     @Test
     void patchWithMissingIdPathParamPelicula() throws Exception {
         int databaseSizeBeforeUpdate = peliculaRepository.findAll().collectList().block().size();
-        pelicula.setId(count.incrementAndGet());
+        pelicula.setId(UUID.randomUUID().toString());
 
         // Create the Pelicula
         PeliculaDTO peliculaDTO = peliculaMapper.toDto(pelicula);

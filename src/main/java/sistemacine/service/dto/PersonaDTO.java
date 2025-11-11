@@ -12,7 +12,7 @@ import sistemacine.domain.enumeration.TipoPersona;
  */
 public class PersonaDTO implements Serializable {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
     private String nombre;
@@ -37,11 +37,11 @@ public class PersonaDTO implements Serializable {
     @NotNull(message = "must not be null")
     private String carnetIdentidad;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -134,7 +134,7 @@ public class PersonaDTO implements Serializable {
     @Override
     public String toString() {
         return "PersonaDTO{" +
-            "id=" + getId() +
+            "id='" + getId() + "'" +
             ", nombre='" + getNombre() + "'" +
             ", apellido='" + getApellido() + "'" +
             ", telefono='" + getTelefono() + "'" +

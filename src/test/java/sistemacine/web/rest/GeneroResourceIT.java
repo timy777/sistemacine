@@ -6,14 +6,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
@@ -21,7 +16,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.Genero;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.GeneroRepository;
 import sistemacine.service.dto.GeneroDTO;
 import sistemacine.service.mapper.GeneroMapper;
@@ -43,17 +37,11 @@ class GeneroResourceIT {
     private static final String ENTITY_API_URL = "/api/generos";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private GeneroRepository generoRepository;
 
     @Autowired
     private GeneroMapper generoMapper;
-
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -66,7 +54,7 @@ class GeneroResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Genero createEntity(EntityManager em) {
+    public static Genero createEntity() {
         Genero genero = new Genero().nombre(DEFAULT_NOMBRE).descripcion(DEFAULT_DESCRIPCION);
         return genero;
     }
@@ -77,28 +65,15 @@ class GeneroResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Genero createUpdatedEntity(EntityManager em) {
+    public static Genero createUpdatedEntity() {
         Genero genero = new Genero().nombre(UPDATED_NOMBRE).descripcion(UPDATED_DESCRIPCION);
         return genero;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Genero.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        genero = createEntity(em);
+        generoRepository.deleteAll().block();
+        genero = createEntity();
     }
 
     @Test
@@ -126,7 +101,7 @@ class GeneroResourceIT {
     @Test
     void createGeneroWithExistingId() throws Exception {
         // Create the Genero with an existing ID
-        genero.setId(1L);
+        genero.setId("existing_id");
         GeneroDTO generoDTO = generoMapper.toDto(genero);
 
         int databaseSizeBeforeCreate = generoRepository.findAll().collectList().block().size();
@@ -185,7 +160,7 @@ class GeneroResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(genero.getId().intValue()))
+            .value(hasItem(genero.getId()))
             .jsonPath("$.[*].nombre")
             .value(hasItem(DEFAULT_NOMBRE))
             .jsonPath("$.[*].descripcion")
@@ -209,7 +184,7 @@ class GeneroResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(genero.getId().intValue()))
+            .value(is(genero.getId()))
             .jsonPath("$.nombre")
             .value(is(DEFAULT_NOMBRE))
             .jsonPath("$.descripcion")
@@ -260,7 +235,7 @@ class GeneroResourceIT {
     @Test
     void putNonExistingGenero() throws Exception {
         int databaseSizeBeforeUpdate = generoRepository.findAll().collectList().block().size();
-        genero.setId(count.incrementAndGet());
+        genero.setId(UUID.randomUUID().toString());
 
         // Create the Genero
         GeneroDTO generoDTO = generoMapper.toDto(genero);
@@ -283,7 +258,7 @@ class GeneroResourceIT {
     @Test
     void putWithIdMismatchGenero() throws Exception {
         int databaseSizeBeforeUpdate = generoRepository.findAll().collectList().block().size();
-        genero.setId(count.incrementAndGet());
+        genero.setId(UUID.randomUUID().toString());
 
         // Create the Genero
         GeneroDTO generoDTO = generoMapper.toDto(genero);
@@ -291,7 +266,7 @@ class GeneroResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(generoDTO))
             .exchange()
@@ -306,7 +281,7 @@ class GeneroResourceIT {
     @Test
     void putWithMissingIdPathParamGenero() throws Exception {
         int databaseSizeBeforeUpdate = generoRepository.findAll().collectList().block().size();
-        genero.setId(count.incrementAndGet());
+        genero.setId(UUID.randomUUID().toString());
 
         // Create the Genero
         GeneroDTO generoDTO = generoMapper.toDto(genero);
@@ -389,7 +364,7 @@ class GeneroResourceIT {
     @Test
     void patchNonExistingGenero() throws Exception {
         int databaseSizeBeforeUpdate = generoRepository.findAll().collectList().block().size();
-        genero.setId(count.incrementAndGet());
+        genero.setId(UUID.randomUUID().toString());
 
         // Create the Genero
         GeneroDTO generoDTO = generoMapper.toDto(genero);
@@ -412,7 +387,7 @@ class GeneroResourceIT {
     @Test
     void patchWithIdMismatchGenero() throws Exception {
         int databaseSizeBeforeUpdate = generoRepository.findAll().collectList().block().size();
-        genero.setId(count.incrementAndGet());
+        genero.setId(UUID.randomUUID().toString());
 
         // Create the Genero
         GeneroDTO generoDTO = generoMapper.toDto(genero);
@@ -420,7 +395,7 @@ class GeneroResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(generoDTO))
             .exchange()
@@ -435,7 +410,7 @@ class GeneroResourceIT {
     @Test
     void patchWithMissingIdPathParamGenero() throws Exception {
         int databaseSizeBeforeUpdate = generoRepository.findAll().collectList().block().size();
-        genero.setId(count.incrementAndGet());
+        genero.setId(UUID.randomUUID().toString());
 
         // Create the Genero
         GeneroDTO generoDTO = generoMapper.toDto(genero);

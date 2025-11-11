@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="reporte">
-      <h2 data-cy="reporteDetailsHeading"><span jhiTranslate="sistemacineApp.reporte.detail.title">Reporte</span></h2>
+      <h2 data-cy="reporteDetailsHeading"><span>Reporte</span></h2>
 
       <hr />
 
@@ -10,23 +10,23 @@
       <jhi-alert></jhi-alert>
 
       <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dt><span>ID</span></dt>
         <dd>
           <span>{{ reporte.id }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.reporte.tipo">Tipo</span></dt>
+        <dt><span>Tipo</span></dt>
         <dd>
           <span>{{ reporte.tipo }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.reporte.fechaGeneracion">Fecha Generacion</span></dt>
+        <dt><span>Fecha Generacion</span></dt>
         <dd>
           <span>{{ reporte.fechaGeneracion | formatMediumDate }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.reporte.descripcion">Descripcion</span></dt>
+        <dt><span>Descripcion</span></dt>
         <dd>
           <span>{{ reporte.descripcion }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.reporte.vendedor">Vendedor</span></dt>
+        <dt><span>Vendedor</span></dt>
         <dd>
           <div *ngIf="reporte.vendedor">
             <a [routerLink]="['/persona', reporte.vendedor?.id, 'view']">{{ reporte.vendedor?.nombre }}</a>
@@ -35,11 +35,11 @@
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
       <button type="button" [routerLink]="['/reporte', reporte.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>
   </div>

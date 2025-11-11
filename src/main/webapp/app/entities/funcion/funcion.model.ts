@@ -4,7 +4,7 @@ import { IPelicula } from 'app/entities/pelicula/pelicula.model';
 import { ITarifa } from 'app/entities/tarifa/tarifa.model';
 
 export interface IFuncion {
-  id?: number;
+  id?: string;
   fecha?: dayjs.Dayjs;
   horaInicio?: dayjs.Dayjs;
   horaFin?: dayjs.Dayjs;
@@ -16,7 +16,7 @@ export interface IFuncion {
 
 export class Funcion implements IFuncion {
   constructor(
-    public id?: number,
+    public id?: string,
     public fecha?: dayjs.Dayjs,
     public horaInicio?: dayjs.Dayjs,
     public horaFin?: dayjs.Dayjs,
@@ -27,6 +27,6 @@ export class Funcion implements IFuncion {
   ) {}
 }
 
-export function getFuncionIdentifier(funcion: IFuncion): number | undefined {
+export function getFuncionIdentifier(funcion: IFuncion): string | undefined {
   return funcion.id;
 }

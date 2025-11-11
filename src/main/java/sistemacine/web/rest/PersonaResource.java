@@ -74,7 +74,7 @@ public class PersonaResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/personas/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class PersonaResource {
      */
     @PutMapping("/personas/{id}")
     public Mono<ResponseEntity<PersonaDTO>> updatePersona(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody PersonaDTO personaDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Persona : {}, {}", id, personaDTO);
@@ -118,7 +118,7 @@ public class PersonaResource {
                     .map(result ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId()))
                             .body(result)
                     );
             });
@@ -137,7 +137,7 @@ public class PersonaResource {
      */
     @PatchMapping(value = "/personas/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public Mono<ResponseEntity<PersonaDTO>> partialUpdatePersona(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody PersonaDTO personaDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Persona partially : {}, {}", id, personaDTO);
@@ -162,7 +162,7 @@ public class PersonaResource {
                     .map(res ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, res.getId()))
                             .body(res)
                     );
             });
@@ -204,7 +204,7 @@ public class PersonaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the personaDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/personas/{id}")
-    public Mono<ResponseEntity<PersonaDTO>> getPersona(@PathVariable Long id) {
+    public Mono<ResponseEntity<PersonaDTO>> getPersona(@PathVariable String id) {
         log.debug("REST request to get Persona : {}", id);
         Mono<PersonaDTO> personaDTO = personaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(personaDTO);
@@ -218,15 +218,12 @@ public class PersonaResource {
      */
     @DeleteMapping("/personas/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deletePersona(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> deletePersona(@PathVariable String id) {
         log.debug("REST request to delete Persona : {}", id);
         return personaService
             .delete(id)
             .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
+                ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build()
             );
     }
 }

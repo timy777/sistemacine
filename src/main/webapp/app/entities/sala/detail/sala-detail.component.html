@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="sala">
-      <h2 data-cy="salaDetailsHeading"><span jhiTranslate="sistemacineApp.sala.detail.title">Sala</span></h2>
+      <h2 data-cy="salaDetailsHeading"><span>Sala</span></h2>
 
       <hr />
 
@@ -10,34 +10,34 @@
       <jhi-alert></jhi-alert>
 
       <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dt><span>ID</span></dt>
         <dd>
           <span>{{ sala.id }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.sala.nombre">Nombre</span></dt>
+        <dt><span>Nombre</span></dt>
         <dd>
           <span>{{ sala.nombre }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.sala.capacidad">Capacidad</span></dt>
+        <dt><span>Capacidad</span></dt>
         <dd>
           <span>{{ sala.capacidad }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.sala.tipo">Tipo</span></dt>
+        <dt><span>Tipo</span></dt>
         <dd>
-          <span jhiTranslate="{{ 'sistemacineApp.TipoSala.' + sala.tipo }}">{{ sala.tipo }}</span>
+          <span>{{ sala.tipo }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.sala.estado">Estado</span></dt>
+        <dt><span>Estado</span></dt>
         <dd>
           <span>{{ sala.estado }}</span>
         </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
       <button type="button" [routerLink]="['/sala', sala.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>
   </div>

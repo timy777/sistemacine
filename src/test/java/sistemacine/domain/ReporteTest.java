@@ -11,11 +11,11 @@ class ReporteTest {
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Reporte.class);
         Reporte reporte1 = new Reporte();
-        reporte1.setId(1L);
+        reporte1.setId("id1");
         Reporte reporte2 = new Reporte();
         reporte2.setId(reporte1.getId());
         assertThat(reporte1).isEqualTo(reporte2);
-        reporte2.setId(2L);
+        reporte2.setId("id2");
         assertThat(reporte1).isNotEqualTo(reporte2);
         reporte1.setId(null);
         assertThat(reporte1).isNotEqualTo(reporte2);

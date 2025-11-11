@@ -59,7 +59,7 @@ export class PromocionUpdateComponent implements OnInit {
     }
   }
 
-  trackPeliculaById(_index: number, item: IPelicula): number {
+  trackPeliculaById(_index: number, item: IPelicula): string {
     return item.id!;
   }
 

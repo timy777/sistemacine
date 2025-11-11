@@ -2,7 +2,6 @@ package sistemacine.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Lob;
 import javax.validation.constraints.*;
 import sistemacine.domain.enumeration.EstadoPelicula;
 
@@ -11,12 +10,11 @@ import sistemacine.domain.enumeration.EstadoPelicula;
  */
 public class PeliculaDTO implements Serializable {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
     private String titulo;
 
-    @Lob
     private String sinopsis;
 
     @NotNull(message = "must not be null")
@@ -35,11 +33,11 @@ public class PeliculaDTO implements Serializable {
 
     private GeneroDTO genero;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -140,7 +138,7 @@ public class PeliculaDTO implements Serializable {
     @Override
     public String toString() {
         return "PeliculaDTO{" +
-            "id=" + getId() +
+            "id='" + getId() + "'" +
             ", titulo='" + getTitulo() + "'" +
             ", sinopsis='" + getSinopsis() + "'" +
             ", duracion=" + getDuracion() +

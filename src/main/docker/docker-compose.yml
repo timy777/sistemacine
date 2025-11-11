@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # --- MongoDB ---
+  mongodb:
+    image: mongo:7.0
+    container_name: sistemacine-mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    command: ['mongod', '--bind_ip_all', '--auth=false']
+    environment:
+      MONGO_INITDB_DATABASE: sistemacine
+
+  # --- Aplicaci�n JHipster ---
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sistemacine-app
+    depends_on:
+      - mongodb
+    ports:
+      - '8083:8083'
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/
+      SPRING_DATA_MONGODB_DATABASE: sistemacine
+      JAVA_OPTS: '-Xms512m -Xmx1024m'
+    volumes:
+      # Monta el c�digo fuente local dentro del contenedor (para desarrollo)
+      - .:/app
+      # Reusa tu cache local de Maven (para acelerar builds)
+      - ~/.m2:/root/.m2
+    restart: always
+
+volumes:
+  mongo-data:

@@ -21,14 +21,14 @@ export class SalaService {
   }
 
   update(sala: ISala): Observable<EntityResponseType> {
-    return this.http.put<ISala>(`${this.resourceUrl}/${getSalaIdentifier(sala) as number}`, sala, { observe: 'response' });
+    return this.http.put<ISala>(`${this.resourceUrl}/${getSalaIdentifier(sala) as string}`, sala, { observe: 'response' });
   }
 
   partialUpdate(sala: ISala): Observable<EntityResponseType> {
-    return this.http.patch<ISala>(`${this.resourceUrl}/${getSalaIdentifier(sala) as number}`, sala, { observe: 'response' });
+    return this.http.patch<ISala>(`${this.resourceUrl}/${getSalaIdentifier(sala) as string}`, sala, { observe: 'response' });
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http.get<ISala>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
@@ -37,7 +37,7 @@ export class SalaService {
     return this.http.get<ISala[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

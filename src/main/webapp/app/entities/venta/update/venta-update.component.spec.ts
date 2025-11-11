@@ -47,13 +47,13 @@ describe('Venta Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call Persona query and add missing value', () => {
-      const venta: IVenta = { id: 456 };
-      const cliente: IPersona = { id: 95321 };
+      const venta: IVenta = { id: 'CBA' };
+      const cliente: IPersona = { id: 'f71303cd-5831-4159-b2b2-74b22fd2e4bd' };
       venta.cliente = cliente;
-      const vendedor: IPersona = { id: 49089 };
+      const vendedor: IPersona = { id: '4c21f98c-5e5d-44ab-9b1d-c4b24305168a' };
       venta.vendedor = vendedor;
 
-      const personaCollection: IPersona[] = [{ id: 12398 }];
+      const personaCollection: IPersona[] = [{ id: 'ddc4f4f8-398c-49d6-9150-a7c59b7d6c6e' }];
       jest.spyOn(personaService, 'query').mockReturnValue(of(new HttpResponse({ body: personaCollection })));
       const additionalPersonas = [cliente, vendedor];
       const expectedCollection: IPersona[] = [...additionalPersonas, ...personaCollection];
@@ -68,10 +68,10 @@ describe('Venta Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const venta: IVenta = { id: 456 };
-      const cliente: IPersona = { id: 22897 };
+      const venta: IVenta = { id: 'CBA' };
+      const cliente: IPersona = { id: '6f16f792-8b0e-43a5-bffb-66b4455c0d43' };
       venta.cliente = cliente;
-      const vendedor: IPersona = { id: 2098 };
+      const vendedor: IPersona = { id: '2c2d9a5c-c228-4ca0-93c0-3b5e5c10b32b' };
       venta.vendedor = vendedor;
 
       activatedRoute.data = of({ venta });
@@ -87,7 +87,7 @@ describe('Venta Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Venta>>();
-      const venta = { id: 123 };
+      const venta = { id: 'ABC' };
       jest.spyOn(ventaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ venta });
@@ -129,7 +129,7 @@ describe('Venta Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Venta>>();
-      const venta = { id: 123 };
+      const venta = { id: 'ABC' };
       jest.spyOn(ventaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ venta });
@@ -150,7 +150,7 @@ describe('Venta Management Update Component', () => {
   describe('Tracking relationships identifiers', () => {
     describe('trackPersonaById', () => {
       it('Should return tracked Persona primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackPersonaById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });

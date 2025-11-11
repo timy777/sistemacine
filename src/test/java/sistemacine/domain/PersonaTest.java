@@ -11,11 +11,11 @@ class PersonaTest {
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Persona.class);
         Persona persona1 = new Persona();
-        persona1.setId(1L);
+        persona1.setId("id1");
         Persona persona2 = new Persona();
         persona2.setId(persona1.getId());
         assertThat(persona1).isEqualTo(persona2);
-        persona2.setId(2L);
+        persona2.setId("id2");
         assertThat(persona1).isNotEqualTo(persona2);
         persona1.setId(null);
         assertThat(persona1).isNotEqualTo(persona2);

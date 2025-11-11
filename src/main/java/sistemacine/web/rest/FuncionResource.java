@@ -74,7 +74,7 @@ public class FuncionResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/funcions/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class FuncionResource {
      */
     @PutMapping("/funcions/{id}")
     public Mono<ResponseEntity<FuncionDTO>> updateFuncion(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody FuncionDTO funcionDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Funcion : {}, {}", id, funcionDTO);
@@ -118,7 +118,7 @@ public class FuncionResource {
                     .map(result ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId()))
                             .body(result)
                     );
             });
@@ -137,7 +137,7 @@ public class FuncionResource {
      */
     @PatchMapping(value = "/funcions/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public Mono<ResponseEntity<FuncionDTO>> partialUpdateFuncion(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody FuncionDTO funcionDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Funcion partially : {}, {}", id, funcionDTO);
@@ -162,7 +162,7 @@ public class FuncionResource {
                     .map(res ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, res.getId()))
                             .body(res)
                     );
             });
@@ -206,7 +206,7 @@ public class FuncionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the funcionDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/funcions/{id}")
-    public Mono<ResponseEntity<FuncionDTO>> getFuncion(@PathVariable Long id) {
+    public Mono<ResponseEntity<FuncionDTO>> getFuncion(@PathVariable String id) {
         log.debug("REST request to get Funcion : {}", id);
         Mono<FuncionDTO> funcionDTO = funcionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(funcionDTO);
@@ -220,15 +220,12 @@ public class FuncionResource {
      */
     @DeleteMapping("/funcions/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deleteFuncion(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> deleteFuncion(@PathVariable String id) {
         log.debug("REST request to delete Funcion : {}", id);
         return funcionService
             .delete(id)
             .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
+                ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build()
             );
     }
 }

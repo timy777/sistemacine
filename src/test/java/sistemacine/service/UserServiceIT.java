@@ -3,8 +3,6 @@ package sistemacine.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +46,6 @@ class UserServiceIT {
 
     @BeforeEach
     public void init() {
-        userRepository.deleteAllUserAuthorities().block();
         userRepository.deleteAll().block();
         user = new User();
         user.setLogin(DEFAULT_LOGIN);
@@ -59,7 +56,6 @@ class UserServiceIT {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setCreatedBy(Constants.SYSTEM);
     }
 
     @Test
@@ -139,7 +135,7 @@ class UserServiceIT {
         User dbUser = userRepository.save(user).block();
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save(user).block();
-        LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
+        Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
         List<User> users = userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)
             .collectList()
@@ -157,7 +153,7 @@ class UserServiceIT {
         User dbUser = userRepository.save(user).block();
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save(user).block();
-        LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
+        Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
         List<User> users = userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)
             .collectList()

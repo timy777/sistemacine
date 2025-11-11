@@ -7,61 +7,59 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A Promocion.
  */
-@Table("promocion")
+@Document(collection = "promocion")
 public class Promocion implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
-    @Column("nombre")
+    @Field("nombre")
     private String nombre;
 
-    @Column("descripcion")
+    @Field("descripcion")
     private String descripcion;
 
     @NotNull(message = "must not be null")
-    @Column("porcentaje_descuento")
+    @Field("porcentaje_descuento")
     private Double porcentajeDescuento;
 
     @NotNull(message = "must not be null")
-    @Column("fecha_inicio")
+    @Field("fecha_inicio")
     private LocalDate fechaInicio;
 
     @NotNull(message = "must not be null")
-    @Column("fecha_fin")
+    @Field("fecha_fin")
     private LocalDate fechaFin;
 
     @NotNull(message = "must not be null")
-    @Column("activa")
+    @Field("activa")
     private Boolean activa;
 
-    @Transient
+    @Field("peliculas")
     @JsonIgnoreProperties(value = { "genero", "promociones" }, allowSetters = true)
     private Set<Pelicula> peliculas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
-    public Promocion id(Long id) {
+    public Promocion id(String id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -11,12 +11,12 @@ class ReporteDTOTest {
     void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(ReporteDTO.class);
         ReporteDTO reporteDTO1 = new ReporteDTO();
-        reporteDTO1.setId(1L);
+        reporteDTO1.setId("id1");
         ReporteDTO reporteDTO2 = new ReporteDTO();
         assertThat(reporteDTO1).isNotEqualTo(reporteDTO2);
         reporteDTO2.setId(reporteDTO1.getId());
         assertThat(reporteDTO1).isEqualTo(reporteDTO2);
-        reporteDTO2.setId(2L);
+        reporteDTO2.setId("id2");
         assertThat(reporteDTO1).isNotEqualTo(reporteDTO2);
         reporteDTO1.setId(null);
         assertThat(reporteDTO1).isNotEqualTo(reporteDTO2);

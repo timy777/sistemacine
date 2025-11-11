@@ -6,14 +6,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
@@ -22,7 +17,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.Sala;
 import sistemacine.domain.enumeration.TipoSala;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.SalaRepository;
 import sistemacine.service.dto.SalaDTO;
 import sistemacine.service.mapper.SalaMapper;
@@ -50,17 +44,11 @@ class SalaResourceIT {
     private static final String ENTITY_API_URL = "/api/salas";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private SalaRepository salaRepository;
 
     @Autowired
     private SalaMapper salaMapper;
-
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -73,7 +61,7 @@ class SalaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Sala createEntity(EntityManager em) {
+    public static Sala createEntity() {
         Sala sala = new Sala().nombre(DEFAULT_NOMBRE).capacidad(DEFAULT_CAPACIDAD).tipo(DEFAULT_TIPO).estado(DEFAULT_ESTADO);
         return sala;
     }
@@ -84,28 +72,15 @@ class SalaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Sala createUpdatedEntity(EntityManager em) {
+    public static Sala createUpdatedEntity() {
         Sala sala = new Sala().nombre(UPDATED_NOMBRE).capacidad(UPDATED_CAPACIDAD).tipo(UPDATED_TIPO).estado(UPDATED_ESTADO);
         return sala;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Sala.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        sala = createEntity(em);
+        salaRepository.deleteAll().block();
+        sala = createEntity();
     }
 
     @Test
@@ -135,7 +110,7 @@ class SalaResourceIT {
     @Test
     void createSalaWithExistingId() throws Exception {
         // Create the Sala with an existing ID
-        sala.setId(1L);
+        sala.setId("existing_id");
         SalaDTO salaDTO = salaMapper.toDto(sala);
 
         int databaseSizeBeforeCreate = salaRepository.findAll().collectList().block().size();
@@ -238,7 +213,7 @@ class SalaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(sala.getId().intValue()))
+            .value(hasItem(sala.getId()))
             .jsonPath("$.[*].nombre")
             .value(hasItem(DEFAULT_NOMBRE))
             .jsonPath("$.[*].capacidad")
@@ -266,7 +241,7 @@ class SalaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(sala.getId().intValue()))
+            .value(is(sala.getId()))
             .jsonPath("$.nombre")
             .value(is(DEFAULT_NOMBRE))
             .jsonPath("$.capacidad")
@@ -323,7 +298,7 @@ class SalaResourceIT {
     @Test
     void putNonExistingSala() throws Exception {
         int databaseSizeBeforeUpdate = salaRepository.findAll().collectList().block().size();
-        sala.setId(count.incrementAndGet());
+        sala.setId(UUID.randomUUID().toString());
 
         // Create the Sala
         SalaDTO salaDTO = salaMapper.toDto(sala);
@@ -346,7 +321,7 @@ class SalaResourceIT {
     @Test
     void putWithIdMismatchSala() throws Exception {
         int databaseSizeBeforeUpdate = salaRepository.findAll().collectList().block().size();
-        sala.setId(count.incrementAndGet());
+        sala.setId(UUID.randomUUID().toString());
 
         // Create the Sala
         SalaDTO salaDTO = salaMapper.toDto(sala);
@@ -354,7 +329,7 @@ class SalaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(salaDTO))
             .exchange()
@@ -369,7 +344,7 @@ class SalaResourceIT {
     @Test
     void putWithMissingIdPathParamSala() throws Exception {
         int databaseSizeBeforeUpdate = salaRepository.findAll().collectList().block().size();
-        sala.setId(count.incrementAndGet());
+        sala.setId(UUID.randomUUID().toString());
 
         // Create the Sala
         SalaDTO salaDTO = salaMapper.toDto(sala);
@@ -456,7 +431,7 @@ class SalaResourceIT {
     @Test
     void patchNonExistingSala() throws Exception {
         int databaseSizeBeforeUpdate = salaRepository.findAll().collectList().block().size();
-        sala.setId(count.incrementAndGet());
+        sala.setId(UUID.randomUUID().toString());
 
         // Create the Sala
         SalaDTO salaDTO = salaMapper.toDto(sala);
@@ -479,7 +454,7 @@ class SalaResourceIT {
     @Test
     void patchWithIdMismatchSala() throws Exception {
         int databaseSizeBeforeUpdate = salaRepository.findAll().collectList().block().size();
-        sala.setId(count.incrementAndGet());
+        sala.setId(UUID.randomUUID().toString());
 
         // Create the Sala
         SalaDTO salaDTO = salaMapper.toDto(sala);
@@ -487,7 +462,7 @@ class SalaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(salaDTO))
             .exchange()
@@ -502,7 +477,7 @@ class SalaResourceIT {
     @Test
     void patchWithMissingIdPathParamSala() throws Exception {
         int databaseSizeBeforeUpdate = salaRepository.findAll().collectList().block().size();
-        sala.setId(count.incrementAndGet());
+        sala.setId(UUID.randomUUID().toString());
 
         // Create the Sala
         SalaDTO salaDTO = salaMapper.toDto(sala);

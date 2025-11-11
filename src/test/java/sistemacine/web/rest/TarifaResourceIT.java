@@ -8,14 +8,9 @@ import static sistemacine.web.rest.TestUtil.sameNumber;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
@@ -24,7 +19,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.Tarifa;
 import sistemacine.domain.enumeration.TipoSala;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.TarifaRepository;
 import sistemacine.service.dto.TarifaDTO;
 import sistemacine.service.mapper.TarifaMapper;
@@ -55,17 +49,11 @@ class TarifaResourceIT {
     private static final String ENTITY_API_URL = "/api/tarifas";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private TarifaRepository tarifaRepository;
 
     @Autowired
     private TarifaMapper tarifaMapper;
-
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -78,7 +66,7 @@ class TarifaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Tarifa createEntity(EntityManager em) {
+    public static Tarifa createEntity() {
         Tarifa tarifa = new Tarifa()
             .nombre(DEFAULT_NOMBRE)
             .descripcion(DEFAULT_DESCRIPCION)
@@ -94,7 +82,7 @@ class TarifaResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Tarifa createUpdatedEntity(EntityManager em) {
+    public static Tarifa createUpdatedEntity() {
         Tarifa tarifa = new Tarifa()
             .nombre(UPDATED_NOMBRE)
             .descripcion(UPDATED_DESCRIPCION)
@@ -104,23 +92,10 @@ class TarifaResourceIT {
         return tarifa;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Tarifa.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        tarifa = createEntity(em);
+        tarifaRepository.deleteAll().block();
+        tarifa = createEntity();
     }
 
     @Test
@@ -151,7 +126,7 @@ class TarifaResourceIT {
     @Test
     void createTarifaWithExistingId() throws Exception {
         // Create the Tarifa with an existing ID
-        tarifa.setId(1L);
+        tarifa.setId("existing_id");
         TarifaDTO tarifaDTO = tarifaMapper.toDto(tarifa);
 
         int databaseSizeBeforeCreate = tarifaRepository.findAll().collectList().block().size();
@@ -232,7 +207,7 @@ class TarifaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(tarifa.getId().intValue()))
+            .value(hasItem(tarifa.getId()))
             .jsonPath("$.[*].nombre")
             .value(hasItem(DEFAULT_NOMBRE))
             .jsonPath("$.[*].descripcion")
@@ -262,7 +237,7 @@ class TarifaResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(tarifa.getId().intValue()))
+            .value(is(tarifa.getId()))
             .jsonPath("$.nombre")
             .value(is(DEFAULT_NOMBRE))
             .jsonPath("$.descripcion")
@@ -327,7 +302,7 @@ class TarifaResourceIT {
     @Test
     void putNonExistingTarifa() throws Exception {
         int databaseSizeBeforeUpdate = tarifaRepository.findAll().collectList().block().size();
-        tarifa.setId(count.incrementAndGet());
+        tarifa.setId(UUID.randomUUID().toString());
 
         // Create the Tarifa
         TarifaDTO tarifaDTO = tarifaMapper.toDto(tarifa);
@@ -350,7 +325,7 @@ class TarifaResourceIT {
     @Test
     void putWithIdMismatchTarifa() throws Exception {
         int databaseSizeBeforeUpdate = tarifaRepository.findAll().collectList().block().size();
-        tarifa.setId(count.incrementAndGet());
+        tarifa.setId(UUID.randomUUID().toString());
 
         // Create the Tarifa
         TarifaDTO tarifaDTO = tarifaMapper.toDto(tarifa);
@@ -358,7 +333,7 @@ class TarifaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(tarifaDTO))
             .exchange()
@@ -373,7 +348,7 @@ class TarifaResourceIT {
     @Test
     void putWithMissingIdPathParamTarifa() throws Exception {
         int databaseSizeBeforeUpdate = tarifaRepository.findAll().collectList().block().size();
-        tarifa.setId(count.incrementAndGet());
+        tarifa.setId(UUID.randomUUID().toString());
 
         // Create the Tarifa
         TarifaDTO tarifaDTO = tarifaMapper.toDto(tarifa);
@@ -467,7 +442,7 @@ class TarifaResourceIT {
     @Test
     void patchNonExistingTarifa() throws Exception {
         int databaseSizeBeforeUpdate = tarifaRepository.findAll().collectList().block().size();
-        tarifa.setId(count.incrementAndGet());
+        tarifa.setId(UUID.randomUUID().toString());
 
         // Create the Tarifa
         TarifaDTO tarifaDTO = tarifaMapper.toDto(tarifa);
@@ -490,7 +465,7 @@ class TarifaResourceIT {
     @Test
     void patchWithIdMismatchTarifa() throws Exception {
         int databaseSizeBeforeUpdate = tarifaRepository.findAll().collectList().block().size();
-        tarifa.setId(count.incrementAndGet());
+        tarifa.setId(UUID.randomUUID().toString());
 
         // Create the Tarifa
         TarifaDTO tarifaDTO = tarifaMapper.toDto(tarifa);
@@ -498,7 +473,7 @@ class TarifaResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(tarifaDTO))
             .exchange()
@@ -513,7 +488,7 @@ class TarifaResourceIT {
     @Test
     void patchWithMissingIdPathParamTarifa() throws Exception {
         int databaseSizeBeforeUpdate = tarifaRepository.findAll().collectList().block().size();
-        tarifa.setId(count.incrementAndGet());
+        tarifa.setId(UUID.randomUUID().toString());
 
         // Create the Tarifa
         TarifaDTO tarifaDTO = tarifaMapper.toDto(tarifa);

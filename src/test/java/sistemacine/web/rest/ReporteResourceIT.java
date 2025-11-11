@@ -9,9 +9,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.AfterEach;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +26,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.IntegrationTest;
 import sistemacine.domain.Reporte;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.ReporteRepository;
 import sistemacine.service.ReporteService;
 import sistemacine.service.dto.ReporteDTO;
@@ -55,9 +52,6 @@ class ReporteResourceIT {
     private static final String ENTITY_API_URL = "/api/reportes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
-
     @Autowired
     private ReporteRepository reporteRepository;
 
@@ -71,9 +65,6 @@ class ReporteResourceIT {
     private ReporteService reporteServiceMock;
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private WebTestClient webTestClient;
 
     private Reporte reporte;
@@ -84,7 +75,7 @@ class ReporteResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Reporte createEntity(EntityManager em) {
+    public static Reporte createEntity() {
         Reporte reporte = new Reporte().tipo(DEFAULT_TIPO).fechaGeneracion(DEFAULT_FECHA_GENERACION).descripcion(DEFAULT_DESCRIPCION);
         return reporte;
     }
@@ -95,28 +86,15 @@ class ReporteResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Reporte createUpdatedEntity(EntityManager em) {
+    public static Reporte createUpdatedEntity() {
         Reporte reporte = new Reporte().tipo(UPDATED_TIPO).fechaGeneracion(UPDATED_FECHA_GENERACION).descripcion(UPDATED_DESCRIPCION);
         return reporte;
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Reporte.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
-        reporte = createEntity(em);
+        reporteRepository.deleteAll().block();
+        reporte = createEntity();
     }
 
     @Test
@@ -145,7 +123,7 @@ class ReporteResourceIT {
     @Test
     void createReporteWithExistingId() throws Exception {
         // Create the Reporte with an existing ID
-        reporte.setId(1L);
+        reporte.setId("existing_id");
         ReporteDTO reporteDTO = reporteMapper.toDto(reporte);
 
         int databaseSizeBeforeCreate = reporteRepository.findAll().collectList().block().size();
@@ -226,7 +204,7 @@ class ReporteResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.[*].id")
-            .value(hasItem(reporte.getId().intValue()))
+            .value(hasItem(reporte.getId()))
             .jsonPath("$.[*].tipo")
             .value(hasItem(DEFAULT_TIPO))
             .jsonPath("$.[*].fechaGeneracion")
@@ -270,7 +248,7 @@ class ReporteResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.id")
-            .value(is(reporte.getId().intValue()))
+            .value(is(reporte.getId()))
             .jsonPath("$.tipo")
             .value(is(DEFAULT_TIPO))
             .jsonPath("$.fechaGeneracion")
@@ -324,7 +302,7 @@ class ReporteResourceIT {
     @Test
     void putNonExistingReporte() throws Exception {
         int databaseSizeBeforeUpdate = reporteRepository.findAll().collectList().block().size();
-        reporte.setId(count.incrementAndGet());
+        reporte.setId(UUID.randomUUID().toString());
 
         // Create the Reporte
         ReporteDTO reporteDTO = reporteMapper.toDto(reporte);
@@ -347,7 +325,7 @@ class ReporteResourceIT {
     @Test
     void putWithIdMismatchReporte() throws Exception {
         int databaseSizeBeforeUpdate = reporteRepository.findAll().collectList().block().size();
-        reporte.setId(count.incrementAndGet());
+        reporte.setId(UUID.randomUUID().toString());
 
         // Create the Reporte
         ReporteDTO reporteDTO = reporteMapper.toDto(reporte);
@@ -355,7 +333,7 @@ class ReporteResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(reporteDTO))
             .exchange()
@@ -370,7 +348,7 @@ class ReporteResourceIT {
     @Test
     void putWithMissingIdPathParamReporte() throws Exception {
         int databaseSizeBeforeUpdate = reporteRepository.findAll().collectList().block().size();
-        reporte.setId(count.incrementAndGet());
+        reporte.setId(UUID.randomUUID().toString());
 
         // Create the Reporte
         ReporteDTO reporteDTO = reporteMapper.toDto(reporte);
@@ -455,7 +433,7 @@ class ReporteResourceIT {
     @Test
     void patchNonExistingReporte() throws Exception {
         int databaseSizeBeforeUpdate = reporteRepository.findAll().collectList().block().size();
-        reporte.setId(count.incrementAndGet());
+        reporte.setId(UUID.randomUUID().toString());
 
         // Create the Reporte
         ReporteDTO reporteDTO = reporteMapper.toDto(reporte);
@@ -478,7 +456,7 @@ class ReporteResourceIT {
     @Test
     void patchWithIdMismatchReporte() throws Exception {
         int databaseSizeBeforeUpdate = reporteRepository.findAll().collectList().block().size();
-        reporte.setId(count.incrementAndGet());
+        reporte.setId(UUID.randomUUID().toString());
 
         // Create the Reporte
         ReporteDTO reporteDTO = reporteMapper.toDto(reporte);
@@ -486,7 +464,7 @@ class ReporteResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, count.incrementAndGet())
+            .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(reporteDTO))
             .exchange()
@@ -501,7 +479,7 @@ class ReporteResourceIT {
     @Test
     void patchWithMissingIdPathParamReporte() throws Exception {
         int databaseSizeBeforeUpdate = reporteRepository.findAll().collectList().block().size();
-        reporte.setId(count.incrementAndGet());
+        reporte.setId(UUID.randomUUID().toString());
 
         // Create the Reporte
         ReporteDTO reporteDTO = reporteMapper.toDto(reporte);

@@ -11,7 +11,7 @@ import sistemacine.domain.enumeration.TipoSala;
  */
 public class TarifaDTO implements Serializable {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
     private String nombre;
@@ -25,11 +25,11 @@ public class TarifaDTO implements Serializable {
 
     private TipoSala tipoSala;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -98,7 +98,7 @@ public class TarifaDTO implements Serializable {
     @Override
     public String toString() {
         return "TarifaDTO{" +
-            "id=" + getId() +
+            "id='" + getId() + "'" +
             ", nombre='" + getNombre() + "'" +
             ", descripcion='" + getDescripcion() + "'" +
             ", monto=" + getMonto() +

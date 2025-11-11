@@ -14,11 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import sistemacine.IntegrationTest;
-import sistemacine.config.Constants;
 import sistemacine.domain.Authority;
 import sistemacine.domain.User;
-import sistemacine.repository.AuthorityRepository;
-import sistemacine.repository.EntityManager;
 import sistemacine.repository.UserRepository;
 import sistemacine.security.AuthoritiesConstants;
 import sistemacine.service.dto.AdminUserDTO;
@@ -37,7 +34,7 @@ class UserResourceIT {
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final String UPDATED_LOGIN = "jhipster";
 
-    private static final Long DEFAULT_ID = 1L;
+    private static final String DEFAULT_ID = "id1";
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
     private static final String UPDATED_PASSWORD = "passjhipster";
@@ -61,13 +58,7 @@ class UserResourceIT {
     private UserRepository userRepository;
 
     @Autowired
-    private AuthorityRepository authorityRepository;
-
-    @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -80,47 +71,31 @@ class UserResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static User createEntity(EntityManager em) {
+    public static User createEntity() {
         User user = new User();
-        user.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
+        user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-        user.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
+        user.setEmail(DEFAULT_EMAIL);
         user.setFirstName(DEFAULT_FIRSTNAME);
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setCreatedBy(Constants.SYSTEM);
         return user;
-    }
-
-    /**
-     * Delete all the users from the database.
-     */
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll("jhi_user_authority").block();
-            em.deleteAll(User.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
     }
 
     /**
      * Setups the database with one user.
      */
-    public static User initTestUser(UserRepository userRepository, EntityManager em) {
-        userRepository.deleteAllUserAuthorities().block();
+    public static User initTestUser(UserRepository userRepository) {
         userRepository.deleteAll().block();
-        User user = createEntity(em);
-        user.setLogin(DEFAULT_LOGIN);
-        user.setEmail(DEFAULT_EMAIL);
+        User user = createEntity();
         return user;
     }
 
     @BeforeEach
     public void initTest() {
-        user = initTestUser(userRepository, em);
+        user = initTestUser(userRepository);
     }
 
     @Test
@@ -166,7 +141,7 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().collectList().block().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setId(DEFAULT_ID);
+        managedUserVM.setId("1L");
         managedUserVM.setLogin(DEFAULT_LOGIN);
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
@@ -257,10 +232,6 @@ class UserResourceIT {
     void getAllUsers() {
         // Initialize the database
         userRepository.save(user).block();
-        authorityRepository
-            .findById(AuthoritiesConstants.USER)
-            .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
-            .block();
 
         // Get all the users
         AdminUserDTO foundUser = webTestClient
@@ -282,17 +253,12 @@ class UserResourceIT {
         assertThat(foundUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(foundUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-        assertThat(foundUser.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
     }
 
     @Test
     void getUser() {
         // Initialize the database
         userRepository.save(user).block();
-        authorityRepository
-            .findById(AuthoritiesConstants.USER)
-            .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
-            .block();
 
         // Get the user
         webTestClient
@@ -315,9 +281,7 @@ class UserResourceIT {
             .jsonPath("$.imageUrl")
             .isEqualTo(DEFAULT_IMAGEURL)
             .jsonPath("$.langKey")
-            .isEqualTo(DEFAULT_LANGKEY)
-            .jsonPath("$.authorities")
-            .isEqualTo(AuthoritiesConstants.USER);
+            .isEqualTo(DEFAULT_LANGKEY);
     }
 
     @Test
@@ -432,7 +396,6 @@ class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
-        anotherUser.setCreatedBy(Constants.SYSTEM);
         userRepository.save(anotherUser).block();
 
         // Update the user
@@ -478,7 +441,6 @@ class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
-        anotherUser.setCreatedBy(Constants.SYSTEM);
         userRepository.save(anotherUser).block();
 
         // Update the user
@@ -537,7 +499,7 @@ class UserResourceIT {
         User user2 = new User();
         user2.setId(user1.getId());
         assertThat(user1).isEqualTo(user2);
-        user2.setId(2L);
+        user2.setId("id2");
         assertThat(user1).isNotEqualTo(user2);
         user1.setId(null);
         assertThat(user1).isNotEqualTo(user2);

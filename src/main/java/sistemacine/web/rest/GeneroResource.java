@@ -74,7 +74,7 @@ public class GeneroResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/generos/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class GeneroResource {
      */
     @PutMapping("/generos/{id}")
     public Mono<ResponseEntity<GeneroDTO>> updateGenero(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody GeneroDTO generoDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Genero : {}, {}", id, generoDTO);
@@ -118,7 +118,7 @@ public class GeneroResource {
                     .map(result ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId()))
                             .body(result)
                     );
             });
@@ -137,7 +137,7 @@ public class GeneroResource {
      */
     @PatchMapping(value = "/generos/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public Mono<ResponseEntity<GeneroDTO>> partialUpdateGenero(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody GeneroDTO generoDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Genero partially : {}, {}", id, generoDTO);
@@ -162,7 +162,7 @@ public class GeneroResource {
                     .map(res ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, res.getId()))
                             .body(res)
                     );
             });
@@ -204,7 +204,7 @@ public class GeneroResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the generoDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/generos/{id}")
-    public Mono<ResponseEntity<GeneroDTO>> getGenero(@PathVariable Long id) {
+    public Mono<ResponseEntity<GeneroDTO>> getGenero(@PathVariable String id) {
         log.debug("REST request to get Genero : {}", id);
         Mono<GeneroDTO> generoDTO = generoService.findOne(id);
         return ResponseUtil.wrapOrNotFound(generoDTO);
@@ -218,15 +218,12 @@ public class GeneroResource {
      */
     @DeleteMapping("/generos/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deleteGenero(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> deleteGenero(@PathVariable String id) {
         log.debug("REST request to delete Genero : {}", id);
         return generoService
             .delete(id)
             .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
+                ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build()
             );
     }
 }

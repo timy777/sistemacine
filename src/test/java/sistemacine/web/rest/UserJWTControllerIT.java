@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import sistemacine.IntegrationTest;
-import sistemacine.config.Constants;
 import sistemacine.domain.User;
 import sistemacine.repository.UserRepository;
 import sistemacine.web.rest.vm.LoginVM;
@@ -35,7 +34,6 @@ class UserJWTControllerIT {
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-        user.setCreatedBy(Constants.SYSTEM);
 
         userRepository.save(user).block();
 
@@ -64,7 +62,6 @@ class UserJWTControllerIT {
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-        user.setCreatedBy(Constants.SYSTEM);
 
         userRepository.save(user).block();
 

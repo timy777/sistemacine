@@ -1,7 +1,7 @@
 import { TipoSala } from 'app/entities/enumerations/tipo-sala.model';
 
 export interface ISala {
-  id?: number;
+  id?: string;
   nombre?: string;
   capacidad?: number;
   tipo?: TipoSala;
@@ -10,7 +10,7 @@ export interface ISala {
 
 export class Sala implements ISala {
   constructor(
-    public id?: number,
+    public id?: string,
     public nombre?: string,
     public capacidad?: number,
     public tipo?: TipoSala,
@@ -18,6 +18,6 @@ export class Sala implements ISala {
   ) {}
 }
 
-export function getSalaIdentifier(sala: ISala): number | undefined {
+export function getSalaIdentifier(sala: ISala): string | undefined {
   return sala.id;
 }

@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
  */
 public class ReporteDTO implements Serializable {
 
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
     private String tipo;
@@ -22,11 +22,11 @@ public class ReporteDTO implements Serializable {
 
     private PersonaDTO vendedor;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -87,7 +87,7 @@ public class ReporteDTO implements Serializable {
     @Override
     public String toString() {
         return "ReporteDTO{" +
-            "id=" + getId() +
+            "id='" + getId() + "'" +
             ", tipo='" + getTipo() + "'" +
             ", fechaGeneracion='" + getFechaGeneracion() + "'" +
             ", descripcion='" + getDescripcion() + "'" +

@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="pelicula">
-      <h2 data-cy="peliculaDetailsHeading"><span jhiTranslate="sistemacineApp.pelicula.detail.title">Pelicula</span></h2>
+      <h2 data-cy="peliculaDetailsHeading"><span>Pelicula</span></h2>
 
       <hr />
 
@@ -10,43 +10,43 @@
       <jhi-alert></jhi-alert>
 
       <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dt><span>ID</span></dt>
         <dd>
           <span>{{ pelicula.id }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.titulo">Titulo</span></dt>
+        <dt><span>Titulo</span></dt>
         <dd>
           <span>{{ pelicula.titulo }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.sinopsis">Sinopsis</span></dt>
+        <dt><span>Sinopsis</span></dt>
         <dd>
           <span>{{ pelicula.sinopsis }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.duracion">Duracion</span></dt>
+        <dt><span>Duracion</span></dt>
         <dd>
           <span>{{ pelicula.duracion }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.idioma">Idioma</span></dt>
+        <dt><span>Idioma</span></dt>
         <dd>
           <span>{{ pelicula.idioma }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.clasificacion">Clasificacion</span></dt>
+        <dt><span>Clasificacion</span></dt>
         <dd>
           <span>{{ pelicula.clasificacion }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.formato">Formato</span></dt>
+        <dt><span>Formato</span></dt>
         <dd>
           <span>{{ pelicula.formato }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.estado">Estado</span></dt>
+        <dt><span>Estado</span></dt>
         <dd>
-          <span jhiTranslate="{{ 'sistemacineApp.EstadoPelicula.' + pelicula.estado }}">{{ pelicula.estado }}</span>
+          <span>{{ pelicula.estado }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.imagenUrl">Imagen Url</span></dt>
+        <dt><span>Imagen Url</span></dt>
         <dd>
           <span>{{ pelicula.imagenUrl }}</span>
         </dd>
-        <dt><span jhiTranslate="sistemacineApp.pelicula.genero">Genero</span></dt>
+        <dt><span>Genero</span></dt>
         <dd>
           <div *ngIf="pelicula.genero">
             <a [routerLink]="['/genero', pelicula.genero?.id, 'view']">{{ pelicula.genero?.nombre }}</a>
@@ -55,11 +55,11 @@
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
       <button type="button" [routerLink]="['/pelicula', pelicula.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>
   </div>

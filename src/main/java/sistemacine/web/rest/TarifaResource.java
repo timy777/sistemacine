@@ -74,7 +74,7 @@ public class TarifaResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/tarifas/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class TarifaResource {
      */
     @PutMapping("/tarifas/{id}")
     public Mono<ResponseEntity<TarifaDTO>> updateTarifa(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody TarifaDTO tarifaDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Tarifa : {}, {}", id, tarifaDTO);
@@ -118,7 +118,7 @@ public class TarifaResource {
                     .map(result ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId()))
                             .body(result)
                     );
             });
@@ -137,7 +137,7 @@ public class TarifaResource {
      */
     @PatchMapping(value = "/tarifas/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public Mono<ResponseEntity<TarifaDTO>> partialUpdateTarifa(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody TarifaDTO tarifaDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Tarifa partially : {}, {}", id, tarifaDTO);
@@ -162,7 +162,7 @@ public class TarifaResource {
                     .map(res ->
                         ResponseEntity
                             .ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
+                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, res.getId()))
                             .body(res)
                     );
             });
@@ -204,7 +204,7 @@ public class TarifaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the tarifaDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/tarifas/{id}")
-    public Mono<ResponseEntity<TarifaDTO>> getTarifa(@PathVariable Long id) {
+    public Mono<ResponseEntity<TarifaDTO>> getTarifa(@PathVariable String id) {
         log.debug("REST request to get Tarifa : {}", id);
         Mono<TarifaDTO> tarifaDTO = tarifaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(tarifaDTO);
@@ -218,15 +218,12 @@ public class TarifaResource {
      */
     @DeleteMapping("/tarifas/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity<Void>> deleteTarifa(@PathVariable Long id) {
+    public Mono<ResponseEntity<Void>> deleteTarifa(@PathVariable String id) {
         log.debug("REST request to delete Tarifa : {}", id);
         return tarifaService
             .delete(id)
             .map(result ->
-                ResponseEntity
-                    .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                    .build()
+                ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build()
             );
     }
 }

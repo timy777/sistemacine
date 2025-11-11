@@ -16,7 +16,7 @@ export class ReporteDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(id: number): void {
+  confirmDelete(id: string): void {
     this.reporteService.delete(id).subscribe(() => {
       this.activeModal.close('deleted');
     });

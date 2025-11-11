@@ -1,7 +1,7 @@
 import { TipoSala } from 'app/entities/enumerations/tipo-sala.model';
 
 export interface ITarifa {
-  id?: number;
+  id?: string;
   nombre?: string;
   descripcion?: string | null;
   monto?: number;
@@ -11,7 +11,7 @@ export interface ITarifa {
 
 export class Tarifa implements ITarifa {
   constructor(
-    public id?: number,
+    public id?: string,
     public nombre?: string,
     public descripcion?: string | null,
     public monto?: number,
@@ -20,6 +20,6 @@ export class Tarifa implements ITarifa {
   ) {}
 }
 
-export function getTarifaIdentifier(tarifa: ITarifa): number | undefined {
+export function getTarifaIdentifier(tarifa: ITarifa): string | undefined {
   return tarifa.id;
 }

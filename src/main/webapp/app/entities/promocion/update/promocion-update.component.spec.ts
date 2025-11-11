@@ -47,11 +47,11 @@ describe('Promocion Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call Pelicula query and add missing value', () => {
-      const promocion: IPromocion = { id: 456 };
-      const peliculas: IPelicula[] = [{ id: 23334 }];
+      const promocion: IPromocion = { id: 'CBA' };
+      const peliculas: IPelicula[] = [{ id: '34d24245-8f85-4489-859a-9f63679a5b20' }];
       promocion.peliculas = peliculas;
 
-      const peliculaCollection: IPelicula[] = [{ id: 27889 }];
+      const peliculaCollection: IPelicula[] = [{ id: 'cbf1e1f4-9d13-4f4c-9371-3c0b1b9f248f' }];
       jest.spyOn(peliculaService, 'query').mockReturnValue(of(new HttpResponse({ body: peliculaCollection })));
       const additionalPeliculas = [...peliculas];
       const expectedCollection: IPelicula[] = [...additionalPeliculas, ...peliculaCollection];
@@ -66,8 +66,8 @@ describe('Promocion Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const promocion: IPromocion = { id: 456 };
-      const peliculas: IPelicula = { id: 83821 };
+      const promocion: IPromocion = { id: 'CBA' };
+      const peliculas: IPelicula = { id: '2685dbce-7601-49f9-9d64-c0366b52883a' };
       promocion.peliculas = [peliculas];
 
       activatedRoute.data = of({ promocion });
@@ -82,7 +82,7 @@ describe('Promocion Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Promocion>>();
-      const promocion = { id: 123 };
+      const promocion = { id: 'ABC' };
       jest.spyOn(promocionService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ promocion });
@@ -124,7 +124,7 @@ describe('Promocion Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Promocion>>();
-      const promocion = { id: 123 };
+      const promocion = { id: 'ABC' };
       jest.spyOn(promocionService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ promocion });
@@ -145,7 +145,7 @@ describe('Promocion Management Update Component', () => {
   describe('Tracking relationships identifiers', () => {
     describe('trackPeliculaById', () => {
       it('Should return tracked Pelicula primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackPeliculaById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
@@ -155,15 +155,15 @@ describe('Promocion Management Update Component', () => {
   describe('Getting selected relationships', () => {
     describe('getSelectedPelicula', () => {
       it('Should return option if no Pelicula is selected', () => {
-        const option = { id: 123 };
+        const option = { id: 'ABC' };
         const result = comp.getSelectedPelicula(option);
         expect(result === option).toEqual(true);
       });
 
       it('Should return selected Pelicula for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
+        const option = { id: 'ABC' };
+        const selected = { id: 'ABC' };
+        const selected2 = { id: 'CBA' };
         const result = comp.getSelectedPelicula(option, [selected2, selected]);
         expect(result === selected).toEqual(true);
         expect(result === selected2).toEqual(false);
@@ -171,8 +171,8 @@ describe('Promocion Management Update Component', () => {
       });
 
       it('Should return option if this Pelicula is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
+        const option = { id: 'ABC' };
+        const selected = { id: 'CBA' };
         const result = comp.getSelectedPelicula(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);

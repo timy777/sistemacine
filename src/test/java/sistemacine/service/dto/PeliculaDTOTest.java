@@ -11,12 +11,12 @@ class PeliculaDTOTest {
     void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(PeliculaDTO.class);
         PeliculaDTO peliculaDTO1 = new PeliculaDTO();
-        peliculaDTO1.setId(1L);
+        peliculaDTO1.setId("id1");
         PeliculaDTO peliculaDTO2 = new PeliculaDTO();
         assertThat(peliculaDTO1).isNotEqualTo(peliculaDTO2);
         peliculaDTO2.setId(peliculaDTO1.getId());
         assertThat(peliculaDTO1).isEqualTo(peliculaDTO2);
-        peliculaDTO2.setId(2L);
+        peliculaDTO2.setId("id2");
         assertThat(peliculaDTO1).isNotEqualTo(peliculaDTO2);
         peliculaDTO1.setId(null);
         assertThat(peliculaDTO1).isNotEqualTo(peliculaDTO2);

@@ -47,11 +47,11 @@ describe('Pelicula Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call Genero query and add missing value', () => {
-      const pelicula: IPelicula = { id: 456 };
-      const genero: IGenero = { id: 10602 };
+      const pelicula: IPelicula = { id: 'CBA' };
+      const genero: IGenero = { id: '16e4d391-a3b9-4f8f-8c55-81822889d94d' };
       pelicula.genero = genero;
 
-      const generoCollection: IGenero[] = [{ id: 38329 }];
+      const generoCollection: IGenero[] = [{ id: '670a35a3-432b-46da-a901-cd12743386fb' }];
       jest.spyOn(generoService, 'query').mockReturnValue(of(new HttpResponse({ body: generoCollection })));
       const additionalGeneros = [genero];
       const expectedCollection: IGenero[] = [...additionalGeneros, ...generoCollection];
@@ -66,8 +66,8 @@ describe('Pelicula Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const pelicula: IPelicula = { id: 456 };
-      const genero: IGenero = { id: 91853 };
+      const pelicula: IPelicula = { id: 'CBA' };
+      const genero: IGenero = { id: '7b6d9ee2-4288-40ee-a498-d8d2612d6f2d' };
       pelicula.genero = genero;
 
       activatedRoute.data = of({ pelicula });
@@ -82,7 +82,7 @@ describe('Pelicula Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Pelicula>>();
-      const pelicula = { id: 123 };
+      const pelicula = { id: 'ABC' };
       jest.spyOn(peliculaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ pelicula });
@@ -124,7 +124,7 @@ describe('Pelicula Management Update Component', () => {
     it('Should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<Pelicula>>();
-      const pelicula = { id: 123 };
+      const pelicula = { id: 'ABC' };
       jest.spyOn(peliculaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ pelicula });
@@ -145,7 +145,7 @@ describe('Pelicula Management Update Component', () => {
   describe('Tracking relationships identifiers', () => {
     describe('trackGeneroById', () => {
       it('Should return tracked Genero primary key', () => {
-        const entity = { id: 123 };
+        const entity = { id: 'ABC' };
         const trackResult = comp.trackGeneroById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });

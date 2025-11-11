@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sistemacine.domain.Funcion;
@@ -16,7 +15,6 @@ import sistemacine.service.mapper.FuncionMapper;
  * Service Implementation for managing {@link Funcion}.
  */
 @Service
-@Transactional
 public class FuncionService {
 
     private final Logger log = LoggerFactory.getLogger(FuncionService.class);
@@ -78,7 +76,6 @@ public class FuncionService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    @Transactional(readOnly = true)
     public Flux<FuncionDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Funcions");
         return funcionRepository.findAllBy(pageable).map(funcionMapper::toDto);
@@ -108,8 +105,7 @@ public class FuncionService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    @Transactional(readOnly = true)
-    public Mono<FuncionDTO> findOne(Long id) {
+    public Mono<FuncionDTO> findOne(String id) {
         log.debug("Request to get Funcion : {}", id);
         return funcionRepository.findOneWithEagerRelationships(id).map(funcionMapper::toDto);
     }
@@ -120,7 +116,7 @@ public class FuncionService {
      * @param id the id of the entity.
      * @return a Mono to signal the deletion
      */
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         log.debug("Request to delete Funcion : {}", id);
         return funcionRepository.deleteById(id);
     }

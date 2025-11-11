@@ -1,13 +1,13 @@
 export interface IGenero {
-  id?: number;
+  id?: string;
   nombre?: string;
   descripcion?: string | null;
 }
 
 export class Genero implements IGenero {
-  constructor(public id?: number, public nombre?: string, public descripcion?: string | null) {}
+  constructor(public id?: string, public nombre?: string, public descripcion?: string | null) {}
 }
 
-export function getGeneroIdentifier(genero: IGenero): number | undefined {
+export function getGeneroIdentifier(genero: IGenero): string | undefined {
   return genero.id;
 }

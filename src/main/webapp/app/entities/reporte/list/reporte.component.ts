@@ -57,7 +57,7 @@ export class ReporteComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: IReporte): number {
+  trackId(_index: number, item: IReporte): string {
     return item.id!;
   }
 

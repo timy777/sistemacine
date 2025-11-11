@@ -2,7 +2,7 @@ import dayjs from 'dayjs/esm';
 import { IPersona } from 'app/entities/persona/persona.model';
 
 export interface IReporte {
-  id?: number;
+  id?: string;
   tipo?: string;
   fechaGeneracion?: dayjs.Dayjs;
   descripcion?: string | null;
@@ -11,7 +11,7 @@ export interface IReporte {
 
 export class Reporte implements IReporte {
   constructor(
-    public id?: number,
+    public id?: string,
     public tipo?: string,
     public fechaGeneracion?: dayjs.Dayjs,
     public descripcion?: string | null,
@@ -19,6 +19,6 @@ export class Reporte implements IReporte {
   ) {}
 }
 
-export function getReporteIdentifier(reporte: IReporte): number | undefined {
+export function getReporteIdentifier(reporte: IReporte): string | undefined {
   return reporte.id;
 }

@@ -3,7 +3,7 @@ import { IPromocion } from 'app/entities/promocion/promocion.model';
 import { EstadoPelicula } from 'app/entities/enumerations/estado-pelicula.model';
 
 export interface IPelicula {
-  id?: number;
+  id?: string;
   titulo?: string;
   sinopsis?: string | null;
   duracion?: number;
@@ -18,7 +18,7 @@ export interface IPelicula {
 
 export class Pelicula implements IPelicula {
   constructor(
-    public id?: number,
+    public id?: string,
     public titulo?: string,
     public sinopsis?: string | null,
     public duracion?: number,
@@ -32,6 +32,6 @@ export class Pelicula implements IPelicula {
   ) {}
 }
 
-export function getPeliculaIdentifier(pelicula: IPelicula): number | undefined {
+export function getPeliculaIdentifier(pelicula: IPelicula): string | undefined {
   return pelicula.id;
 }

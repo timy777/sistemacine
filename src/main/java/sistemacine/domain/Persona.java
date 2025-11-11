@@ -4,67 +4,65 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import sistemacine.domain.enumeration.Sexo;
 import sistemacine.domain.enumeration.TipoPersona;
 
 /**
  * A Persona.
  */
-@Table("persona")
+@Document(collection = "persona")
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
-    private Long id;
+    private String id;
 
     @NotNull(message = "must not be null")
-    @Column("nombre")
+    @Field("nombre")
     private String nombre;
 
     @NotNull(message = "must not be null")
-    @Column("apellido")
+    @Field("apellido")
     private String apellido;
 
-    @Column("telefono")
+    @Field("telefono")
     private String telefono;
 
     @NotNull(message = "must not be null")
-    @Column("email")
+    @Field("email")
     private String email;
 
     @NotNull(message = "must not be null")
-    @Column("tipo")
+    @Field("tipo")
     private TipoPersona tipo;
 
     @NotNull(message = "must not be null")
-    @Column("fecha_nacimiento")
+    @Field("fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
     @NotNull(message = "must not be null")
-    @Column("sexo")
+    @Field("sexo")
     private Sexo sexo;
 
     @NotNull(message = "must not be null")
-    @Column("carnet_identidad")
+    @Field("carnet_identidad")
     private String carnetIdentidad;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
-    public Persona id(Long id) {
+    public Persona id(String id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

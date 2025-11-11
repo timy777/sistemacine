@@ -57,7 +57,7 @@ export class SalaComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(_index: number, item: ISala): number {
+  trackId(_index: number, item: ISala): string {
     return item.id!;
   }
 

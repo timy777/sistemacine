@@ -60,11 +60,11 @@ export class DetalleVentaUpdateComponent implements OnInit {
     }
   }
 
-  trackFuncionById(_index: number, item: IFuncion): number {
+  trackFuncionById(_index: number, item: IFuncion): string {
     return item.id!;
   }
 
-  trackVentaById(_index: number, item: IVenta): number {
+  trackVentaById(_index: number, item: IVenta): string {
     return item.id!;
   }
 

@@ -1,32 +1,26 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-reporte-heading" data-cy="ReporteCreateUpdateHeading" jhiTranslate="sistemacineApp.reporte.home.createOrEditLabel">
-        Create or edit a Reporte
-      </h2>
+      <h2 id="jhi-reporte-heading" data-cy="ReporteCreateUpdateHeading">Create or edit a Reporte</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
 
         <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          <label class="form-label" for="field_id">ID</label>
+          <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.reporte.tipo" for="field_tipo">Tipo</label>
+          <label class="form-label" for="field_tipo">Tipo</label>
           <input type="text" class="form-control" name="tipo" id="field_tipo" data-cy="tipo" formControlName="tipo" />
           <div *ngIf="editForm.get('tipo')!.invalid && (editForm.get('tipo')!.dirty || editForm.get('tipo')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('tipo')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('tipo')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.reporte.fechaGeneracion" for="field_fechaGeneracion"
-            >Fecha Generacion</label
-          >
+          <label class="form-label" for="field_fechaGeneracion">Fecha Generacion</label>
           <div class="input-group">
             <input
               id="field_fechaGeneracion"
@@ -48,18 +42,12 @@
               (editForm.get('fechaGeneracion')!.dirty || editForm.get('fechaGeneracion')!.touched)
             "
           >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('fechaGeneracion')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('fechaGeneracion')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.reporte.descripcion" for="field_descripcion">Descripcion</label>
+          <label class="form-label" for="field_descripcion">Descripcion</label>
           <input
             type="text"
             class="form-control"
@@ -71,7 +59,7 @@
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="sistemacineApp.reporte.vendedor" for="field_vendedor">Vendedor</label>
+          <label class="form-label" for="field_vendedor">Vendedor</label>
           <select class="form-control" id="field_vendedor" data-cy="vendedor" name="vendedor" formControlName="vendedor">
             <option [ngValue]="null"></option>
             <option
@@ -86,7 +74,7 @@
 
       <div>
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
         </button>
 
         <button
@@ -96,7 +84,7 @@
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
         >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>
       </div>
     </form>
